@@ -30,6 +30,12 @@ Every project and post has its own link (for example `#/wine/weeknight-white-und
 - **About me text:** `src/pages/Home.tsx`
 - **Projects and posts:** add an object to the array in the matching `src/content/*.ts` file. Bodies are lists of blocks (`p`, `h`, `list`, `quote`); see `src/content/types.ts`. Content is rendered as text, never as raw HTML.
 - **Wine posts** can include an optional `wine` tasting card with a 1 to 5 heart rating.
+- **Links and italics** go inside a paragraph as a list of parts: `text: ['Read ', { text: 'this', href: 'https://…' }, ' and ', { text: 'that', em: true }]`. Only `http(s)` links become clickable.
+- **Images** are `{ type: 'image', src: 'images/…/file.jpg', alt: '…' }`, with the file saved in `public/images/`. Images must live in this repo; the security policy blocks images from other sites.
+
+### Education blog ↔ Substack
+
+The education blog mirrors [arynlynn.substack.com](https://arynlynn.substack.com). To add a new Substack post, copy its text into `src/content/education.ts`, save any images to `public/images/education/`, and set `substackUrl` to the post's link. That adds a "Read & subscribe on Substack" button to the post and an "also on Substack" tag to its note.
 
 All sample content is placeholder text; replace it before publishing.
 

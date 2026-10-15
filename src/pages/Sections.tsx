@@ -3,6 +3,7 @@ import { projects } from '../content/portfolio'
 import type { Project, WinePost } from '../content/types'
 import { winePosts } from '../content/wine'
 import PixelIcon from '../components/PixelIcon'
+import { site } from '../site'
 import Collection from './Collection'
 
 function ProjectFacts({ project }: { project: Project }) {
@@ -93,7 +94,21 @@ export function EducationPage({ slug }: { slug?: string }) {
           <span className="mega-ext">.txt</span>
         </>
       }
-      intro={<p>Writing about teaching, learning, and designing for real classrooms. Pinned like post-its, newest first.</p>}
+      intro={
+        <>
+          <p>Writing about teaching, learning, and designing for real classrooms. These posts also go out on my Substack, so subscribe there to get them by email.</p>
+          <a className="pixel-button substack-link" href={site.substack} target="_blank" rel="noopener noreferrer">
+            ✉ Visit my Substack ↗
+          </a>
+        </>
+      }
+      cardExtra={(post) =>
+        post.substackUrl && (
+          <span className="substack-badge" aria-hidden="true">
+            ✉ also on Substack
+          </span>
+        )
+      }
     />
   )
 }

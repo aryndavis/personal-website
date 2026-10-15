@@ -5,6 +5,7 @@ export const site = {
   roles: ['Curriculum designer', 'Educator', 'Wine nerd'],
   status: 'Open to curriculum projects for 2027',
   email: 'hello@example.com',
+  substack: 'https://arynlynn.substack.com',
   year: new Date().getFullYear(),
 }
 

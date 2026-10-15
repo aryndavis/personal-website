@@ -1044,9 +1044,84 @@ button.pixel-button:active {
   outline: none;
 }
 
+.post-subtitle {
+  margin: -4px 0 14px;
+  font-size: 1.15rem;
+  line-height: 1.45;
+  opacity: 0.8;
+}
+
 .post-body {
   font-size: 1.06rem;
   line-height: 1.7;
+}
+
+.post-body a {
+  color: var(--pink-deep);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+}
+
+.post-body a:hover {
+  background: #ffe6f4;
+}
+
+.post-figure {
+  margin: 1.6em 0;
+}
+
+.post-figure img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-inline: auto;
+  border: 3px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--pink);
+}
+
+.post-figure figcaption {
+  margin-top: 8px;
+  font: 1.15rem/1.2 var(--terminal);
+  text-align: center;
+}
+
+.substack-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  margin: 28px 0 0;
+  padding: 14px 16px;
+  border: 3px dashed var(--pink-deep);
+  background: #ffe6f4;
+  font: 1.25rem/1.2 var(--terminal);
+}
+
+.folder-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.pixel-button.substack-link {
+  background: var(--pink);
+}
+
+a.pixel-button.substack-link:hover {
+  background: var(--yellow);
+}
+
+.intro-row .substack-link {
+  margin-top: 12px;
+}
+
+.substack-badge {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 2px 6px;
+  border: 2px solid var(--ink);
+  background: rgba(255, 255, 255, 0.6);
+  font: 1.1rem/1.1 var(--terminal);
 }
 
 .post-body h3 {

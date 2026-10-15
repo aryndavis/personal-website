@@ -114,9 +114,16 @@ export default function Home() {
                       </li>
                     ))}
                   </ul>
-                  <a className="pixel-button" href={href(sections[key].path)}>
-                    Open folder ▶
-                  </a>
+                  <div className="folder-actions">
+                    <a className="pixel-button" href={href(sections[key].path)}>
+                      Open folder ▶
+                    </a>
+                    {key === 'education' && (
+                      <a className="pixel-button substack-link" href={site.substack} target="_blank" rel="noopener noreferrer">
+                        ✉ Substack ↗
+                      </a>
+                    )}
+                  </div>
                 </PixelWindow>
               ),
           )}
