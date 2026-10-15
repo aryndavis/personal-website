@@ -1,6 +1,7 @@
-import { useEffect, useRef, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import PixelIcon, { type IconName } from '../components/PixelIcon'
 import PixelWindow, { type Tone } from '../components/PixelWindow'
+import { useFocusReturn } from '../components/Popup'
 import PostDialog from '../components/PostDialog'
 import { formatDate, newestFirst, type Entry } from '../content/types'
 import { href } from '../router'
@@ -29,14 +30,7 @@ export default function Collection<T extends Entry>({ sectionKey, entries, slug,
   const open = index >= 0 ? sorted[index] : undefined
   const missing = slug !== undefined && !open
 
-  // When a pop-up closes, return focus to the link that opened it.
-  const lastSlug = useRef<string | undefined>(undefined)
-  useEffect(() => {
-    if (!slug && lastSlug.current) {
-      document.querySelector<HTMLElement>(`[data-slug="${CSS.escape(lastSlug.current)}"]`)?.focus()
-    }
-    lastSlug.current = slug
-  }, [slug])
+  useFocusReturn(slug)
 
   const link = (entry: T) => href(`${section.path}/${entry.slug}`)
 

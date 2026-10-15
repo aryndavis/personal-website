@@ -1,5 +1,5 @@
 import { href } from '../router'
-import { sections, site } from '../site'
+import { bookshelf, sections, site } from '../site'
 
 const isActive = (route: string, path: string) => (path === '/' ? route === '/' : route === path || route.startsWith(`${path}/`))
 
@@ -26,6 +26,7 @@ export default function Header({ route }: { route: string }) {
         {link(sections.portfolio.path, sections.portfolio.label)}
         {link(sections.education.path, sections.education.label)}
         {link(sections.wine.path, sections.wine.label)}
+        {link(bookshelf.path, bookshelf.label)}
       </nav>
       <a className="header-cta" href={`mailto:${site.email}`}>
         Say hello <span aria-hidden="true">↗</span>

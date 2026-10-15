@@ -6,7 +6,8 @@ import { projects } from '../content/portfolio'
 import { newestFirst, type Entry } from '../content/types'
 import { winePosts } from '../content/wine'
 import { href } from '../router'
-import { sections, site, type SectionKey } from '../site'
+import { currentlyReading } from '../content/books'
+import { bookshelf, sections, site, type SectionKey } from '../site'
 
 const latest = <T extends Entry>(entries: T[], count = 2) => newestFirst(entries).slice(0, count)
 
@@ -137,7 +138,18 @@ export default function Home() {
                 </div>
                 <div>
                   <dt>Reading</dt>
-                  <dd>a book on your nightstand</dd>
+                  <dd>
+                    {currentlyReading.length > 0 ? (
+                      currentlyReading.map((book, i) => (
+                        <span key={book.slug}>
+                          {i > 0 && ' & '}
+                          <a href={href(`${bookshelf.path}/${book.slug}`)}>{book.title}</a>
+                        </span>
+                      ))
+                    ) : (
+                      <a href={href(bookshelf.path)}>between books</a>
+                    )}
+                  </dd>
                 </div>
                 <div>
                   <dt>Sipping</dt>
@@ -179,6 +191,10 @@ export default function Home() {
           <a href={href(sections.wine.path)}>
             <PixelIcon name="glass" size={30} />
             <span>Wine blog</span>
+          </a>
+          <a href={href(bookshelf.path)}>
+            <PixelIcon name="books" size={36} />
+            <span>Bookshelf</span>
           </a>
           <a href={`mailto:${site.email}`}>
             <PixelIcon name="mail" size={40} />

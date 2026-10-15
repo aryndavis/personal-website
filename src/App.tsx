@@ -3,9 +3,10 @@ import Header from './components/Header'
 import HoloBackground from './components/HoloBackground'
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
+import BookshelfPage from './pages/Bookshelf'
 import { EducationPage, PortfolioPage, WinePage } from './pages/Sections'
 import { href, useRoute } from './router'
-import { sections, site } from './site'
+import { bookshelf, sections, site } from './site'
 
 const marquee = '✦ stay curious ✦ take the long way ✦ pour something interesting'
 
@@ -13,18 +14,20 @@ const pages = {
   portfolio: PortfolioPage,
   education: EducationPage,
   wine: WinePage,
+  bookshelf: BookshelfPage,
 }
 
 const titles: Record<string, string> = {
   portfolio: sections.portfolio.label,
   education: sections.education.label,
   wine: sections.wine.label,
+  bookshelf: bookshelf.label,
 }
 
 export default function App() {
   const route = useRoute()
   const [, top, slug, ...rest] = route.split('/')
-  const Page = top in pages && rest.length === 0 ? pages[top as keyof typeof pages] : undefined
+  const Page = Object.hasOwn(pages, top) && rest.length === 0 ? pages[top as keyof typeof pages] : undefined
 
   // Scroll to the top only when moving between sections, not when opening a pop-up.
   useEffect(() => {

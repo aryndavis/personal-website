@@ -21,6 +21,7 @@ npm run preview   # serve the production build at http://localhost:4173
 | `#/portfolio` | Curriculum portfolio | `src/content/portfolio.ts` |
 | `#/education` | Education blog | `src/content/education.ts` |
 | `#/wine` | Wine blog | `src/content/wine.ts` |
+| `#/bookshelf` | Bookshelf (reading list) | `src/content/books.ts` |
 
 Every project and post has its own link (for example `#/wine/weeknight-white-under-20`). Opening it shows the entry in a pop-up window, and each section also has a plain `index.txt` list of links. Routes use the `#/` form so the site works on any static host without server rewrite rules.
 
@@ -29,6 +30,7 @@ Every project and post has its own link (for example `#/wine/weeknight-white-und
 - **Name, email, tagline:** `src/site.ts`
 - **About me text:** `src/pages/Home.tsx`
 - **Projects and posts:** add an object to the array in the matching `src/content/*.ts` file. Bodies are lists of blocks (`p`, `h`, `list`, `quote`); see `src/content/types.ts`. Content is rendered as text, never as raw HTML.
+- **Books:** add or move books in `src/content/books.ts`. Set `status` to `'reading'` (shown face-out and on the home page's currently.txt), `'read'` or `'want'`, and pick a spine `color`. `rating` and `note` are optional.
 - **Wine posts** can include an optional `wine` tasting card with a 1 to 5 heart rating.
 - **Links and italics** go inside a paragraph as a list of parts: `text: ['Read ', { text: 'this', href: 'https://…' }, ' and ', { text: 'that', em: true }]`. Only `http(s)` links become clickable.
 - **Images** are `{ type: 'image', src: 'images/…/file.jpg', alt: '…' }`, with the file saved in `public/images/`. Images must live in this repo; the security policy blocks images from other sites.

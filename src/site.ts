@@ -9,6 +9,8 @@ export const site = {
   year: new Date().getFullYear(),
 }
 
+export const bookshelf = { path: '/bookshelf', label: 'Bookshelf', file: 'bookshelf.db' }
+
 export type SectionKey = 'portfolio' | 'education' | 'wine'
 
 export const sections: Record<SectionKey, { path: string; label: string; file: string; blurb: string }> = {

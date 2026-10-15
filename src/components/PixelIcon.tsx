@@ -114,6 +114,19 @@ const icons = {
     '...klk...',
     '....k....',
   ],
+  books: [
+    'kkkk.......',
+    'kppkkkkk...',
+    'kwpkyyyk...',
+    'kppkyyykkkk',
+    'kppkwwwkmmk',
+    'kppkyyykmmk',
+    'kwpkyyykwmk',
+    'kppkyyykmmk',
+    'kppkwwwkmmk',
+    'kppkyyykmmk',
+    'kkkkkkkkkkk',
+  ],
 } satisfies Record<string, string[]>
 
 export type IconName = keyof typeof icons

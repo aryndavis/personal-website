@@ -2,7 +2,7 @@ import { educationPosts } from '../content/education'
 import { projects } from '../content/portfolio'
 import type { Project, WinePost } from '../content/types'
 import { winePosts } from '../content/wine'
-import PixelIcon from '../components/PixelIcon'
+import Rating from '../components/Rating'
 import { site } from '../site'
 import Collection from './Collection'
 
@@ -22,17 +22,6 @@ function ProjectFacts({ project }: { project: Project }) {
         <dd>{project.format}</dd>
       </div>
     </dl>
-  )
-}
-
-function Rating({ value }: { value: number }) {
-  return (
-    <span className="rating">
-      <span className="sr-only">Rated {value} out of 5</span>
-      {Array.from({ length: 5 }, (_, i) => (
-        <PixelIcon key={i} name="heart" size={14} className={i < value ? '' : 'dim'} />
-      ))}
-    </span>
   )
 }
 

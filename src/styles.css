@@ -235,6 +235,8 @@ main {
 }
 
 .mega-ext {
+  display: inline-block;
+  white-space: nowrap;
   font: 400 0.32em var(--pixel);
   letter-spacing: 0;
   text-transform: lowercase;
@@ -1309,4 +1311,208 @@ a.pixel-button.substack-link:hover {
   .eq i {
     height: 60%;
   }
+}
+
+/* ---------- Bookshelf ---------- */
+
+.spine-pink { --book: var(--pink); --book-ink: var(--ink); }
+.spine-yellow { --book: var(--yellow); --book-ink: var(--ink); }
+.spine-mint { --book: var(--mint); --book-ink: var(--ink); }
+.spine-lilac { --book: var(--lilac); --book-ink: var(--ink); }
+.spine-blue { --book: var(--blue); --book-ink: var(--ink); }
+.spine-cream { --book: var(--cream); --book-ink: var(--ink); }
+.spine-wine { --book: #8c1c4a; --book-ink: var(--cream); }
+
+.shelf-window .window-body {
+  padding: 20px clamp(12px, 3vw, 28px) 28px;
+}
+
+.shelf + .shelf {
+  margin-top: 28px;
+}
+
+.shelf-label {
+  margin: 0;
+  font: 600 1.15rem/1 var(--pixel);
+}
+
+/* Room above the books so they can slide up on hover without clipping. */
+.shelf-scroll {
+  overflow-x: auto;
+  padding-top: 18px;
+}
+
+.shelf-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  width: max-content;
+  min-width: 100%;
+  margin: 0;
+  padding: 0 14px;
+  list-style: none;
+}
+
+.shelf-plank {
+  height: 16px;
+  border: 3px solid var(--ink);
+  background: repeating-linear-gradient(90deg, #a0673f 0 24px, #8f5a35 24px 48px);
+  box-shadow: 0 6px 0 rgba(59, 35, 70, 0.25);
+}
+
+.spine {
+  flex: none;
+  width: var(--spine-w);
+  height: var(--spine-h);
+  transition: translate 0.15s steps(3);
+}
+
+.spine:hover,
+.spine:focus-within,
+.cover:hover,
+.cover:focus-within {
+  translate: 0 -12px;
+}
+
+.spine-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 28px 0;
+  border: 3px solid var(--ink);
+  border-bottom: 0;
+  background: var(--book);
+  color: var(--book-ink);
+  box-shadow: inset -6px 0 0 rgba(0, 0, 0, 0.14);
+  text-decoration: none;
+}
+
+/* Pixel bands near the top and bottom of each spine. */
+.spine-link::before,
+.spine-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: rgba(59, 35, 70, 0.35);
+}
+
+.spine-link::before {
+  top: 10px;
+  box-shadow: 0 8px 0 rgba(59, 35, 70, 0.35);
+}
+
+.spine-link::after {
+  bottom: 12px;
+}
+
+.spine-title {
+  writing-mode: vertical-rl;
+  max-height: 100%;
+  overflow: hidden;
+  font: 500 13px/1 var(--pixel);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.spine-link:focus-visible,
+.cover-link:focus-visible {
+  outline: 3px solid var(--pink-deep);
+  outline-offset: 2px;
+}
+
+.cover {
+  position: relative;
+  flex: none;
+  width: 132px;
+  height: 180px;
+  margin-right: 14px;
+  transition: translate 0.15s steps(3);
+}
+
+.cover-link,
+.cover-static {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+  height: 100%;
+  padding: 18px 12px 12px 20px;
+  border: 3px solid var(--ink);
+  border-bottom: 0;
+  background: var(--book);
+  color: var(--book-ink);
+  box-shadow: inset 8px 0 0 rgba(0, 0, 0, 0.15);
+  text-decoration: none;
+  overflow: hidden;
+}
+
+.cover-static {
+  width: 120px;
+  height: 165px;
+  border-bottom: 3px solid var(--ink);
+  box-shadow: inset 8px 0 0 rgba(0, 0, 0, 0.15), 6px 6px 0 var(--ink);
+}
+
+.cover-title {
+  font: 600 1rem/1.15 var(--pixel);
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+.cover-author {
+  font: 1.1rem/1 var(--terminal);
+}
+
+.cover-ribbon {
+  position: absolute;
+  top: -8px;
+  right: 10px;
+  padding: 4px 6px 10px;
+  background: var(--pink-deep);
+  color: var(--cream);
+  font: 500 10px/1 var(--pixel);
+  text-transform: uppercase;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 78%, 0 100%);
+}
+
+.book-detail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 24px;
+  margin-top: 10px;
+}
+
+.book-detail > div:last-child {
+  flex: 1;
+  min-width: min(100%, 240px);
+}
+
+.book-author {
+  margin: -6px 0 10px;
+  font: 1.35rem/1.1 var(--terminal);
+}
+
+.book-note {
+  font-size: 1.06rem;
+  line-height: 1.6;
+}
+
+.archive-group h3 {
+  margin: 18px 0 2px;
+  font: 500 14px var(--pixel);
+  text-transform: uppercase;
+  color: var(--pink-deep);
+}
+
+.archive-meta {
+  opacity: 0.75;
+}
+
+.currently dd a {
+  color: inherit;
 }
