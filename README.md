@@ -89,6 +89,12 @@ All sample content is placeholder text; replace it before publishing.
 - `src/components/PixelIcon.tsx`: pixel-art icons drawn from small character grids.
 - Fonts (Pixelify Sans, VT323) are bundled from npm via Fontsource, so nothing loads from a third party.
 
+## Deploy on Netlify
+
+1. In Netlify, **Add new site → Import an existing project → GitHub** and pick this repo. `netlify.toml` already sets the build (`npm run build`, publish `dist`, Node 22), so leave the defaults.
+2. **Domain:** Site configuration → Domain management → **Add a domain**. Netlify then shows the DNS records to add at your registrar, or you can move the domain's DNS to Netlify. HTTPS is set up automatically once DNS is in place.
+3. Every push to `main` redeploys. Security headers come from `public/_headers`.
+
 ## Security
 
 - The Content Security Policy only allows scripts, styles, fonts, and images from the site itself. No third-party scripts, no inline scripts, no framing, and forms are disabled. Assets are never inlined as `data:` URIs.
