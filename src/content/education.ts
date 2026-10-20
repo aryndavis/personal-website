@@ -1,7 +1,11 @@
+import { substackPosts } from './education.substack'
 import type { Entry } from './types'
 
-// Mirrors the posts on https://arynlynn.substack.com. Newest posts can go anywhere; the site sorts by date.
-export const educationPosts: Entry[] = [
+// The education blog mirrors https://arynlynn.substack.com. Public posts sync automatically into
+// education.substack.ts (`npm run sync:substack`, run daily by a GitHub Action).
+// Posts here are written by hand and win over a synced post with the same slug, so copy a post here
+// to polish it (for example, better image alt text). Newest posts can go anywhere; the site sorts by date.
+const handWritten: Entry[] = [
   {
     slug: 'what-do-we-even-need-education-for',
     title: 'What do we even need education for?',
@@ -75,4 +79,11 @@ export const educationPosts: Entry[] = [
       },
     ],
   },
+]
+
+const handWrittenSlugs = new Set(handWritten.map((post) => post.slug))
+
+export const educationPosts: Entry[] = [
+  ...handWritten,
+  ...substackPosts.filter((post) => !handWrittenSlugs.has(post.slug)),
 ]
