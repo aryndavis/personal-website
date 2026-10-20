@@ -689,11 +689,19 @@ button.pixel-button:active {
 /* ---------- Section pages ---------- */
 
 .page-hero {
+  --hero-side: 420px;
   display: grid;
-  grid-template-columns: 1fr minmax(260px, 420px);
+  grid-template-columns: 1fr minmax(260px, var(--hero-side));
   gap: 24px 40px;
   align-items: end;
   padding-block: 32px 56px;
+  container-type: inline-size;
+}
+
+/* Shrink page titles to fit their column, so a long word like BOOKSHELF never breaks mid-word.
+   5.8em fits the longest single word plus its file extension (e.g. PORTFOLIO.exe). */
+.page-hero .mega {
+  font-size: min(clamp(3.4rem, 10.5vw, 9.5rem), (100cqi - var(--hero-side) - 40px) / 5.8);
 }
 
 .page-path {
@@ -1192,6 +1200,10 @@ a.pixel-button.substack-link:hover {
   .page-hero {
     grid-template-columns: 1fr;
     grid-template-rows: none;
+  }
+
+  .page-hero .mega {
+    font-size: min(clamp(3.4rem, 10.5vw, 9.5rem), 100cqi / 5.8);
   }
 
   .home-hero > *,

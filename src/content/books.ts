@@ -1,4 +1,4 @@
-// Sample books. Replace these with your own shelf.
+// The 'read' and 'want' books below are still samples. Replace them with your own shelf.
 // status: 'reading' shows face-out on the top shelf; 'read' and 'want' show as spines.
 
 export type BookStatus = 'reading' | 'read' | 'want'
@@ -20,21 +20,18 @@ export interface Book {
 
 export const books: Book[] = [
   {
-    slug: 'teaching-to-transgress',
-    title: 'Teaching to Transgress',
-    author: 'bell hooks',
+    slug: 'survivor',
+    title: 'Survivor',
+    author: 'Octavia E. Butler',
     status: 'reading',
-    color: 'pink',
-    date: '2026-09-28',
-    note: 'Sample entry. Write a line about why you picked this up.',
+    color: 'mint',
   },
   {
-    slug: 'the-widow-clicquot',
-    title: 'The Widow Clicquot',
-    author: 'Tilar J. Mazzeo',
+    slug: 'cult-classic',
+    title: 'Cult Classic',
+    author: 'Sloane Crosley',
     status: 'reading',
-    color: 'yellow',
-    date: '2026-10-05',
+    color: 'lilac',
   },
   {
     slug: 'understanding-by-design',

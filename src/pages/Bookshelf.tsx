@@ -12,6 +12,8 @@ const newestFirst = (list: Book[]) => [...list].sort((a, b) => (b.date ?? '').lo
 const bookLink = (book: Book) => href(`${bookshelf.path}/${book.slug}`)
 
 const dateLabel: Record<BookStatus, string> = { reading: 'Started', read: 'Finished', want: 'Want to read' }
+// Shown when a book has no date.
+const statusLabel: Record<BookStatus, string> = { reading: 'Currently reading', read: 'Read', want: 'Want to read' }
 
 // Stable, slightly varied spine sizes so the shelf doesn't look machine-made.
 function spineSize(book: Book) {
@@ -66,7 +68,7 @@ function BookPopup({ book }: { book: Book }) {
     <Popup fileName={`bookshelf/${book.slug}.book`} closePath={bookshelf.path} titleId={titleId} contentKey={book.slug}>
       <p className="post-date">
         {book.status === 'want' || !book.date ? (
-          dateLabel[book.status]
+          statusLabel[book.status]
         ) : (
           <>
             {dateLabel[book.status]} <time dateTime={book.date}>{formatDate(book.date)}</time>
