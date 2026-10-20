@@ -9,6 +9,7 @@
   --lilac: #c9a7ff;
   --mint: #8be0c4;
   --blue: #8fb7ff;
+  --peach: #ffb38a;
   --drop: rgba(5, 0, 12, 0.6);
   --gutter: clamp(16px, 3vw, 40px);
   --pixel: 'Pixelify Sans', ui-monospace, monospace;
@@ -269,6 +270,7 @@ main {
 .tone-mint { --body: #e2fbf1; --bar: var(--mint); }
 .tone-yellow { --body: #fff4cf; --bar: var(--yellow); }
 .tone-blue { --body: #e6eeff; --bar: var(--blue); }
+.tone-peach { --body: #ffeadb; --bar: var(--peach); }
 
 .titlebar {
   display: flex;
@@ -558,6 +560,11 @@ button.pixel-button:active {
 
 .desktop-windows > .currently-window {
   rotate: -1.4deg;
+}
+
+.desktop-windows > .school-window {
+  grid-column: span 7;
+  rotate: 0.8deg;
 }
 
 .desktop-windows > .reopen {
@@ -1191,7 +1198,8 @@ a.pixel-button.substack-link:hover {
   .desktop-windows > *,
   .desktop-windows > .about-window,
   .desktop-windows > .folder-portfolio,
-  .desktop-windows > .mail-window {
+  .desktop-windows > .mail-window,
+  .desktop-windows > .school-window {
     grid-column: span 6;
   }
 }
@@ -1245,7 +1253,8 @@ a.pixel-button.substack-link:hover {
   .desktop-windows > *,
   .desktop-windows > .about-window,
   .desktop-windows > .folder-portfolio,
-  .desktop-windows > .mail-window {
+  .desktop-windows > .mail-window,
+  .desktop-windows > .school-window {
     grid-column: 1;
   }
 
@@ -1937,4 +1946,23 @@ a.pixel-button.substack-link:hover {
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 4px 18px;
+}
+
+/* ---------- School note (home) ---------- */
+
+.school-window h2 {
+  margin: 0;
+}
+
+.school-window .folder-list li {
+  cursor: default;
+}
+
+.school-course {
+  opacity: 0.75;
+}
+
+.school-soon {
+  margin: 4px 0 0;
+  font: 1.2rem/1.2 var(--terminal);
 }
