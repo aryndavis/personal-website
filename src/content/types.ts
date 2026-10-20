@@ -31,15 +31,33 @@ export interface Project extends Entry {
   format: string
 }
 
+export type WineStyle = 'red' | 'white' | 'rosé' | 'orange' | 'sparkling' | 'dessert'
+
+/** Rough price per bottle: $ under $15, $$ $15–30, $$$ $30–60, $$$$ over $60. */
+export type WinePrice = '$' | '$$' | '$$$' | '$$$$'
+
+export type BuyAgain = 'yes' | 'maybe' | 'no'
+
+/** The tasting card. Only name, grape and vintage are required. */
+export interface WineDetails {
+  name: string
+  grape: string
+  /** A year, or 'NV' for non-vintage. */
+  vintage: string
+  /** Sets the bottle color on the wine rack. */
+  style?: WineStyle
+  producer?: string
+  region?: string
+  price?: WinePrice
+  /** 1 to 5 hearts */
+  rating?: number
+  buyAgain?: BuyAgain
+}
+
 export interface WinePost extends Entry {
-  wine?: {
-    name: string
-    region: string
-    grape: string
-    vintage?: string
-    /** 1 to 5 */
-    rating: number
-  }
+  /** 'tasting' posts are bottles on the wine rack; 'guide' posts are recipe cards. */
+  kind: 'tasting' | 'guide'
+  wine?: WineDetails
 }
 
 export const formatDate = (iso: string) =>
