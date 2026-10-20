@@ -1924,3 +1924,10 @@ a.pixel-button.substack-link:hover {
   gap: 10px;
   margin: 4px 0 14px;
 }
+
+.social-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 14px 0 0;
+}

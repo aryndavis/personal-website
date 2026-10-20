@@ -3,8 +3,11 @@ export const site = {
   name: 'Aryn Davis',
   shortName: 'ARYN DAVIS',
   roles: ['Software engineer', 'Curriculum designer', 'Educator'],
-  status: 'Open to curriculum projects for 2027',
-  email: 'arynlynn1@gmail.com',
+  status: 'M.Ed. student, Teachers College, Columbia',
+  // Forwards to my personal inbox (email forwarding on the domain), so the real address stays private.
+  email: 'hello@arynlynn.com',
+  linkedin: 'https://www.linkedin.com/in/aryn-davis',
+  instagram: 'https://www.instagram.com/aryn.creates',
   substack: 'https://arynlynn.substack.com',
   year: new Date().getFullYear(),
 }
@@ -18,7 +21,7 @@ export const sections: Record<SectionKey, { path: string; label: string; file: s
     path: '/portfolio',
     label: 'Portfolio',
     file: 'portfolio.exe',
-    blurb: 'Software engineering at Microsoft and beyond, plus the courses and clubs I’ve designed and taught.',
+    blurb: 'Software I’ve built, plus the courses, clubs and classes I’ve designed and taught.',
   },
   education: {
     path: '/education',

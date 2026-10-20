@@ -79,25 +79,38 @@ export default function Home() {
                 <h2 id="about-title">Hi, I’m {site.name.split(' ')[0]}.</h2>
               </div>
               <p>
-                I’m a software engineer at Microsoft and a curriculum designer. By day I build the checkout experiences behind Microsoft 365 and Copilot, and I’m the security point
-                of contact for my product space. Outside of work, I design and teach: Python and Django for adult learners, web development courses for CodePath, coding clubs for
-                Black Girls Code, and, lately, hand-sewing classes at Made Space.
+                I’m a software engineer and a curriculum designer, and I love the places where the two meet. I spent five years as a software engineer at Microsoft, building the
+                checkout experiences behind Microsoft 365 and Copilot and serving as my team’s security point of contact. Now I’m in New York, studying Technology, Media, and
+                Learning for a Master of Education at Teachers College, Columbia University.
               </p>
               <p>
-                I also build things for fun, like a library catalog for my books and a scrapbook closet that cuts my clothes out of photos. This site has rooms for all of it. Pick a
-                folder below or use the menu up top.
+                Along the way I’ve designed and taught Python and Django for adult learners, web development courses for CodePath, coding clubs for Black Girls Code, and
+                hand-sewing classes at Made Space. I still build things for fun, like a library catalog for my books and a scrapbook closet that cuts my clothes out of photos.
+                This site has rooms for all of it. Pick a folder below or use the menu up top.
               </p>
               <ul className="quick-facts">
                 <li>
-                  <PixelIcon name="star" size={16} /> Based in: Seattle, WA
+                  <PixelIcon name="star" size={16} /> Based in: New York City
                 </li>
                 <li>
-                  <PixelIcon name="heart" size={16} /> Loves: good questions, golf, sewing, natural wine
+                  <PixelIcon name="heart" size={16} /> Loves: crochet, sewing, golf, and Riesling above all
                 </li>
                 <li>
-                  <PixelIcon name="floppy" size={16} /> Background: B.S. in Computer Science (Intelligent Systems), minor in Sociology, Columbia University
+                  <PixelIcon name="floppy" size={16} /> Studying: M.Ed. in Technology, Media, and Learning, Teachers College, Columbia University (expected May 2028)
+                </li>
+                <li>
+                  <PixelIcon name="books" size={16} /> Background: B.S. in Computer Science (Intelligent Systems), minor in Sociology, Columbia University; software engineer at
+                  Microsoft, 2021–2026
                 </li>
               </ul>
+              <p className="social-links">
+                <a className="pixel-button" href={site.linkedin} target="_blank" rel="noopener noreferrer">
+                  LinkedIn ↗
+                </a>
+                <a className="pixel-button" href={site.instagram} target="_blank" rel="noopener noreferrer">
+                  Instagram: @aryn.creates ↗
+                </a>
+              </p>
             </PixelWindow>
           )}
 
@@ -176,6 +189,16 @@ export default function Home() {
                   Have a project, a question, or a bottle recommendation?
                   <br />
                   <a href={`mailto:${site.email}`}>{site.email}</a>
+                  <br />
+                  Or find me on{' '}
+                  <a href={site.linkedin} target="_blank" rel="noopener noreferrer">
+                    LinkedIn
+                  </a>{' '}
+                  and, for creative stuff,{' '}
+                  <a href={site.instagram} target="_blank" rel="noopener noreferrer">
+                    Instagram
+                  </a>
+                  .
                 </p>
               </div>
             </PixelWindow>

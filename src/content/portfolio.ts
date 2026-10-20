@@ -1,49 +1,10 @@
 import type { Project } from './types'
 
 // Two tracks, each under its own heading on the Portfolio page:
-//   'software'   — engineering work (jobs from my CV, and projects on github.com/aryndavis)
+//   'software'   — things I've built that are on github.com/aryndavis (job work stays off the site)
 //   'curriculum' — curriculum design and teaching (from my CV; most of these have no public demo)
 // `date` sorts newest first; `period` is shown instead of the date for work that spans time.
 export const projects: Project[] = [
-  {
-    slug: 'microsoft-commerce',
-    track: 'software',
-    title: 'Inline purchase experiences at Microsoft',
-    date: '2026-10-20',
-    period: 'Aug 2021 – present',
-    role: 'Software Engineer II, Microsoft',
-    audience: 'Microsoft 365 and Copilot customers',
-    format: 'Distributed full-stack service (React, TypeScript, C#)',
-    summary: 'The in-product checkout behind Microsoft 365 and Copilot purchases, plus security leadership and service telemetry.',
-    tags: ['React', 'TypeScript', 'C#', 'Azure', 'Security'],
-    body: [
-      { type: 'p', text: 'I’m a Software Engineer II in Seattle. This work is internal to Microsoft, so there’s no public demo, but here’s what I’ve built.' },
-      { type: 'h', text: 'Inline transactions' },
-      {
-        type: 'list',
-        items: [
-          'Integrated new products and redesigned the UX of a distributed full-stack service for inline purchases, delivered across multiple Microsoft products (React, TypeScript, C#)',
-          'Built an API for product availability and geo-specific support, contributing to a 10% increase in Microsoft 365 subscription acquisitions and a 45% increase in consumer and commercial Microsoft Copilot acquisition rates',
-          'End-to-end test automation with Playwright and React Testing Library',
-          'Converted the in-app transaction component into a single-page experience and A/B tested UX variations, raising acquisition rates 13%',
-          'Tuned dynamic routing and CDN caching with Azure Front Door to handle 10× normal traffic',
-        ],
-      },
-      { type: 'h', text: 'Security' },
-      {
-        type: 'list',
-        items: [
-          'Security point of contact for my product space: reviewing data flow diagrams and keeping 100% compliance with Microsoft’s Secure Future Initiative',
-          'Automated testing for web-facing vulnerabilities, with remediation by a Copilot agent that patches findings based on severity',
-        ],
-      },
-      { type: 'h', text: 'Telemetry' },
-      {
-        type: 'p',
-        text: 'Designed and built telemetry and monitoring with OpenTelemetry and Geneva for two critical physical and virtual machine allocation services in Office Automation, used for testing across Office 365, improving detection time for breakdowns and latency by 20%.',
-      },
-    ],
-  },
   {
     slug: 'aryns-library',
     track: 'software',
@@ -201,76 +162,11 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: 'microsoft-test-clustering',
-    track: 'software',
-    title: 'Finding redundant tests with clustering',
-    date: '2020-08-01',
-    period: 'Summer 2020',
-    role: 'Software Engineering Intern, Microsoft',
-    audience: 'Microsoft test automation',
-    format: 'Python data pipeline',
-    summary: 'Machine learning that spotted 10% of 700+ automated tests as candidates for pruning, saving 2 hours and $150 a week.',
-    tags: ['Python', 'Machine learning', 'K-Means'],
-    body: [
-      {
-        type: 'list',
-        items: [
-          'Experimented with K-Means, DBSCAN and mean shift on automation results, telemetry, logs, failure buckets and scenario coverage to find tests that pass or fail together',
-          'Prototyped and productionized a Python tool that ingests and cleans the data, clusters it with K-Means, and outputs tests with similar behavior',
-          'Identified 10% of 700+ tests as candidates for pruning, saving 2 hours and $150 per week in test automation',
-        ],
-      },
-    ],
-  },
-  {
-    slug: 'azure-devops-branch-health',
-    track: 'software',
-    title: 'Branch health dashboards for Azure DevOps',
-    date: '2019-08-01',
-    period: 'Summer 2019',
-    role: 'Explore Intern, Microsoft',
-    audience: 'Microsoft 365 Office product teams',
-    format: 'Azure DevOps widgets (React, TypeScript)',
-    summary: 'Dashboard widgets that track Git branch health for Microsoft 365 Office teams, built around their feedback.',
-    tags: ['React', 'TypeScript', 'Accessibility'],
-    body: [
-      {
-        type: 'list',
-        items: [
-          'Planned, built and installed Azure DevOps dashboard widgets tracking branch-health metrics in Git, shaped by continuous customer feedback',
-          'Designed an accessible UI in HTML and React, with proper labels on navigation and accessible color contrast',
-          'Built the backend that calls the Azure DevOps REST API for Git information and sorts the right records, in TypeScript',
-        ],
-      },
-    ],
-  },
-  {
-    slug: 'fidelity-pricing',
-    track: 'software',
-    title: 'Faster real-time stock pricing',
-    date: '2018-08-01',
-    period: 'Summer 2018',
-    role: 'Technical Intern, Fidelity Investments',
-    audience: 'A large-scale global pricing application',
-    format: 'SQL, PowerShell, log4j',
-    summary: 'Backend scripts and performance changes for a real-time pricing app, cutting latency by 1–2 seconds.',
-    tags: ['SQL', 'PowerShell', 'Performance'],
-    body: [
-      {
-        type: 'list',
-        items: [
-          'Wrote and deployed SQL and PowerShell scripts for data patches and server migrations behind a web app that determines real-time stock pricing, making queries more reliable',
-          'Shipped backend and frontend performance changes to a large-scale global pricing application, reducing latency by 1–2 seconds',
-        ],
-      },
-    ],
-  },
-  {
     slug: 'made-space-hand-sewing',
     track: 'curriculum',
     title: 'Basic hand sewing',
-    date: '2025-10-01',
-    period: 'Oct 2025 – present',
+    date: '2026-04-01',
+    period: 'Oct 2025 – Apr 2026',
     role: 'Volunteer instructor, Made Space Seattle',
     audience: 'Adult beginners',
     format: 'Hands-on classes',
@@ -279,7 +175,7 @@ export const projects: Project[] = [
     body: [
       {
         type: 'p',
-        text: 'I lead basic hand-sewing classes focused on garment repairs and introductory embroidery, teaching foundational stitches, tool use and fabric care while building creativity and confidence in a supportive space.',
+        text: 'I led basic hand-sewing classes focused on garment repairs and introductory embroidery, teaching foundational stitches, tool use and fabric care while building creativity and confidence in a supportive space.',
       },
     ],
   },
