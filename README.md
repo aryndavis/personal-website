@@ -1,5 +1,7 @@
 # Personal website
 
+Live at **[arynlynn.com](https://arynlynn.com)**. The apps live on subdomains: [library.arynlynn.com](https://library.arynlynn.com) (bookshelf) and [closet.arynlynn.com](https://closet.arynlynn.com) (Aryn’s Closet).
+
 Aryn Davis's personal site: an about-me home page, a curriculum design portfolio, an education blog, and a wine blog. It has a Y2K desktop look: a liquid-chrome holographic background with pixel pop-up windows and post-it notes. Built with React, TypeScript, and Vite.
 
 ## Screenshots
@@ -92,7 +94,7 @@ All sample content is placeholder text; replace it before publishing.
 ## Deploy on Netlify
 
 1. In Netlify, **Add new site → Import an existing project → GitHub** and pick this repo. `netlify.toml` already sets the build (`npm run build`, publish `dist`, Node 22), so leave the defaults.
-2. **Domain:** Site configuration → Domain management → **Add a domain**. Netlify then shows the DNS records to add at your registrar, or you can move the domain's DNS to Netlify. HTTPS is set up automatically once DNS is in place.
+2. **Domain:** `arynlynn.com` (registered at Porkbun) uses **Netlify DNS**: Porkbun's nameservers point to Netlify, and the records for `arynlynn.com`, `www`, `library` and `closet` live in Netlify. HTTPS is set up automatically.
 3. Every push to `main` redeploys. Security headers come from `public/_headers`.
 
 ## Security
