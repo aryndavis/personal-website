@@ -13,8 +13,8 @@ Taken from the production build at 1280×800. Update them whenever a page's look
 | ![Home page](docs/screenshots/home.jpg) | ![Portfolio](docs/screenshots/portfolio.jpg) |
 | **Education blog** | **Gen Z With A Glass (wine blog)** |
 | ![Education blog](docs/screenshots/education.jpg) | ![Gen Z With A Glass wine rack](docs/screenshots/wine.jpg) |
-| **Tasting card** | **Bookshelf** |
-| ![A tasting note with its tasting card](docs/screenshots/wine-tasting-card.jpg) | ![Bookshelf](docs/screenshots/bookshelf.jpg) |
+| **Bookshelf** | |
+| ![Bookshelf](docs/screenshots/bookshelf.jpg) | |
 
 ## Run locally
 
@@ -83,7 +83,6 @@ The education blog mirrors [arynlynn.substack.com](https://arynlynn.substack.com
 - Paid-only posts, podcasts and threads aren't synced.
 - `npm run test:substack` checks the HTML conversion.
 
-All sample content is placeholder text; replace it before publishing.
 
 ### Post tasting notes by text
 

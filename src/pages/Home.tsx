@@ -114,7 +114,7 @@ export default function Home() {
                       <p>{sections[key].blurb}</p>
                     </div>
                   </div>
-                  <p className="folder-recent">Recent:</p>
+                  <p className="folder-recent">{entries.length ? 'Recent:' : 'Nothing here yet. Check back soon!'}</p>
                   <ul className="folder-list">
                     {entries.map((entry) => (
                       <li key={entry.slug}>
