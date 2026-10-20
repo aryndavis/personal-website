@@ -7,6 +7,7 @@ import { newestFirst, type Entry } from '../content/types'
 import { winePosts } from '../content/wine'
 import { href } from '../router'
 import { currentlyReading } from '../content/books'
+import { school } from '../content/school'
 import { bookshelf, sections, site, type SectionKey } from '../site'
 
 const latest = <T extends Entry>(entries: T[], count = 2) => newestFirst(entries).slice(0, count)
@@ -19,7 +20,7 @@ const folders: { key: SectionKey; icon: IconName; tone: 'yellow' | 'mint' | 'pin
   { key: 'wine', icon: 'glass', tone: 'pink', entries: latest(winePosts) },
 ]
 
-type WindowId = 'about' | 'currently' | 'mail' | SectionKey
+type WindowId = 'about' | 'currently' | 'school' | 'mail' | SectionKey
 
 export default function Home() {
   const [closed, setClosed] = useState<WindowId[]>([])
@@ -181,6 +182,43 @@ export default function Home() {
                   <dd>something interesting</dd>
                 </div>
               </dl>
+            </PixelWindow>
+          )}
+
+          {isOpen('school') && (
+            <PixelWindow title="school_notes.txt" tone="yellow" className="school-window" movable onClose={close('school')} labelledBy="school-title">
+              <div className="folder-head">
+                <PixelIcon name="notebook" size={40} />
+                <div>
+                  <h2 id="school-title">Back in school</h2>
+                  <p>
+                    {school.program}, {school.school} · expected {school.expected}
+                  </p>
+                </div>
+              </div>
+              <p className="folder-recent">Relevant courses:</p>
+              <ul className="folder-list">
+                {school.courses.map((course) => (
+                  <li key={course}>{course}</li>
+                ))}
+              </ul>
+              <p className="folder-recent">Assignments:</p>
+              {school.assignments.filter((a) => /^https?:\/\//i.test(a.href)).length ? (
+                <ul className="folder-list">
+                  {school.assignments
+                    .filter((a) => /^https?:\/\//i.test(a.href))
+                    .map((assignment) => (
+                      <li key={assignment.href}>
+                        <a href={assignment.href} target="_blank" rel="noopener noreferrer">
+                          {assignment.title}
+                        </a>
+                        {assignment.course && <span className="school-course"> · {assignment.course}</span>}
+                      </li>
+                    ))}
+                </ul>
+              ) : (
+                <p className="school-soon">Coming soon, once there’s something to share!</p>
+              )}
             </PixelWindow>
           )}
 
