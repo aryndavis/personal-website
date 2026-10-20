@@ -1,5 +1,7 @@
 import { tastingNotes, type TastingNote } from './tastingNotes'
+import { isTextNote } from './textNote'
 import type { WinePost } from './types'
+import texted from './wine.texts.json'
 
 // Gen Z With A Glass. Two kinds of posts; newest can go anywhere, the site sorts by date.
 //
@@ -18,7 +20,7 @@ import type { WinePost } from './types'
 //   The post:  moment, look, nose, palate, finish, thoughts, and title/summary/tags to override the defaults.
 //
 // Sample notes. Replace these with your own.
-const notes: TastingNote[] = [
+export const handNotes: TastingNote[] = [
   {
     wine: 'Sample Poulsard',
     grape: 'Poulsard',
@@ -61,7 +63,7 @@ const notes: TastingNote[] = [
 ]
 
 // GUIDES are recipe cards: explainers, regions, how-tos. Write the body like the other blogs (see types.ts).
-const guides: WinePost[] = [
+export const guides: WinePost[] = [
   {
     kind: 'guide',
     slug: 'a-beginners-map-of-sparkling-wine',
@@ -76,4 +78,7 @@ const guides: WinePost[] = [
   },
 ]
 
-export const winePosts: WinePost[] = [...tastingNotes(notes, guides.map((guide) => guide.slug)), ...guides]
+// Notes texted in (netlify/functions/sms.ts adds them to wine.texts.json). Anything malformed is skipped.
+export const textNotes: TastingNote[] = (texted as unknown[]).filter(isTextNote)
+
+export const winePosts: WinePost[] = [...tastingNotes([...handNotes, ...textNotes], guides.map((guide) => guide.slug)), ...guides]

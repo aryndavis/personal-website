@@ -25,7 +25,7 @@ npm install
 npm run dev       # live preview at http://localhost:5173
 npm run build     # type-check and build to dist/
 npm run preview   # serve the production build at http://localhost:4173
-npm test          # content and Substack-sync tests
+npm test          # content, Substack-sync and text-posting tests
 ```
 
 ## Pages
@@ -83,6 +83,53 @@ The education blog mirrors [arynlynn.substack.com](https://arynlynn.substack.com
 - `npm run test:substack` checks the HTML conversion.
 
 All sample content is placeholder text; replace it before publishing.
+
+### Post tasting notes by text
+
+Text a tasting note to the site's Twilio number and it shows up on Gen Z With A Glass. Only texts from your own number work.
+
+```
+wine: Domaine Example Poulsard, Poulsard, 2022
+rating: 4
+buy again: yes
+flavors: red currant, rose petal
+paired with: roast chicken
+notes:
+Anything after "notes:" becomes the post's extra notes.
+```
+
+- **Format:** only the first line (wine, grape, year or `NV`) is required. Text `wine help` for every label. Bad values are explained, never guessed.
+- **Preview first:** you get a preview back, and nothing posts until you reply `YES`. `NO` discards it. Previews expire after an hour.
+- **What happens on YES:** the note is added to `src/content/wine.texts.json` with a commit to `main`, Netlify redeploys, and the reply has the post's link. To edit or delete a texted post, edit that file.
+- **Code:** `netlify/functions/sms.ts`, served at `/api/sms`. The flow lives in `netlify/lib/sms.ts`, and the parser in `src/content/textNote.ts`.
+
+**Security**
+- Every request must carry a valid Twilio signature.
+- Texts from any other number get no reply.
+- A spoofed sender never sees the preview, so it can't confirm a post.
+- Limits: 60 texts and 10 posts a day.
+- `SMS_PUBLISHING` is a kill switch.
+- Texted content is stored as data and shown as plain text.
+
+**Setup (one time)**
+1. **Twilio:** create an account at twilio.com and buy a phone number with SMS (about $1.15/month plus about 1¢ per text). US numbers must be registered before they can reply: start **toll-free verification** (for a toll-free number) or **A2P 10DLC sole proprietor** (for a local number) in the Twilio console. It takes a few days. Until then, a trial account can still text your own verified number.
+2. **Webhook:** in Twilio, open **Phone Numbers → your number → Messaging configuration**. Under "A message comes in", choose Webhook, enter `https://arynlynn.com/api/sms`, and pick **HTTP POST**.
+3. **GitHub token:** on GitHub, go to **Settings → Developer settings → Fine-grained tokens → Generate new token**.
+   - **Repository access:** only `aryndavis/personal-website`.
+   - **Permissions:** Contents **Read and write**, and nothing else.
+   - **Expiration:** set one, and put a reminder on your calendar to renew it.
+4. **Netlify environment variables** (personal-website site → Site configuration → Environment variables). Mark the two secret ones **Contains secret values**, then redeploy.
+
+   | Key | Value |
+   | --- | --- |
+   | `TWILIO_AUTH_TOKEN` | Twilio console → Account info → Auth token (**secret**) |
+   | `SMS_ALLOWED_FROM` | your cell number, like `+15551234567` |
+   | `SMS_WEBHOOK_URL` | `https://arynlynn.com/api/sms` (exactly what's in Twilio) |
+   | `GITHUB_TOKEN` | the fine-grained token (**secret**) |
+   | `SMS_PUBLISHING` | `on` (set to `off` to pause posting) |
+   | `SMS_TIMEZONE` | optional, for post dates, e.g. `America/Chicago` (default `America/New_York`) |
+
+5. **Test:** text `wine help` to the number.
 
 ## Design pieces
 
