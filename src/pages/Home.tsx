@@ -85,7 +85,7 @@ export default function Home() {
               </p>
               <p>
                 Along the way I’ve designed and taught Python and Django for adult learners, web development courses for CodePath, coding clubs for Black Girls Code, and
-                hand-sewing classes at Made Space. I still build things for fun, like a library catalog for my books and a scrapbook closet that cuts my clothes out of photos.
+                hand-sewing classes at Made Space Seattle. I still build things for fun, like a library catalog for my books and a scrapbook closet that cuts my clothes out of photos.
                 This site has rooms for all of it. Pick a folder below or use the menu up top.
               </p>
               <ul className="quick-facts">

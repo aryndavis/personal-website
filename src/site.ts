@@ -3,7 +3,7 @@ export const site = {
   name: 'Aryn Davis',
   shortName: 'ARYN DAVIS',
   roles: ['Software engineer', 'Curriculum designer', 'Educator'],
-  status: 'M.Ed. student, Teachers College, Columbia',
+  status: 'Open to curriculum projects',
   // Forwards to my personal inbox (email forwarding on the domain), so the real address stays private.
   email: 'hello@arynlynn.com',
   linkedin: 'https://www.linkedin.com/in/aryn-davis',
