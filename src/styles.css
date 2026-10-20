@@ -1931,3 +1931,10 @@ a.pixel-button.substack-link:hover {
   gap: 10px;
   margin: 14px 0 0;
 }
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px 18px;
+}
