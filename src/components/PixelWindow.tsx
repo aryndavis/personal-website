@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState, type PointerEvent, type ReactNode, type RefObject } from 'react'
 
-export type Tone = 'cream' | 'pink' | 'lilac' | 'mint' | 'yellow' | 'blue' | 'peach'
+export type Tone = 'cream' | 'pink' | 'lilac' | 'mint' | 'yellow' | 'blue' | 'peach' | 'lime'
 
 let topLayer = 10
 

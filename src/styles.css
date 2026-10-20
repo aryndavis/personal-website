@@ -10,6 +10,7 @@
   --mint: #8be0c4;
   --blue: #8fb7ff;
   --peach: #ffb38a;
+  --lime: #c2e86a;
   --drop: rgba(5, 0, 12, 0.6);
   --gutter: clamp(16px, 3vw, 40px);
   --pixel: 'Pixelify Sans', ui-monospace, monospace;
@@ -271,6 +272,7 @@ main {
 .tone-yellow { --body: #fff4cf; --bar: var(--yellow); }
 .tone-blue { --body: #e6eeff; --bar: var(--blue); }
 .tone-peach { --body: #ffeadb; --bar: var(--peach); }
+.tone-lime { --body: #f0fad6; --bar: var(--lime); }
 
 .titlebar {
   display: flex;

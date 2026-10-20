@@ -14,8 +14,8 @@ const latest = <T extends Entry>(entries: T[], count = 2) => newestFirst(entries
 // The featured project is the newest one people can open and try.
 const featuredProject = latest(projects.filter((project) => project.links?.length), 1)[0]
 
-const folders: { key: SectionKey; icon: IconName; tone: 'yellow' | 'mint' | 'pink'; entries: Entry[] }[] = [
-  { key: 'portfolio', icon: 'folder', tone: 'yellow', entries: latest(projects) },
+const folders: { key: SectionKey; icon: IconName; tone: 'lime' | 'mint' | 'pink'; entries: Entry[] }[] = [
+  { key: 'portfolio', icon: 'folder', tone: 'lime', entries: latest(projects) },
   { key: 'education', icon: 'notebook', tone: 'mint', entries: latest(educationPosts) },
   { key: 'wine', icon: 'glass', tone: 'pink', entries: latest(winePosts) },
 ]
