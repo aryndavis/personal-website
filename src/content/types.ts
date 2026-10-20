@@ -38,6 +38,14 @@ export type WinePrice = '$' | '$$' | '$$$' | '$$$$'
 
 export type BuyAgain = 'yes' | 'maybe' | 'no'
 
+// Five-step scales for the tasting card's profile meters.
+export const SWEETNESS = ['bone dry', 'dry', 'off-dry', 'medium sweet', 'sweet'] as const
+export const BODY = ['light', 'medium-light', 'medium', 'medium-full', 'full'] as const
+export const LEVEL = ['low', 'medium-low', 'medium', 'medium-high', 'high'] as const
+export type Sweetness = (typeof SWEETNESS)[number]
+export type Body = (typeof BODY)[number]
+export type Level = (typeof LEVEL)[number]
+
 /** The tasting card. Only name, grape and vintage are required. */
 export interface WineDetails {
   name: string
@@ -52,6 +60,18 @@ export interface WineDetails {
   /** 1 to 5 hearts */
   rating?: number
   buyAgain?: BuyAgain
+  /** A one- or two-sentence review shown at the top of the card. */
+  verdict?: string
+  sweetness?: Sweetness
+  body?: Body
+  acidity?: Level
+  tannin?: Level
+  /** Tasting notes: flavors and aromas, e.g. ['red currant', 'rose petal']. */
+  flavors?: string[]
+  /** What I actually ate with it. */
+  pairedWith?: string
+  /** Shown as "Try it with" when there's no pairedWith. */
+  suggestedPairings?: string[]
 }
 
 export interface WinePost extends Entry {

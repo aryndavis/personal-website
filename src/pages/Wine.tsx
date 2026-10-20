@@ -4,7 +4,7 @@ import PixelWindow from '../components/PixelWindow'
 import { useFocusReturn } from '../components/Popup'
 import PostDialog from '../components/PostDialog'
 import Rating from '../components/Rating'
-import { formatDate, newestFirst, type BuyAgain, type WinePost, type WinePrice, type WineStyle } from '../content/types'
+import { BODY, LEVEL, SWEETNESS, formatDate, newestFirst, type BuyAgain, type WinePost, type WinePrice, type WineStyle } from '../content/types'
 import { winePosts } from '../content/wine'
 import { href } from '../router'
 import { sections } from '../site'
@@ -19,27 +19,56 @@ const styleClass = (style?: WineStyle) => `bottle-${style === 'rosé' ? 'rose' :
 const priceLabel: Record<WinePrice, string> = { $: 'under $15', $$: '$15–30', $$$: '$30–60', $$$$: 'over $60' }
 const buyAgainLabel: Record<BuyAgain, string> = { yes: 'Yes, I’d buy it again', maybe: 'Maybe', no: 'No, once was enough' }
 
-/** The tasting card at the top of a tasting note. */
+/** A five-step pixel meter. The text label next to it carries the meaning; the meter is decoration. */
+function Meter({ scale, value }: { scale: readonly string[]; value: string }) {
+  const filled = scale.indexOf(value) + 1
+  return (
+    <span className="meter" aria-hidden="true">
+      {scale.map((step, i) => (
+        <span key={step} className={i < filled ? 'on' : ''} />
+      ))}
+    </span>
+  )
+}
+
+/** The tasting card at the top of a tasting note: verdict, ratings, facts, profile, tasting notes and pairings. */
 function TastingCard({ post }: { post: WinePost }) {
   if (!post.wine) return null
-  const { name, vintage, producer, grape, region, style, price, rating, buyAgain } = post.wine
-  const rows: [string, ReactNode][] = [
-    ['Wine', `${name} ${vintage}`],
-    ['Producer', producer],
-    ['Grape', grape],
-    ['Region', region],
-    ['Style', style && <span className="style-name">{style}</span>],
-    ['Price', price && `${price} · ${priceLabel[price]}`],
-    ['Rating', rating !== undefined && <Rating value={rating} />],
-    ['Buy again?', buyAgain && <span className={`buy-again buy-${buyAgain}`}>{buyAgainLabel[buyAgain]}</span>],
+  const wine = post.wine
+  const facts: [string, ReactNode][] = [
+    ['Wine', `${wine.name} ${wine.vintage}`],
+    ['Producer', wine.producer],
+    ['Grape', wine.grape],
+    ['Region', wine.region],
+    ['Style', wine.style && <span className="style-name">{wine.style}</span>],
+    ['Price', wine.price && `${wine.price} · ${priceLabel[wine.price]}`],
   ]
+  const profile: [string, readonly string[], string | undefined][] = [
+    ['Sweetness', SWEETNESS, wine.sweetness],
+    ['Body', BODY, wine.body],
+    ['Acidity', LEVEL, wine.acidity],
+    ['Tannin', LEVEL, wine.tannin],
+  ]
+  const shownProfile = profile.filter(([, , value]) => value)
+  const flavors = wine.flavors ?? []
+
   return (
-    <div className={`tasting-card ${styleClass(style)}`}>
+    <div className={`tasting-card ${styleClass(wine.style)}`}>
       <p className="tasting-card-title">
         <PixelIcon name="glass" size={18} /> Tasting card
       </p>
-      <dl>
-        {rows
+
+      {wine.verdict && <p className="verdict">“{wine.verdict}”</p>}
+
+      {(wine.rating !== undefined || wine.buyAgain) && (
+        <div className="card-scores">
+          {wine.rating !== undefined && <Rating value={wine.rating} />}
+          {wine.buyAgain && <span className={`buy-again buy-${wine.buyAgain}`}>{buyAgainLabel[wine.buyAgain]}</span>}
+        </div>
+      )}
+
+      <dl className="card-facts">
+        {facts
           .filter(([, value]) => value)
           .map(([label, value]) => (
             <div key={label}>
@@ -48,6 +77,51 @@ function TastingCard({ post }: { post: WinePost }) {
             </div>
           ))}
       </dl>
+
+      {shownProfile.length > 0 && (
+        <section className="card-section">
+          <h3>Profile</h3>
+          <dl className="card-profile">
+            {shownProfile.map(([label, scale, value]) => (
+              <div key={label}>
+                <dt>{label}</dt>
+                <dd>
+                  <Meter scale={scale} value={value!} />
+                  <span className="meter-label">{value}</span>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      )}
+
+      {flavors.length > 0 && (
+        <section className="card-section">
+          <h3>Tasting notes</h3>
+          <ul className="flavor-chips">
+            {flavors.map((flavor) => (
+              <li key={flavor}>{flavor}</li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {wine.pairedWith ? (
+        <section className="card-section">
+          <h3>Paired with</h3>
+          <p className="pairing">{wine.pairedWith}</p>
+        </section>
+      ) : (
+        wine.suggestedPairings &&
+        wine.suggestedPairings.length > 0 && (
+          <section className="card-section">
+            <h3>Try it with</h3>
+            <p className="pairing">
+              {wine.suggestedPairings.join(' · ')} <span className="pairing-hint">(suggested)</span>
+            </p>
+          </section>
+        )
+      )}
     </div>
   )
 }

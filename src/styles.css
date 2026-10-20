@@ -1677,16 +1677,35 @@ a.pixel-button.substack-link:hover {
   color: var(--pink-deep);
 }
 
-.tasting-card dl {
+.verdict {
+  margin: 0 0 10px;
+  font: italic 1.08rem/1.5 var(--sans);
+}
+
+.card-scores {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin-bottom: 12px;
+}
+
+.card-scores .rating {
+  margin-top: 0;
+}
+
+.card-facts,
+.card-profile {
   display: grid;
   gap: 4px;
   margin: 0;
 }
 
-.tasting-card dl > div {
+.card-facts > div,
+.card-profile > div {
   display: grid;
   grid-template-columns: 7.5em 1fr;
-  align-items: baseline;
+  align-items: center;
   gap: 8px;
 }
 
@@ -1700,9 +1719,68 @@ a.pixel-button.substack-link:hover {
   font: 1.2rem/1.15 var(--terminal);
 }
 
-.tasting-card .rating {
-  margin-top: 0;
-  align-self: center;
+.card-section {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 2px dashed rgba(59, 35, 70, 0.35);
+}
+
+.card-section h3 {
+  margin: 0 0 8px;
+  font: 600 12px/1 var(--pixel);
+  text-transform: uppercase;
+  color: var(--pink-deep);
+}
+
+.card-profile dd {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.meter {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.meter span {
+  width: 14px;
+  height: 12px;
+  border: 2px solid var(--ink);
+  background: var(--white);
+}
+
+.meter span.on {
+  background: var(--glass);
+}
+
+.meter-label {
+  text-transform: capitalize;
+}
+
+.flavor-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.flavor-chips li {
+  padding: 1px 8px;
+  border: 2px solid var(--ink);
+  background: color-mix(in srgb, var(--glass) 25%, var(--white));
+  font: 1.15rem/1.2 var(--terminal);
+}
+
+.pairing {
+  margin: 0;
+  font: 1.2rem/1.25 var(--terminal);
+}
+
+.pairing-hint {
+  opacity: 0.7;
 }
 
 .style-name {

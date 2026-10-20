@@ -9,8 +9,13 @@ import type { WinePost } from './types'
 //
 // Add any of these when you have them (see tastingNotes.ts for details):
 //   style: 'red' | 'white' | 'rosé' | 'orange' | 'sparkling' | 'dessert'  (guessed from the grape if left out)
-//   producer, region, price: '$' | '$$' | '$$$' | '$$$$', rating: 1–5, buyAgain: 'yes' | 'maybe' | 'no',
-//   moment, look, nose, palate, finish, pairing, thoughts, and title/summary/tags to override the defaults.
+//   The card:  producer, region, price: '$' | '$$' | '$$$' | '$$$$', rating: 1–5, buyAgain: 'yes' | 'maybe' | 'no',
+//              verdict (a one-line review), flavors (your tasting notes: 'red currant, rose petal'),
+//              sweetness: 'bone dry' | 'dry' | 'off-dry' | 'medium sweet' | 'sweet',
+//              body: 'light' | 'medium-light' | 'medium' | 'medium-full' | 'full',
+//              acidity, tannin: 'low' | 'medium-low' | 'medium' | 'medium-high' | 'high',
+//              pairedWith (what you ate), suggestedPairings (your ideas; made for you if both are left out)
+//   The post:  moment, look, nose, palate, finish, thoughts, and title/summary/tags to override the defaults.
 //
 // Sample notes. Replace these with your own.
 const notes: TastingNote[] = [
@@ -24,11 +29,17 @@ const notes: TastingNote[] = [
     price: '$$',
     rating: 4,
     buyAgain: 'yes',
+    verdict: 'Bright, a little wild, and impossible to stop sipping. Proof that light reds can steal the show.',
+    flavors: 'red currant, rose petal, cranberry, white pepper',
+    sweetness: 'dry',
+    body: 'light',
+    acidity: 'high',
+    tannin: 'low',
+    pairedWith: 'Roast chicken and a loud dinner table',
     moment: 'A bright, slightly unruly Jura red and a reminder to trust your curiosity. This is a sample tasting note.',
     look: 'pale ruby',
     nose: 'red currant, rose petal',
     palate: 'light, crunchy, a little wild',
-    pairing: 'Roast chicken and a loud dinner table.',
   },
   {
     wine: 'Sample Albariño',
@@ -40,8 +51,12 @@ const notes: TastingNote[] = [
     price: '$$',
     rating: 3,
     buyAgain: 'maybe',
+    verdict: 'Crisp, salty and easy to love for the price.',
+    flavors: 'lemon, green apple, sea salt',
+    sweetness: 'dry',
+    body: 'medium-light',
+    acidity: 'high',
     moment: 'A crisp, salty white that over-delivers with takeout. This is a sample tasting note.',
-    pairing: 'Sushi takeout.',
   },
 ]
 
