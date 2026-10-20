@@ -186,7 +186,7 @@ export default function Home() {
           )}
 
           {isOpen('school') && (
-            <PixelWindow title="school_notes.txt" tone="yellow" className="school-window" movable onClose={close('school')} labelledBy="school-title">
+            <PixelWindow title="school_notes.txt" tone="peach" className="school-window" movable onClose={close('school')} labelledBy="school-title">
               <div className="folder-head">
                 <PixelIcon name="notebook" size={40} />
                 <div>
