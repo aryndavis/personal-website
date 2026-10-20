@@ -1,9 +1,100 @@
 import type { Project } from './types'
 
-// Sample projects. Replace these with your own case studies.
+// Two tracks: 'curriculum' (case studies) and 'software' (apps I've built).
+// The curriculum projects are still samples. Replace them with your own case studies.
 export const projects: Project[] = [
   {
+    slug: 'aryns-library',
+    track: 'software',
+    title: 'Aryn’s Library',
+    date: '2026-10-20',
+    role: 'Design & engineering',
+    audience: 'My own bookshelf, public to browse',
+    format: 'React + Supabase web app',
+    summary: 'A pixel-art card catalog for my physical books, with lending, rubber-stamp check-outs, and a public read-only view.',
+    tags: ['React', 'TypeScript', 'Supabase', 'Postgres'],
+    cover: { src: 'images/portfolio/library-catalog.jpg', alt: 'Aryn’s Library card catalog: pixel book covers on a shelf with search and filters.' },
+    links: [
+      { label: 'Open the library ↗', href: 'https://library.arynlynn.com' },
+      { label: 'Code on GitHub ↗', href: 'https://github.com/aryndavis/bookshelf' },
+    ],
+    body: [
+      { type: 'h', text: 'What it is' },
+      {
+        type: 'p',
+        text: 'A cozy catalog of every book I own, which ones I’ve lent out, who has them, and for how long. Anyone can browse the shelves; only I can add books or lend them.',
+      },
+      { type: 'image', src: 'images/portfolio/library-checked-out.jpg', alt: 'A checked-out book with a CHECKED OUT rubber stamp and an old-school date-due card.' },
+      { type: 'h', text: 'Features' },
+      {
+        type: 'list',
+        items: [
+          'Card catalog with search, filters (on the shelf, checked out, overdue) and sorting',
+          'Add a book by ISBN: title, author and year fill in from Open Library',
+          'Lending with due dates: a rubber stamp animates onto the cover, and a pocket library card keeps the history',
+          '“Who has what” page grouping open loans by borrower, overdue first',
+          'CSV and JSON backups',
+        ],
+      },
+      { type: 'h', text: 'How it’s built' },
+      {
+        type: 'list',
+        items: [
+          'React 19, TypeScript and Vite, hosted on Netlify',
+          'Supabase (Postgres + auth) with Row Level Security on every table',
+          'Public view: visitors can read books and see that a book is out, but borrower names and contact details never leave the database',
+          'Strict Content Security Policy, no third-party scripts, and a demo mode that runs entirely in the browser',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'aryns-closet',
+    track: 'software',
+    title: 'Aryn’s Closet',
+    date: '2026-10-19',
+    role: 'Design & engineering',
+    audience: 'My own closet, public to browse',
+    format: 'React + Supabase web app with on-device ML',
+    summary: 'A Y2K scrapbook lookbook that cuts each piece of clothing out of an outfit photo, on the device, and catalogs it.',
+    tags: ['React', 'TypeScript', 'Computer vision', 'Supabase'],
+    cover: { src: 'images/portfolio/closet-lookbook.jpg', alt: 'Aryn’s Closet lookbook: an outfit polaroid taped into a pink scrapbook on a wooden desk.' },
+    links: [
+      { label: 'Open the closet ↗', href: 'https://closet.arynlynn.com' },
+      { label: 'Code on GitHub ↗', href: 'https://github.com/aryndavis/aryns-closet' },
+    ],
+    body: [
+      { type: 'h', text: 'What it is' },
+      {
+        type: 'p',
+        text: 'Upload an outfit photo and it becomes a page in a Bratz-meets-scrapbook lookbook. Every fully visible piece of clothing is cut out into a sticker and added to my closet, and an outfit roulette shuffles those pieces into new looks.',
+      },
+      { type: 'image', src: 'images/portfolio/closet-scanner.jpg', alt: 'The review step: the scanner found three pieces in an outfit photo, each cut out as a sticker to name and categorize.' },
+      { type: 'h', text: 'Features' },
+      {
+        type: 'list',
+        items: [
+          'Clothing scanner: finds tops, bottoms, dresses, shoes and accessories, cuts each out, and names its color',
+          'Pieces cut off at the edge of the photo get a friendly error instead of a bad sticker',
+          'Review before saving, including “this is already in my closet” to tag an existing piece',
+          'Closet board with wear counts, and an outfit roulette with lockable pieces',
+        ],
+      },
+      { type: 'h', text: 'How it’s built' },
+      {
+        type: 'list',
+        items: [
+          'Segmentation runs entirely in the browser: a SegFormer model through Transformers.js and ONNX Runtime (WebAssembly) in a Web Worker, so photos never go to an AI service',
+          'The model is pinned to an exact revision and checked against SHA-256 hashes, and served from the site itself',
+          'Supabase for data and a private photo bucket, with Row Level Security and short-lived signed photo links',
+          'React 19, TypeScript and Vite on Netlify, with a strict Content Security Policy',
+        ],
+      },
+    ],
+  },
+  {
     slug: 'the-living-map',
+    track: 'curriculum',
     title: 'The Living Map',
     date: '2026-08-20',
     role: 'Lead curriculum designer',
@@ -22,6 +113,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'small-worlds-big-questions',
+    track: 'curriculum',
     title: 'Small Worlds, Big Questions',
     date: '2026-05-02',
     role: 'Designer and facilitator',
@@ -39,6 +131,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'make-room-for-wonder',
+    track: 'curriculum',
     title: 'Make Room for Wonder',
     date: '2025-11-10',
     role: 'Program designer',

@@ -4,6 +4,28 @@ import type { Project } from '../content/types'
 import { site } from '../site'
 import Collection from './Collection'
 
+const isWebLink = (url: string) => /^https?:\/\//i.test(url)
+
+/** Screenshot on a software project's card. Decorative there: the card's title and summary say what it is. */
+function ProjectCover({ project }: { project: Project }) {
+  if (!project.cover) return null
+  return <img className="card-cover" src={`${import.meta.env.BASE_URL}${project.cover.src}`} alt="" loading="lazy" />
+}
+
+function ProjectLinks({ project }: { project: Project }) {
+  const links = (project.links ?? []).filter((link) => isWebLink(link.href))
+  if (!links.length) return null
+  return (
+    <p className="project-links">
+      {links.map((link) => (
+        <a key={link.href} className="pixel-button" href={link.href} target="_blank" rel="noopener noreferrer">
+          {link.label}
+        </a>
+      ))}
+    </p>
+  )
+}
+
 function ProjectFacts({ project }: { project: Project }) {
   return (
     <dl className="facts">
@@ -38,13 +60,24 @@ export function PortfolioPage({ slug }: { slug?: string }) {
           <span className="mega-ext">.exe</span>
         </>
       }
-      intro={
-        <p>
-          Curriculum design case studies: the challenge, my approach, and what changed for learners. Open any project for the full story.
-        </p>
-      }
-      cardExtra={(project) => <ProjectFacts project={project} />}
-      dialogMeta={(project) => <ProjectFacts project={project} />}
+      intro={<p>Two kinds of work: curriculum design case studies, and software I’ve designed and built. Open any project for the full story.</p>}
+      groups={[
+        { id: 'curriculum-design', title: 'Curriculum design', filter: (project) => project.track === 'curriculum' },
+        { id: 'software-engineering', title: 'Software engineering', filter: (project) => project.track === 'software' },
+      ]}
+      openLabel={(project) => (project.track === 'software' ? 'Open project ▶' : 'Open case study ▶')}
+      cardExtra={(project) => (
+        <>
+          <ProjectCover project={project} />
+          <ProjectFacts project={project} />
+        </>
+      )}
+      dialogMeta={(project) => (
+        <>
+          <ProjectFacts project={project} />
+          <ProjectLinks project={project} />
+        </>
+      )}
     />
   )
 }

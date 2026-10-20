@@ -1893,3 +1893,33 @@ a.pixel-button.substack-link:hover {
     transition: none;
   }
 }
+
+/* ---------- Portfolio groups ---------- */
+
+.board-group + .board-group {
+  margin-top: 72px;
+}
+
+.board-group-title {
+  margin: 0 0 20px;
+  font: 600 clamp(1.6rem, 4vw, 2.2rem)/1 var(--pixel);
+  color: var(--white);
+  text-shadow: 3px 3px 0 var(--ink);
+}
+
+.card-cover {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  margin-bottom: 14px;
+  object-fit: cover;
+  object-position: top;
+  border: 3px solid var(--ink);
+}
+
+.project-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 4px 0 14px;
+}

@@ -21,9 +21,13 @@ interface CollectionProps<T extends Entry> {
   fileExtension: string
   cardExtra?: (entry: T) => ReactNode
   dialogMeta?: (entry: T) => ReactNode
+  /** Splits the 'windows' layout into titled sections. Entries in no group aren't shown on the board. */
+  groups?: { id: string; title: string; intro?: ReactNode; filter: (entry: T) => boolean }[]
+  /** The button text on a 'windows' card. */
+  openLabel?: (entry: T) => string
 }
 
-export default function Collection<T extends Entry>({ sectionKey, entries, slug, headline, intro, icon, layout, fileExtension, cardExtra, dialogMeta }: CollectionProps<T>) {
+export default function Collection<T extends Entry>({ sectionKey, entries, slug, headline, intro, icon, layout, fileExtension, cardExtra, dialogMeta, groups, openLabel = () => 'Open case study ▶' }: CollectionProps<T>) {
   const section = sections[sectionKey]
   const sorted = newestFirst(entries)
   const index = slug ? sorted.findIndex((entry) => entry.slug === slug) : -1
@@ -33,6 +37,34 @@ export default function Collection<T extends Entry>({ sectionKey, entries, slug,
   useFocusReturn(slug)
 
   const link = (entry: T) => href(`${section.path}/${entry.slug}`)
+
+  // Inside a titled group, card titles sit one level below the group title.
+  const CardHeading = groups ? 'h3' : 'h2'
+  const windowBoard = (list: T[]) => (
+    <ul className="window-board">
+      {list.map((entry, i) => (
+        <li key={entry.slug}>
+          <PixelWindow as="article" title={`${entry.slug}.${fileExtension}`} tone={noteTones[(i + 1) % noteTones.length]} labelledBy={`card-${entry.slug}`} className="card-window">
+            {cardExtra?.(entry)}
+            <CardHeading className="card-title" id={`card-${entry.slug}`}>
+              <a className="stretched" href={link(entry)} data-slug={entry.slug}>
+                {entry.title}
+              </a>
+            </CardHeading>
+            <p>{entry.summary}</p>
+            <ul className="tag-list" aria-label="Tags">
+              {entry.tags.map((tag) => (
+                <li key={tag}>#{tag}</li>
+              ))}
+            </ul>
+            <span className="pixel-button card-open" aria-hidden="true">
+              {openLabel(entry)}
+            </span>
+          </PixelWindow>
+        </li>
+      ))}
+    </ul>
+  )
 
   return (
     <div className={`collection collection-${sectionKey}`}>
@@ -84,30 +116,23 @@ export default function Collection<T extends Entry>({ sectionKey, entries, slug,
               </li>
             ))}
           </ul>
-        ) : (
-          <ul className="window-board">
-            {sorted.map((entry, i) => (
-              <li key={entry.slug}>
-                <PixelWindow as="article" title={`${entry.slug}.${fileExtension}`} tone={noteTones[(i + 1) % noteTones.length]} labelledBy={`card-${entry.slug}`} className="card-window">
-                  {cardExtra?.(entry)}
-                  <h2 className="card-title" id={`card-${entry.slug}`}>
-                    <a className="stretched" href={link(entry)} data-slug={entry.slug}>
-                      {entry.title}
-                    </a>
+        ) : groups ? (
+          groups.map((group) => {
+            const list = sorted.filter(group.filter)
+            return (
+              list.length > 0 && (
+                <section key={group.id} id={group.id} className="board-group" aria-labelledby={`${group.id}-title`}>
+                  <h2 id={`${group.id}-title`} className="board-group-title">
+                    {group.title}
                   </h2>
-                  <p>{entry.summary}</p>
-                  <ul className="tag-list" aria-label="Tags">
-                    {entry.tags.map((tag) => (
-                      <li key={tag}>#{tag}</li>
-                    ))}
-                  </ul>
-                  <span className="pixel-button card-open" aria-hidden="true">
-                    Open case study ▶
-                  </span>
-                </PixelWindow>
-              </li>
-            ))}
-          </ul>
+                  {group.intro}
+                  {windowBoard(list)}
+                </section>
+              )
+            )
+          })
+        ) : (
+          windowBoard(sorted)
         )}
       </section>
 
