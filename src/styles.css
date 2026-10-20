@@ -10,6 +10,7 @@
   --mint: #8be0c4;
   --blue: #8fb7ff;
   --peach: #ffb38a;
+  --lime: #c2e86a;
   --drop: rgba(5, 0, 12, 0.6);
   --gutter: clamp(16px, 3vw, 40px);
   --pixel: 'Pixelify Sans', ui-monospace, monospace;
@@ -271,6 +272,7 @@ main {
 .tone-yellow { --body: #fff4cf; --bar: var(--yellow); }
 .tone-blue { --body: #e6eeff; --bar: var(--blue); }
 .tone-peach { --body: #ffeadb; --bar: var(--peach); }
+.tone-lime { --body: #f0fad6; --bar: var(--lime); }
 
 .titlebar {
   display: flex;
@@ -769,6 +771,8 @@ button.pixel-button:active {
 .note.tone-mint { --body: #cdf7e6; }
 .note.tone-lilac { --body: #e8dbff; }
 .note.tone-blue { --body: #d9e6ff; }
+.note.tone-peach { --body: #ffe0cc; }
+.note.tone-lime { --body: #e8f7c2; }
 
 .note:nth-child(even) {
   rotate: 1.4deg;
@@ -1320,6 +1324,8 @@ a.pixel-button.substack-link:hover {
 .spine-blue { --book: var(--blue); --book-ink: var(--ink); }
 .spine-cream { --book: var(--cream); --book-ink: var(--ink); }
 .spine-wine { --book: #8c1c4a; --book-ink: var(--cream); }
+.spine-peach { --book: var(--peach); --book-ink: var(--ink); }
+.spine-lime { --book: var(--lime); --book-ink: var(--ink); }
 
 .shelf-window .window-body {
   padding: 20px clamp(12px, 3vw, 28px) 28px;

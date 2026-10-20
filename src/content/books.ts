@@ -1,7 +1,7 @@
 // status: 'reading' shows face-out on the top shelf; 'read' and 'want' show as spines.
 
 export type BookStatus = 'reading' | 'read' | 'want'
-export type SpineColor = 'pink' | 'yellow' | 'mint' | 'lilac' | 'blue' | 'wine' | 'cream'
+export type SpineColor = 'pink' | 'yellow' | 'mint' | 'lilac' | 'blue' | 'wine' | 'cream' | 'peach' | 'lime'
 
 export interface Book {
   slug: string
