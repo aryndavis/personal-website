@@ -10,6 +10,8 @@ import { currentlyReading } from '../content/books'
 import { bookshelf, sections, site, type SectionKey } from '../site'
 
 const latest = <T extends Entry>(entries: T[], count = 2) => newestFirst(entries).slice(0, count)
+// The featured project is the newest one people can open and try.
+const featuredProject = latest(projects.filter((project) => project.links?.length), 1)[0]
 
 const folders: { key: SectionKey; icon: IconName; tone: 'yellow' | 'mint' | 'pink'; entries: Entry[] }[] = [
   { key: 'portfolio', icon: 'folder', tone: 'yellow', entries: latest(projects) },
@@ -23,12 +25,13 @@ export default function Home() {
   const [closed, setClosed] = useState<WindowId[]>([])
   const close = (id: WindowId) => () => setClosed((list) => [...list, id])
   const isOpen = (id: WindowId) => !closed.includes(id)
-  const featured = latest(projects, 1)[0]
+  const featured = featuredProject
 
   return (
     <>
       <section className="home-hero" aria-labelledby="hero-title">
         <ul className="hero-tags">
+          <li>/ Software engineering</li>
           <li>/ Curriculum design</li>
           <li>/ Education writing</li>
           <li>/ Wine notes</li>
@@ -76,21 +79,41 @@ export default function Home() {
                 <h2 id="about-title">Hi, I’m {site.name.split(' ')[0]}.</h2>
               </div>
               <p>
-                I’m a curriculum designer who builds learning experiences that are rigorous, human, and a little bit delightful. Replace this paragraph with your story: where you’ve
-                taught, what you design, and what you care about.
+                I’m a software engineer and a curriculum designer, and I love the places where the two meet. I spent five years as a software engineer at Microsoft, building the
+                checkout experiences behind Microsoft 365 and Copilot and serving as my team’s security point of contact. Now I’m in New York, studying Technology, Media, and
+                Learning for a Master of Education at Teachers College, Columbia University.
               </p>
-              <p>This site has three rooms. Pick a folder below or use the menu up top.</p>
+              <p>
+                Along the way I’ve designed and taught Python and Django for adult learners, web development courses for CodePath, coding clubs for Black Girls Code, and
+                hand-sewing classes at Made Space Seattle. I still build things for fun, like a library catalog for my books and a scrapbook closet that cuts my clothes out of photos.
+                This site has rooms for all of it. Pick a folder below or use the menu up top.
+              </p>
               <ul className="quick-facts">
                 <li>
-                  <PixelIcon name="star" size={16} /> Based in: your city
+                  <PixelIcon name="star" size={16} /> Based in: New York City
                 </li>
                 <li>
-                  <PixelIcon name="heart" size={16} /> Loves: inquiry, good questions, natural wine
+                  <PixelIcon name="smile" size={16} /> Sign: Gemini {'\u264A\uFE0E'}, which explains the engineer-and-educator double life
                 </li>
                 <li>
-                  <PixelIcon name="floppy" size={16} /> Background: your degrees and experience
+                  <PixelIcon name="heart" size={16} /> Loves: crochet, sewing, golf, and Riesling above all
+                </li>
+                <li>
+                  <PixelIcon name="floppy" size={16} /> Studying: M.Ed. in Technology, Media, and Learning, Teachers College, Columbia University (expected May 2028)
+                </li>
+                <li>
+                  <PixelIcon name="books" size={16} /> Background: B.S. in Computer Science (Intelligent Systems), minor in Sociology, Columbia University; software engineer at
+                  Microsoft, 2021–2026
                 </li>
               </ul>
+              <p className="social-links">
+                <a className="pixel-button" href={site.linkedin} target="_blank" rel="noopener noreferrer">
+                  LinkedIn ↗
+                </a>
+                <a className="pixel-button" href={site.instagram} target="_blank" rel="noopener noreferrer">
+                  Instagram: @aryn.creates ↗
+                </a>
+              </p>
             </PixelWindow>
           )}
 
@@ -107,7 +130,7 @@ export default function Home() {
                       <p>{sections[key].blurb}</p>
                     </div>
                   </div>
-                  <p className="folder-recent">Recent:</p>
+                  <p className="folder-recent">{entries.length ? 'Recent:' : 'Nothing here yet. Check back soon!'}</p>
                   <ul className="folder-list">
                     {entries.map((entry) => (
                       <li key={entry.slug}>
@@ -133,8 +156,10 @@ export default function Home() {
             <PixelWindow title="currently.txt" tone="lilac" className="currently-window" movable onClose={close('currently')}>
               <dl className="currently">
                 <div>
-                  <dt>Designing</dt>
-                  <dd>a unit you’re proud of</dd>
+                  <dt>Building</dt>
+                  <dd>
+                    <a href={href(`${sections.portfolio.path}/${featuredProject?.slug ?? ''}`)}>{featuredProject?.title ?? 'something new'}</a>
+                  </dd>
                 </div>
                 <div>
                   <dt>Reading</dt>
@@ -167,6 +192,16 @@ export default function Home() {
                   Have a project, a question, or a bottle recommendation?
                   <br />
                   <a href={`mailto:${site.email}`}>{site.email}</a>
+                  <br />
+                  Or find me on{' '}
+                  <a href={site.linkedin} target="_blank" rel="noopener noreferrer">
+                    LinkedIn
+                  </a>{' '}
+                  and, for creative stuff,{' '}
+                  <a href={site.instagram} target="_blank" rel="noopener noreferrer">
+                    Instagram
+                  </a>
+                  .
                 </p>
               </div>
             </PixelWindow>

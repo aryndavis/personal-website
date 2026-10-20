@@ -141,7 +141,7 @@ export default function Collection<T extends Entry>({ sectionKey, entries, slug,
         <ol className="archive-list">
           {sorted.map((entry) => (
             <li key={entry.slug}>
-              <time dateTime={entry.date}>{entry.date}</time>
+              {entry.period ? <span className="archive-period">{entry.period}</span> : <time dateTime={entry.date}>{entry.date}</time>}
               <a href={link(entry)}>{entry.title}</a>
             </li>
           ))}

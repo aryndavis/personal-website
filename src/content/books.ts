@@ -1,4 +1,3 @@
-// The 'read' and 'want' books below are still samples. Replace them with your own shelf.
 // status: 'reading' shows face-out on the top shelf; 'read' and 'want' show as spines.
 
 export type BookStatus = 'reading' | 'read' | 'want'
@@ -32,57 +31,6 @@ export const books: Book[] = [
     author: 'Sloane Crosley',
     status: 'reading',
     color: 'lilac',
-  },
-  {
-    slug: 'understanding-by-design',
-    title: 'Understanding by Design',
-    author: 'Grant Wiggins & Jay McTighe',
-    status: 'read',
-    color: 'blue',
-    date: '2026-08-14',
-    rating: 5,
-    note: 'Sample entry. Short thoughts show up in the pop-up.',
-  },
-  {
-    slug: 'pedagogy-of-the-oppressed',
-    title: 'Pedagogy of the Oppressed',
-    author: 'Paulo Freire',
-    status: 'read',
-    color: 'wine',
-    date: '2026-06-02',
-    rating: 4,
-  },
-  {
-    slug: 'wine-folly-magnum-edition',
-    title: 'Wine Folly: Magnum Edition',
-    author: 'Madeline Puckette & Justin Hammack',
-    status: 'read',
-    color: 'mint',
-    date: '2026-04-20',
-    rating: 4,
-  },
-  {
-    slug: 'braiding-sweetgrass',
-    title: 'Braiding Sweetgrass',
-    author: 'Robin Wall Kimmerer',
-    status: 'read',
-    color: 'lilac',
-    date: '2026-02-11',
-    rating: 5,
-  },
-  {
-    slug: 'range',
-    title: 'Range',
-    author: 'David Epstein',
-    status: 'want',
-    color: 'cream',
-  },
-  {
-    slug: 'the-sommeliers-atlas-of-taste',
-    title: "The Sommelier's Atlas of Taste",
-    author: 'Rajat Parr & Jordan Mackay',
-    status: 'want',
-    color: 'pink',
   },
 ]
 

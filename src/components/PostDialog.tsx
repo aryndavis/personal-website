@@ -76,7 +76,7 @@ export default function PostDialog({ entry, fileName, closePath, prev, next, met
   return (
     <Popup fileName={fileName} closePath={closePath} titleId={titleId} contentKey={entry.slug}>
       <p className="post-date">
-        <time dateTime={entry.date}>{formatDate(entry.date)}</time>
+        {entry.period ?? <time dateTime={entry.date}>{formatDate(entry.date)}</time>}
       </p>
       <h2 id={titleId} tabIndex={-1} className="post-title">
         {entry.title}
