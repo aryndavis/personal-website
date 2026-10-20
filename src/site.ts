@@ -2,9 +2,9 @@
 export const site = {
   name: 'Aryn Davis',
   shortName: 'ARYN DAVIS',
-  roles: ['Curriculum designer', 'Educator', 'Wine nerd'],
+  roles: ['Software engineer', 'Curriculum designer', 'Educator'],
   status: 'Open to curriculum projects for 2027',
-  email: 'hello@example.com',
+  email: 'arynlynn1@gmail.com',
   substack: 'https://arynlynn.substack.com',
   year: new Date().getFullYear(),
 }
@@ -18,7 +18,7 @@ export const sections: Record<SectionKey, { path: string; label: string; file: s
     path: '/portfolio',
     label: 'Portfolio',
     file: 'portfolio.exe',
-    blurb: 'Curriculum design work: units, courses, toolkits, and professional learning.',
+    blurb: 'Software engineering at Microsoft and beyond, plus the courses and clubs I’ve designed and taught.',
   },
   education: {
     path: '/education',

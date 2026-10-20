@@ -60,10 +60,10 @@ export function PortfolioPage({ slug }: { slug?: string }) {
           <span className="mega-ext">.exe</span>
         </>
       }
-      intro={<p>Two kinds of work: curriculum design case studies, and software I’ve designed and built. Open any project for the full story.</p>}
+      intro={<p>Two kinds of work: software I’ve built at Microsoft and on my own, and the courses, clubs and classes I’ve designed and taught. Open any project for the full story.</p>}
       groups={[
-        { id: 'curriculum-design', title: 'Curriculum design', filter: (project) => project.track === 'curriculum' },
         { id: 'software-engineering', title: 'Software engineering', filter: (project) => project.track === 'software' },
+        { id: 'curriculum-design', title: 'Curriculum design', filter: (project) => project.track === 'curriculum' },
       ]}
       openLabel={(project) => (project.track === 'software' ? 'Open project ▶' : 'Open case study ▶')}
       cardExtra={(project) => (

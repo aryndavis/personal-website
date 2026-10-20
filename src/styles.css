@@ -944,7 +944,8 @@ button.pixel-button:active {
   border-bottom: 2px dotted rgba(59, 35, 70, 0.4);
 }
 
-.archive-list time {
+.archive-list time,
+.archive-period {
   font: 1.2rem/1.2 var(--terminal);
   opacity: 0.75;
 }

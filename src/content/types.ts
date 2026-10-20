@@ -16,8 +16,10 @@ export interface Entry {
   title: string
   /** Optional line shown under the title in the pop-up. */
   subtitle?: string
-  /** ISO date, e.g. 2026-09-14 */
+  /** ISO date, e.g. 2026-09-14. Used for sorting; shown unless there's a period. */
   date: string
+  /** Shown instead of the date for work that spans time, e.g. 'Aug 2021 – present'. */
+  period?: string
   summary: string
   tags: string[]
   body: Block[]

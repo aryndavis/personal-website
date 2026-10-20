@@ -10,6 +10,8 @@ import { currentlyReading } from '../content/books'
 import { bookshelf, sections, site, type SectionKey } from '../site'
 
 const latest = <T extends Entry>(entries: T[], count = 2) => newestFirst(entries).slice(0, count)
+// The featured project is the newest one people can open and try.
+const featuredProject = latest(projects.filter((project) => project.links?.length), 1)[0]
 
 const folders: { key: SectionKey; icon: IconName; tone: 'yellow' | 'mint' | 'pink'; entries: Entry[] }[] = [
   { key: 'portfolio', icon: 'folder', tone: 'yellow', entries: latest(projects) },
@@ -23,12 +25,13 @@ export default function Home() {
   const [closed, setClosed] = useState<WindowId[]>([])
   const close = (id: WindowId) => () => setClosed((list) => [...list, id])
   const isOpen = (id: WindowId) => !closed.includes(id)
-  const featured = latest(projects, 1)[0]
+  const featured = featuredProject
 
   return (
     <>
       <section className="home-hero" aria-labelledby="hero-title">
         <ul className="hero-tags">
+          <li>/ Software engineering</li>
           <li>/ Curriculum design</li>
           <li>/ Education writing</li>
           <li>/ Wine notes</li>
@@ -76,19 +79,23 @@ export default function Home() {
                 <h2 id="about-title">Hi, I’m {site.name.split(' ')[0]}.</h2>
               </div>
               <p>
-                I’m a curriculum designer who builds learning experiences that are rigorous, human, and a little bit delightful. Replace this paragraph with your story: where you’ve
-                taught, what you design, and what you care about.
+                I’m a software engineer at Microsoft and a curriculum designer. By day I build the checkout experiences behind Microsoft 365 and Copilot, and I’m the security point
+                of contact for my product space. Outside of work, I design and teach: Python and Django for adult learners, web development courses for CodePath, coding clubs for
+                Black Girls Code, and, lately, hand-sewing classes at Made Space.
               </p>
-              <p>This site has three rooms. Pick a folder below or use the menu up top.</p>
+              <p>
+                I also build things for fun, like a library catalog for my books and a scrapbook closet that cuts my clothes out of photos. This site has rooms for all of it. Pick a
+                folder below or use the menu up top.
+              </p>
               <ul className="quick-facts">
                 <li>
-                  <PixelIcon name="star" size={16} /> Based in: your city
+                  <PixelIcon name="star" size={16} /> Based in: Seattle, WA
                 </li>
                 <li>
-                  <PixelIcon name="heart" size={16} /> Loves: inquiry, good questions, natural wine
+                  <PixelIcon name="heart" size={16} /> Loves: good questions, golf, sewing, natural wine
                 </li>
                 <li>
-                  <PixelIcon name="floppy" size={16} /> Background: your degrees and experience
+                  <PixelIcon name="floppy" size={16} /> Background: B.S. in Computer Science (Intelligent Systems), minor in Sociology, Columbia University
                 </li>
               </ul>
             </PixelWindow>
@@ -133,8 +140,10 @@ export default function Home() {
             <PixelWindow title="currently.txt" tone="lilac" className="currently-window" movable onClose={close('currently')}>
               <dl className="currently">
                 <div>
-                  <dt>Designing</dt>
-                  <dd>a unit you’re proud of</dd>
+                  <dt>Building</dt>
+                  <dd>
+                    <a href={href(`${sections.portfolio.path}/${featuredProject?.slug ?? ''}`)}>{featuredProject?.title ?? 'something new'}</a>
+                  </dd>
                 </div>
                 <div>
                   <dt>Reading</dt>
