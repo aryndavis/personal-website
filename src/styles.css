@@ -900,30 +900,6 @@ button.pixel-button:active {
   font: 1.15rem/1.05 var(--terminal);
 }
 
-.wine-card {
-  margin-top: 14px;
-  padding: 10px 12px;
-  border: 2px solid var(--ink);
-  background: rgba(255, 255, 255, 0.55);
-}
-
-.wine-card.full {
-  margin: 4px 0 8px;
-}
-
-.wine-card p {
-  margin: 0;
-}
-
-.wine-name {
-  font: 600 1rem/1.2 var(--pixel);
-  color: #8c1c4a;
-}
-
-.wine-detail {
-  font: 1.15rem/1.1 var(--terminal);
-}
-
 .rating {
   display: flex;
   gap: 3px;
@@ -1515,4 +1491,315 @@ a.pixel-button.substack-link:hover {
 
 .currently dd a {
   color: inherit;
+}
+
+/* ---------- Gen Z With A Glass (wine) ---------- */
+
+/* Bottle colors follow the wine's style. --glass is the wine, --foil the capsule. */
+.bottle-red { --glass: #7a1538; --foil: #2b0f1c; }
+.bottle-white { --glass: #ead36d; --foil: #6f5f12; }
+.bottle-rose { --glass: #ff8fb3; --foil: var(--pink-deep); }
+.bottle-orange { --glass: #f0913a; --foil: #7f4210; }
+.bottle-sparkling { --glass: #dcebaa; --foil: #e2b33c; }
+.bottle-dessert { --glass: #b8731c; --foil: #4f2c07; }
+.bottle-unknown { --glass: var(--lilac); --foil: var(--ink); }
+
+.rack-window .window-body {
+  padding: 20px clamp(12px, 3vw, 28px) 24px;
+}
+
+/* Rows of bottles, each standing on a wooden plank drawn by the background. */
+.wine-rack {
+  --row: 252px;
+  --plank: 14px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 76px);
+  grid-auto-rows: var(--row);
+  gap: 0 14px;
+  margin: 0;
+  padding: 0 14px;
+  list-style: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0 calc(var(--row) - var(--plank) - 6px),
+    var(--ink) calc(var(--row) - var(--plank) - 6px) calc(var(--row) - var(--plank) - 3px),
+    #a0673f calc(var(--row) - var(--plank) - 3px) calc(var(--row) - 3px),
+    var(--ink) calc(var(--row) - 3px) var(--row)
+  );
+}
+
+.bottle {
+  position: relative;
+  align-self: end;
+  width: 76px;
+  height: 210px;
+  margin-bottom: calc(var(--plank) + 6px);
+  transition: translate 0.15s steps(3);
+}
+
+.bottle:hover,
+.bottle:focus-within {
+  translate: 0 -10px;
+}
+
+/* A pixel outline around the clipped bottle shape. */
+.bottle-link {
+  position: relative;
+  display: block;
+  height: 100%;
+  color: var(--ink);
+  text-decoration: none;
+  filter: drop-shadow(3px 0 0 var(--ink)) drop-shadow(-3px 0 0 var(--ink)) drop-shadow(0 3px 0 var(--ink)) drop-shadow(0 -3px 0 var(--ink));
+}
+
+.bottle-link:focus-visible {
+  outline: 3px dashed var(--pink-deep);
+  outline-offset: 8px;
+}
+
+.bottle-glass {
+  position: absolute;
+  inset: 0;
+  background: var(--glass);
+  clip-path: polygon(33% 0, 67% 0, 67% 30%, 80% 30%, 80% 34%, 92% 34%, 92% 39%, 100% 39%, 100% 100%, 0 100%, 0 39%, 8% 39%, 8% 34%, 20% 34%, 20% 30%, 33% 30%);
+}
+
+/* Foil capsule on the neck, and a pixel highlight down the side. */
+.bottle-glass::before,
+.bottle-glass::after {
+  content: '';
+  position: absolute;
+}
+
+.bottle-glass::before {
+  inset: 0 0 auto;
+  height: 20%;
+  background: var(--foil);
+}
+
+.bottle-glass::after {
+  top: 44%;
+  bottom: 8%;
+  left: 14%;
+  width: 6px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.bottle-label {
+  position: absolute;
+  top: 50%;
+  bottom: 9%;
+  left: 9px;
+  right: 9px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 4px 3px;
+  border: 2px solid var(--ink);
+  background: var(--cream);
+  text-align: center;
+}
+
+.bottle-name {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  font: 600 10px/1.15 var(--pixel);
+  overflow-wrap: anywhere;
+}
+
+.bottle-vintage {
+  font: 1rem/1 var(--terminal);
+  color: var(--pink-deep);
+}
+
+.bottle-tag {
+  position: absolute;
+  top: 44px;
+  right: -14px;
+  z-index: 2;
+  padding: 2px 5px;
+  border: 2px solid var(--ink);
+  background: var(--pink);
+  font: 600 9px/1.2 var(--pixel);
+  white-space: nowrap;
+  rotate: 8deg;
+  pointer-events: none;
+}
+
+.rack-empty {
+  margin: 12px 0 0;
+  font: 1.25rem/1.2 var(--terminal);
+}
+
+.rack-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+  font: 1.15rem/1 var(--terminal);
+  text-transform: capitalize;
+}
+
+.rack-legend li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-swatch {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--ink);
+  background: var(--glass);
+}
+
+.tasting-card {
+  margin: 6px 0 14px;
+  padding: 12px 14px;
+  border: 3px solid var(--ink);
+  background: var(--white);
+  box-shadow: 6px 6px 0 var(--glass);
+}
+
+.tasting-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px;
+  font: 600 13px/1 var(--pixel);
+  text-transform: uppercase;
+  color: var(--pink-deep);
+}
+
+.tasting-card dl {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+}
+
+.tasting-card dl > div {
+  display: grid;
+  grid-template-columns: 7.5em 1fr;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.tasting-card dt {
+  font: 600 12px/1.2 var(--pixel);
+  text-transform: uppercase;
+}
+
+.tasting-card dd {
+  margin: 0;
+  font: 1.2rem/1.15 var(--terminal);
+}
+
+.tasting-card .rating {
+  margin-top: 0;
+  align-self: center;
+}
+
+.style-name {
+  text-transform: capitalize;
+}
+
+.buy-again {
+  display: inline-block;
+  padding: 0 6px;
+  border: 2px solid var(--ink);
+}
+
+.buy-yes { background: var(--mint); }
+.buy-maybe { background: var(--yellow); }
+.buy-no { background: #ffd6ee; }
+
+.section-heading {
+  margin: 64px 0 20px;
+  font: 600 clamp(1.6rem, 4vw, 2.2rem)/1 var(--pixel);
+  color: var(--white);
+  text-shadow: 3px 3px 0 var(--ink);
+}
+
+.recipe-board {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  gap: 40px 32px;
+  margin: 0;
+  padding: 12px 0 0;
+  list-style: none;
+}
+
+/* An index card: a pink header rule and blue lines. */
+.recipe-card {
+  position: relative;
+  min-height: 190px;
+  margin: 3px;
+  padding: 30px 22px 22px;
+  color: var(--ink);
+  background:
+    linear-gradient(to bottom, transparent 0 58px, var(--pink) 58px 60px, transparent 60px),
+    repeating-linear-gradient(to bottom, transparent 0 25px, #c4d7ff 25px 26px) 0 60px / 100% calc(100% - 60px) no-repeat,
+    var(--white);
+  box-shadow:
+    0 -3px 0 0 var(--ink),
+    0 3px 0 0 var(--ink),
+    -3px 0 0 0 var(--ink),
+    3px 0 0 0 var(--ink),
+    9px 9px 0 0 var(--drop);
+  rotate: 0.8deg;
+  transition: rotate 0.15s steps(3), translate 0.15s steps(3);
+}
+
+.recipe-card:nth-child(even) {
+  rotate: -1deg;
+}
+
+.recipe-card:hover,
+.recipe-card:focus-within {
+  rotate: 0deg;
+  translate: 0 -4px;
+}
+
+.recipe-pin {
+  position: absolute;
+  top: -11px;
+  left: calc(50% - 10px);
+  width: 20px;
+  height: 20px;
+  border: 3px solid var(--ink);
+  background: var(--pink-deep);
+  box-shadow: inset 4px 4px 0 rgba(255, 255, 255, 0.45);
+}
+
+.recipe-kicker {
+  margin: 0;
+  font: 1.1rem/1 var(--terminal);
+  color: var(--pink-deep);
+}
+
+.recipe-title {
+  margin: 14px 0 8px;
+  font: 600 1.15rem/1.2 var(--pixel);
+}
+
+.recipe-title a {
+  color: inherit;
+}
+
+.recipe-summary {
+  margin: 0;
+  line-height: 26px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bottle,
+  .recipe-card {
+    transition: none;
+  }
 }

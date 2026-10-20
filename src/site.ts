@@ -28,8 +28,8 @@ export const sections: Record<SectionKey, { path: string; label: string; file: s
   },
   wine: {
     path: '/wine',
-    label: 'Wine blog',
+    label: 'Gen Z With A Glass',
     file: 'wine_cellar.dat',
-    blurb: 'Tasting notes, regions, and bottles worth talking about.',
+    blurb: 'Honest tasting notes and easy wine guides.',
   },
 }

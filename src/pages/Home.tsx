@@ -190,7 +190,7 @@ export default function Home() {
           </a>
           <a href={href(sections.wine.path)}>
             <PixelIcon name="glass" size={30} />
-            <span>Wine blog</span>
+            <span>{sections.wine.label}</span>
           </a>
           <a href={href(bookshelf.path)}>
             <PixelIcon name="books" size={36} />

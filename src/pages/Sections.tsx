@@ -1,8 +1,6 @@
 import { educationPosts } from '../content/education'
 import { projects } from '../content/portfolio'
-import type { Project, WinePost } from '../content/types'
-import { winePosts } from '../content/wine'
-import Rating from '../components/Rating'
+import type { Project } from '../content/types'
 import { site } from '../site'
 import Collection from './Collection'
 
@@ -22,23 +20,6 @@ function ProjectFacts({ project }: { project: Project }) {
         <dd>{project.format}</dd>
       </div>
     </dl>
-  )
-}
-
-function WineCard({ post, full = false }: { post: WinePost; full?: boolean }) {
-  if (!post.wine) return null
-  const { name, region, grape, vintage, rating } = post.wine
-  return (
-    <div className={`wine-card ${full ? 'full' : ''}`}>
-      <p className="wine-name">
-        {name}
-        {vintage ? ` ${vintage}` : ''}
-      </p>
-      <p className="wine-detail">
-        {grape} · {region}
-      </p>
-      <Rating value={rating} />
-    </div>
   )
 }
 
@@ -98,28 +79,6 @@ export function EducationPage({ slug }: { slug?: string }) {
           </span>
         )
       }
-    />
-  )
-}
-
-export function WinePage({ slug }: { slug?: string }) {
-  return (
-    <Collection
-      sectionKey="wine"
-      entries={winePosts}
-      slug={slug}
-      layout="notes"
-      fileExtension="dat"
-      icon="glass"
-      headline={
-        <>
-          Wine cellar
-          <span className="mega-ext">.dat</span>
-        </>
-      }
-      intro={<p>Tasting notes, regions, and bottles worth talking about. No scores to impress anyone, just honest hearts.</p>}
-      cardExtra={(post) => <WineCard post={post} />}
-      dialogMeta={(post) => <WineCard post={post} full />}
     />
   )
 }
