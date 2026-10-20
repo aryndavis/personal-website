@@ -1,4 +1,4 @@
-import type { Block, BuyAgain, WinePost, WinePrice, WineStyle } from './types'
+import type { Block, Body, BuyAgain, Level, Sweetness, WinePost, WinePrice, WineStyle } from './types'
 
 /**
  * What you write for a tasting note. Only `wine`, `grape`, `vintage` and `date` are required;
@@ -24,6 +24,22 @@ export interface TastingNote {
   /** 1 to 5 hearts */
   rating?: 1 | 2 | 3 | 4 | 5
   buyAgain?: BuyAgain
+  /** A one- or two-sentence review at the top of the card. */
+  verdict?: string
+  /** 'bone dry' | 'dry' | 'off-dry' | 'medium sweet' | 'sweet'. Reds, orange and dessert wines are guessed if left out. */
+  sweetness?: Sweetness
+  /** 'light' | 'medium-light' | 'medium' | 'medium-full' | 'full' */
+  body?: Body
+  /** 'low' | 'medium-low' | 'medium' | 'medium-high' | 'high' */
+  acidity?: Level
+  /** Same scale as acidity; usually only for reds and orange wines. */
+  tannin?: Level
+  /** Tasting notes: a list, or one comma-separated string like 'red currant, rose petal, pepper'. */
+  flavors?: string[] | string
+  /** What you ate with it. */
+  pairedWith?: string
+  /** Your own pairing ideas. If you leave out both pairing fields, suggestions are made from the grape or style. */
+  suggestedPairings?: string[]
 
   // Optional: the post
   /** Where you were, who you were with, why you opened it. */
@@ -32,15 +48,13 @@ export interface TastingNote {
   nose?: string
   palate?: string
   finish?: string
-  /** What you ate with it, or what you'd pair it with. */
-  pairing?: string
   /** Anything else. Blank lines start new paragraphs. */
   thoughts?: string | Block[]
 
   // Optional: overrides
   /** Defaults to the wine's name and vintage. */
   title?: string
-  /** The line on the wine rack and home page. Defaults to the first sentence of `moment`. */
+  /** The line on the home page and in previews. Defaults to the verdict, then the first sentence of `moment`. */
   summary?: string
   /** Extra tags. 'tasting note' and the style are added automatically. */
   tags?: string[]
@@ -90,6 +104,67 @@ export function guessStyle(name: string, grape: string): WineStyle | undefined {
   return undefined
 }
 
+// Classic pairings, used when a note doesn't say what it was paired with. Grape first, then style.
+const GRAPE_PAIRINGS: [string, string[]][] = [
+  ['cabernet sauvignon', ['steak', 'burgers', 'aged cheddar']],
+  ['merlot', ['roast chicken', 'mushroom pasta', 'meatloaf']],
+  ['pinot noir', ['salmon', 'roast chicken', 'mushroom risotto']],
+  ['syrah', ['barbecue', 'lamb', 'peppery stews']],
+  ['shiraz', ['barbecue', 'lamb', 'peppery stews']],
+  ['grenache', ['roast vegetables', 'lamb', 'chorizo']],
+  ['garnacha', ['roast vegetables', 'lamb', 'chorizo']],
+  ['tempranillo', ['tapas', 'roast pork', 'manchego']],
+  ['sangiovese', ['pizza', 'tomato pasta', 'parmesan']],
+  ['nebbiolo', ['truffle pasta', 'braised beef', 'risotto']],
+  ['malbec', ['steak', 'empanadas', 'chimichurri']],
+  ['zinfandel', ['barbecue ribs', 'pizza', 'burgers']],
+  ['gamay', ['charcuterie', 'roast chicken', 'picnic food']],
+  ['cabernet franc', ['roast pork', 'goat cheese', 'grilled vegetables']],
+  ['poulsard', ['roast chicken', 'charcuterie', 'comté']],
+  ['barbera', ['pizza', 'lasagna', 'salumi']],
+  ['chardonnay', ['roast chicken', 'lobster', 'creamy pasta']],
+  ['sauvignon blanc', ['goat cheese', 'green salads', 'shellfish']],
+  ['riesling', ['spicy Thai or Indian food', 'pork', 'sushi']],
+  ['pinot grigio', ['light seafood', 'salads', 'antipasti']],
+  ['pinot gris', ['spiced dishes', 'pork', 'creamy cheeses']],
+  ['chenin blanc', ['pork', 'spicy food', 'soft cheeses']],
+  ['albarino', ['oysters', 'grilled fish', 'sushi']],
+  ['gruner veltliner', ['schnitzel', 'asparagus', 'salads']],
+  ['viognier', ['curries', 'roast chicken', 'apricot desserts']],
+  ['gewurztraminer', ['spicy Asian food', 'Munster cheese', 'curries']],
+  ['vermentino', ['grilled fish', 'pesto pasta', 'salads']],
+  ['assyrtiko', ['grilled fish', 'Greek salad', 'oysters']],
+  ['muscadet', ['oysters', 'mussels', 'fish and chips']],
+  ['melon de bourgogne', ['oysters', 'mussels', 'fish and chips']],
+  ['moscato', ['fruit desserts', 'spicy food', 'brunch']],
+]
+const STYLE_PAIRINGS: Record<WineStyle, string[]> = {
+  red: ['roast meats', 'pasta with red sauce', 'hard cheeses'],
+  white: ['seafood', 'chicken', 'salads'],
+  'rosé': ['salads', 'grilled shrimp', 'picnic food'],
+  orange: ['spiced dishes', 'roast vegetables', 'funky cheeses'],
+  sparkling: ['fried food', 'oysters', 'potato chips'],
+  dessert: ['blue cheese', 'fruit tarts', 'dark chocolate'],
+}
+
+/** Pairing ideas from the grape (the first one, for a blend), then the style. */
+export function suggestPairings(grape: string, style?: WineStyle): string[] | undefined {
+  const first = normalize(grape).split(/,|\/|&|\+|\band\b/)[0].trim()
+  const match = GRAPE_PAIRINGS.find(([name]) => first.includes(name))
+  if (match && style !== 'sparkling' && style !== 'dessert') return match[1]
+  return style ? STYLE_PAIRINGS[style] : undefined
+}
+
+/** Only for styles that are almost always one way. Whites, rosés and sparkling vary too much to guess. */
+function guessSweetness(style?: WineStyle): Sweetness | undefined {
+  if (style === 'red' || style === 'orange') return 'dry'
+  if (style === 'dessert') return 'sweet'
+  return undefined
+}
+
+const list = (value?: string[] | string) =>
+  (typeof value === 'string' ? value.split(',') : (value ?? [])).map((item) => item.trim()).filter(Boolean)
+
 const slugify = (text: string) =>
   normalize(text)
     .replace(/[^a-z0-9]+/g, '-')
@@ -122,7 +197,6 @@ function toPost(note: TastingNote, slug: string): WinePost {
     body.push({ type: 'h', text: 'In the glass' })
     body.push({ type: 'list', items: glass.map(([label, value]) => `${label}: ${value!.trim()}`) })
   }
-  if (note.pairing?.trim()) body.push({ type: 'h', text: 'Goes with' }, ...paragraphs(note.pairing))
   if (note.thoughts) body.push(...(typeof note.thoughts === 'string' ? paragraphs(note.thoughts) : note.thoughts))
 
   const where = note.region ? ` from ${note.region}` : ''
@@ -131,7 +205,7 @@ function toPost(note: TastingNote, slug: string): WinePost {
     slug,
     title: note.title ?? `${note.wine} ${vintage}`,
     date: note.date,
-    summary: note.summary ?? (note.moment ? firstSentence(note.moment.trim()) : `${note.grape}${where}.`),
+    summary: note.summary ?? (note.verdict?.trim() || (note.moment ? firstSentence(note.moment.trim()) : `${note.grape}${where}.`)),
     tags: [...new Set(['tasting note', ...(style ? [style] : []), ...(note.tags ?? [])])],
     wine: {
       name: note.wine,
@@ -143,6 +217,18 @@ function toPost(note: TastingNote, slug: string): WinePost {
       price: note.price,
       rating: note.rating,
       buyAgain: note.buyAgain,
+      verdict: note.verdict?.trim() || undefined,
+      sweetness: note.sweetness ?? guessSweetness(style),
+      body: note.body,
+      acidity: note.acidity,
+      tannin: note.tannin,
+      flavors: list(note.flavors),
+      pairedWith: note.pairedWith?.trim() || undefined,
+      suggestedPairings: note.pairedWith?.trim()
+        ? undefined
+        : list(note.suggestedPairings).length
+          ? list(note.suggestedPairings)
+          : suggestPairings(note.grape, style),
     },
     body,
   }

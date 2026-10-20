@@ -2,6 +2,18 @@
 
 Aryn Davis's personal site: an about-me home page, a curriculum design portfolio, an education blog, and a wine blog. It has a Y2K desktop look: a liquid-chrome holographic background with pixel pop-up windows and post-it notes. Built with React, TypeScript, and Vite.
 
+## Screenshots
+
+Taken from the production build at 1280×800. Update them whenever a page's look changes (they live in `docs/screenshots/`).
+
+| Home (about me) | Portfolio |
+| --- | --- |
+| ![Home page](docs/screenshots/home.jpg) | ![Portfolio](docs/screenshots/portfolio.jpg) |
+| **Education blog** | **Gen Z With A Glass (wine blog)** |
+| ![Education blog](docs/screenshots/education.jpg) | ![Gen Z With A Glass wine rack](docs/screenshots/wine.jpg) |
+| **Tasting card** | **Bookshelf** |
+| ![A tasting note with its tasting card](docs/screenshots/wine-tasting-card.jpg) | ![Bookshelf](docs/screenshots/bookshelf.jpg) |
+
 ## Run locally
 
 Requires Node.js LTS and npm (with nvm: `nvm install --lts && nvm use --lts`).
@@ -39,7 +51,12 @@ Every project and post has its own link (for example `#/wine/weeknight-white-und
     { wine: 'Domaine Example Poulsard', grape: 'Poulsard', vintage: 2022, date: '2026-10-20' },
     ```
 
-    The title, link (`#/wine/domaine-example-poulsard-2022`), tags and layout are made for you, and the style (red, white, rosé, orange, sparkling, dessert) is guessed from the grape and name. Optional extras fill in the tasting card (`producer`, `region`, `price` from `'$'` to `'$$$$'`, `rating` 1–5 hearts, `buyAgain` `'yes' | 'maybe' | 'no'`, `style`) and the post (`moment`, `look`, `nose`, `palate`, `finish`, `pairing`, `thoughts`). See `src/content/tastingNotes.ts`.
+    The title, link (`#/wine/domaine-example-poulsard-2022`), tags and layout are made for you, and the style (red, white, rosé, orange, sparkling, dessert) is guessed from the grape and name. Optional extras fill in the tasting card and the post:
+    - **Card basics:** `producer`, `region`, `price` (`'$'` to `'$$$$'`), `rating` (1–5 hearts), `buyAgain` (`'yes' | 'maybe' | 'no'`), `style`.
+    - **Review:** `verdict` (a one-line review at the top of the card), `flavors` (tasting notes, e.g. `'red currant, rose petal'`).
+    - **Profile meters:** `sweetness` (bone dry → sweet), `body` (light → full), `acidity` and `tannin` (low → high). Sweetness is guessed for reds, orange and dessert wines if left out.
+    - **Pairings:** `pairedWith` (what you ate). Without it, the card shows "Try it with" suggestions from the grape or style, or your own `suggestedPairings`.
+    - **The post:** `moment`, `look`, `nose`, `palate`, `finish`, `thoughts`. See `src/content/tastingNotes.ts`.
   - **Guides** show as pinned recipe cards and are written like any other post, with `kind: 'guide'`.
 - **Links and italics** go inside a paragraph as a list of parts: `text: ['Read ', { text: 'this', href: 'https://…' }, ' and ', { text: 'that', em: true }]`. Only `http(s)` links become clickable.
 - **Images** are `{ type: 'image', src: 'images/…/file.jpg', alt: '…' }`, with the file saved in `public/images/`. Images must live in this repo; the security policy blocks images from other sites.
