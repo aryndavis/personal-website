@@ -2,7 +2,7 @@
 
 Live at **[arynlynn.com](https://arynlynn.com)**. The apps live on subdomains: [library.arynlynn.com](https://library.arynlynn.com) (bookshelf) and [closet.arynlynn.com](https://closet.arynlynn.com) (Aryn’s Closet).
 
-Aryn Davis's personal site: an about-me home page, a curriculum design portfolio, an education blog, and a wine blog. It has a Y2K desktop look: a liquid-chrome holographic background with pixel pop-up windows and post-it notes. Built with React, TypeScript, and Vite.
+Aryn Davis's personal site: an about-me home page, a portfolio (curriculum design and software engineering), an education blog, and a wine blog. It has a Y2K desktop look: a liquid-chrome holographic background with pixel pop-up windows and post-it notes. Built with React, TypeScript, and Vite.
 
 ## Screenshots
 
@@ -33,7 +33,7 @@ npm test          # content, Substack-sync and text-posting tests
 | URL | Page | Content file |
 | --- | --- | --- |
 | `#/` | About me (home) | `src/pages/Home.tsx` |
-| `#/portfolio` | Curriculum portfolio | `src/content/portfolio.ts` |
+| `#/portfolio` | Portfolio: curriculum design and software engineering | `src/content/portfolio.ts` |
 | `#/education` | Education blog | `src/content/education.ts` |
 | `#/wine` | Gen Z With A Glass (wine blog) | `src/content/wine.ts` |
 | `#/bookshelf` | Bookshelf (reading list) | `src/content/books.ts` |
@@ -44,6 +44,7 @@ Every project and post has its own link (for example `#/wine/weeknight-white-und
 
 - **Name, email, tagline:** `src/site.ts`
 - **About me text:** `src/pages/Home.tsx`
+- **Portfolio projects** (`src/content/portfolio.ts`) have a `track`: `'curriculum'` or `'software'`. Each shows under its own heading on the Portfolio page. Software projects can add a `cover` screenshot for the card and `links` (live site, code) as buttons in the pop-up. Put images in `public/images/portfolio/`.
 - **Projects and posts:** add an object to the array in the matching `src/content/*.ts` file. Bodies are lists of blocks (`p`, `h`, `list`, `quote`); see `src/content/types.ts`. Content is rendered as text, never as raw HTML.
 - **Books:** add or move books in `src/content/books.ts`. Set `status` to `'reading'` (shown face-out and on the home page's currently.txt), `'read'` or `'want'`, and pick a spine `color`. `rating` and `note` are optional.
 - **Wine posts (Gen Z With A Glass)** come in two kinds, both in `src/content/wine.ts`:

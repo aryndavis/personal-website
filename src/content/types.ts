@@ -25,10 +25,18 @@ export interface Entry {
   substackUrl?: string
 }
 
+export type Track = 'curriculum' | 'software'
+
 export interface Project extends Entry {
+  /** Which half of the portfolio it belongs to. */
+  track: Track
   role: string
   audience: string
   format: string
+  /** A screenshot or image on the project's card. src is a file in public/. */
+  cover?: { src: string; alt: string }
+  /** Buttons in the project's pop-up, e.g. the live site and the code. Only http(s) links are shown. */
+  links?: { label: string; href: string }[]
 }
 
 export type WineStyle = 'red' | 'white' | 'rosé' | 'orange' | 'sparkling' | 'dessert'
