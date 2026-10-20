@@ -1,5 +1,6 @@
 // Copies the public posts from Substack into the education blog: `npm run sync:substack`.
-// A GitHub Action (.github/workflows/sync-substack.yml) runs this daily and commits any changes.
+// Run it after publishing on Substack, then commit and push. (It can't run in GitHub Actions:
+// Substack refuses requests from GitHub's servers.)
 //
 // - Substack's HTML is never rendered. It's parsed and converted into the site's typed blocks
 //   (paragraphs with links and italics, headings, lists, quotes, images), and anything else is dropped.
@@ -147,3 +148,4 @@ export const substackPosts: Entry[] = ${JSON.stringify(posts, null, 2)}
 
 for (const message of warnings) console.warn(`note: ${message}`)
 console.log(`Synced ${posts.length} post${posts.length === 1 ? '' : 's'} and ${files.size} image${files.size === 1 ? '' : 's'} from Substack.`)
+console.log('To publish, commit and push src/content/education.substack.ts and public/images/education/substack/.')

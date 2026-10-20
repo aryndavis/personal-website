@@ -37,10 +37,18 @@ Every project and post has its own link (for example `#/wine/weeknight-white-und
 
 ### Education blog ↔ Substack
 
-The education blog mirrors [arynlynn.substack.com](https://arynlynn.substack.com), and new posts show up on their own:
+The education blog mirrors [arynlynn.substack.com](https://arynlynn.substack.com), and one command copies new posts over:
 
 - `npm run sync:substack` downloads every free, public post into `src/content/education.substack.ts` and its images into `public/images/education/substack/`. Substack's HTML is converted into the typed blocks above (paragraphs with links and italics, headings, lists, quotes, images); subscribe boxes, buttons and embeds are dropped, and nothing is rendered as HTML.
-- The **Sync Substack posts** GitHub Action runs it every day (and on demand from the Actions tab). When a post is new or changed, it commits to `main`, and the host redeploys.
+- After publishing on Substack, run it, then commit and push the changes so the host redeploys:
+
+  ```sh
+  npm run sync:substack
+  git add src/content/education.substack.ts public/images/education/substack
+  git commit -m "Sync education posts from Substack" && git push
+  ```
+
+  It runs from your computer rather than on a schedule in GitHub Actions, because Substack refuses requests from GitHub's servers.
 - Each synced post gets a "Read & subscribe on Substack" button and an "also on Substack" tag.
 - Substack usually leaves image alt text empty, so synced images fall back to the caption or "Image from “Post title”". To polish a post, copy it from `education.substack.ts` into `src/content/education.ts` and edit it there: a hand-written post wins over a synced post with the same slug.
 - Paid-only posts, podcasts and threads aren't synced.

@@ -1,8 +1,8 @@
 import { substackPosts } from './education.substack'
 import type { Entry } from './types'
 
-// The education blog mirrors https://arynlynn.substack.com. Public posts sync automatically into
-// education.substack.ts (`npm run sync:substack`, run daily by a GitHub Action).
+// The education blog mirrors https://arynlynn.substack.com. After publishing on Substack, run
+// `npm run sync:substack` to copy public posts into education.substack.ts, then commit and push.
 // Posts here are written by hand and win over a synced post with the same slug, so copy a post here
 // to polish it (for example, better image alt text). Newest posts can go anywhere; the site sorts by date.
 const handWritten: Entry[] = [
