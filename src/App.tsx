@@ -60,7 +60,12 @@ export default function App() {
         <span className="footer-marquee" aria-hidden="true">
           <span>{`${marquee} ${marquee} `}</span>
         </span>
-        <a href={href('/')}>Back home ↑</a>
+        <span className="footer-links">
+          <a href="/sms">SMS policy</a>
+          <a href="/terms">Terms</a>
+          <a href="/privacy">Privacy</a>
+          <a href={href('/')}>Back home ↑</a>
+        </span>
       </footer>
     </>
   )
