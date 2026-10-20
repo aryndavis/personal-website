@@ -13,9 +13,9 @@ export const projects: Project[] = [
     role: 'Design & engineering',
     audience: 'My own bookshelf, public to browse',
     format: 'React + Supabase web app',
-    summary: 'A pixel-art card catalog for my physical books, with lending, rubber-stamp check-outs, and a public read-only view.',
+    summary: 'A pixel-art book catalog for my physical books, with lending, rubber-stamp check-outs, and a public read-only view.',
     tags: ['React', 'TypeScript', 'Supabase', 'Postgres'],
-    cover: { src: 'images/portfolio/library-catalog.jpg', alt: 'Aryn’s Library card catalog: pixel book covers on a shelf with search and filters.' },
+    cover: { src: 'images/portfolio/library-catalog.jpg', alt: 'Aryn’s Library book catalog: pixel book covers on a shelf with search and filters.' },
     links: [
       { label: 'Open the library ↗', href: 'https://library.arynlynn.com' },
       { label: 'Code on GitHub ↗', href: 'https://github.com/aryndavis/bookshelf' },
@@ -31,7 +31,7 @@ export const projects: Project[] = [
       {
         type: 'list',
         items: [
-          'Card catalog with search, filters (on the shelf, checked out, overdue) and sorting',
+          'Book catalog with search, filters (on the shelf, checked out, overdue) and sorting',
           'Add a book by ISBN: title, author and year fill in from Open Library',
           'Lending with due dates: a rubber stamp animates onto the cover, and a pocket library card keeps the history',
           '“Who has what” page grouping open loans by borrower, overdue first',
