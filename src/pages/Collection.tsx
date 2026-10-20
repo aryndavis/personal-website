@@ -7,7 +7,8 @@ import { formatDate, newestFirst, type Entry } from '../content/types'
 import { href } from '../router'
 import { sections, type SectionKey } from '../site'
 
-const noteTones: Tone[] = ['yellow', 'pink', 'mint', 'lilac', 'blue']
+// Every note color, in an order where neighbors never match; seven colors means repeats are rare.
+const noteTones: Tone[] = ['yellow', 'pink', 'mint', 'peach', 'lilac', 'lime', 'blue']
 
 interface CollectionProps<T extends Entry> {
   sectionKey: SectionKey
@@ -40,11 +41,12 @@ export default function Collection<T extends Entry>({ sectionKey, entries, slug,
 
   // Inside a titled group, card titles sit one level below the group title.
   const CardHeading = groups ? 'h3' : 'h2'
-  const windowBoard = (list: T[]) => (
+  // `offset` continues the color rotation from the previous group, so sections don't start on the same color.
+  const windowBoard = (list: T[], offset = 0) => (
     <ul className="window-board">
       {list.map((entry, i) => (
         <li key={entry.slug}>
-          <PixelWindow as="article" title={`${entry.slug}.${fileExtension}`} tone={noteTones[(i + 1) % noteTones.length]} labelledBy={`card-${entry.slug}`} className="card-window">
+          <PixelWindow as="article" title={`${entry.slug}.${fileExtension}`} tone={noteTones[(i + offset + 1) % noteTones.length]} labelledBy={`card-${entry.slug}`} className="card-window">
             {cardExtra?.(entry)}
             <CardHeading className="card-title" id={`card-${entry.slug}`}>
               <a className="stretched" href={link(entry)} data-slug={entry.slug}>
@@ -117,8 +119,9 @@ export default function Collection<T extends Entry>({ sectionKey, entries, slug,
             ))}
           </ul>
         ) : groups ? (
-          groups.map((group) => {
+          groups.map((group, g) => {
             const list = sorted.filter(group.filter)
+            const offset = groups.slice(0, g).reduce((count, earlier) => count + sorted.filter(earlier.filter).length, 0)
             return (
               list.length > 0 && (
                 <section key={group.id} id={group.id} className="board-group" aria-labelledby={`${group.id}-title`}>
@@ -126,7 +129,7 @@ export default function Collection<T extends Entry>({ sectionKey, entries, slug,
                     {group.title}
                   </h2>
                   {group.intro}
-                  {windowBoard(list)}
+                  {windowBoard(list, offset)}
                 </section>
               )
             )
