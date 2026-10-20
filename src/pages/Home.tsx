@@ -93,7 +93,7 @@ export default function Home() {
                   <PixelIcon name="star" size={16} /> Based in: New York City
                 </li>
                 <li>
-                  <PixelIcon name="smile" size={16} /> Sign: Gemini ♊, which explains the engineer-and-educator double life
+                  <PixelIcon name="smile" size={16} /> Sign: Gemini {'\u264A\uFE0E'}, which explains the engineer-and-educator double life
                 </li>
                 <li>
                   <PixelIcon name="heart" size={16} /> Loves: crochet, sewing, golf, and Riesling above all
