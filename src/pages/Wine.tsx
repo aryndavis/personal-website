@@ -39,11 +39,12 @@ function Meter({ scale, value, icon }: { scale: readonly string[]; value: string
   )
 }
 
-/** Widths that make each meter icon about 16px tall. */
+/** Widths that make each meter icon about 16px tall (the tea cup is wide and short). */
 type MeterIcon = { name: IconName; size: number }
 const SUGAR: MeterIcon = { name: 'sugar', size: 20 }
-const DROP: MeterIcon = { name: 'drop', size: 14 }
+const KETTLEBELL: MeterIcon = { name: 'kettlebell', size: 15 }
 const BOLT: MeterIcon = { name: 'bolt', size: 13 }
+const TEA: MeterIcon = { name: 'tea', size: 20 }
 
 /** A label with a small icon in front of it. */
 const withIcon = (icon: IconName, text: ReactNode) => (
@@ -68,9 +69,9 @@ function TastingCard({ post }: { post: WinePost }) {
   ]
   const profile: [string, readonly string[], string | undefined, MeterIcon?][] = [
     ['Sweetness', SWEETNESS, wine.sweetness, SUGAR],
-    ['Body', BODY, wine.body, DROP],
+    ['Body', BODY, wine.body, KETTLEBELL],
     ['Acidity', LEVEL, wine.acidity, BOLT],
-    ['Tannin', LEVEL, wine.tannin],
+    ['Tannin', LEVEL, wine.tannin, TEA],
   ]
   const shownProfile = profile.filter(([, , value]) => value)
   const flavors = wine.flavors ?? []

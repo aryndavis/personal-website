@@ -14,8 +14,9 @@ const OLIVE = ['..kkkkk..', '.kPwPPPk.', 'kPPPPPPQk', 'kPPPPPQQk', '.kPPQQQk.', 
 
 /** Icons the card uses for its own labels. */
 export const CARD_ART = {
-  // The profile meters: wine drops for body (in the wine's color), lightning for acidity, sugar for sweetness.
-  drop: ['...kk...', '..kvvk..', '..kvvk..', '.kvvvvk.', 'kvwvvvvk', 'kvwvvvvk', 'kvvvvvvk', '.kvvvvk.', '..kkkk..'],
+  // The profile meters: kettlebells for body (in the wine's color), lightning for acidity, sugar for sweetness,
+  // and tannin is a cup of strong tea (the drying grip tannin gives).
+  kettlebell: ['...kkkkk...', '..kSSSSSk..', '.kSk...kSk.', '.kSk...kSk.', '..kkkkkkk..', '.kvwvvvvvk.', 'kvwvvvvvvvk', 'kvvvvvvvvvk', 'kvvvvvvvvvk', '.kvvvvvvvk.', '..kkkkkkk..'],
   bolt: ['....kkk', '...kyyk', '..kyyk.', '.kyyykk', 'kkkyyyk', '..kyyk.', '.kyyk..', '.kyk...', 'kkk....'],
   sugar: ['.....kk.....', '....kWWk....', '...kWWWek...', '..kWWbWWek..', '.kWWWWWWeek.', 'kWbWWWWbWeek', 'kkkkkkkkkkkk'],
   bag: ['...kkkk...', '..k....k..', '..k....k..', 'kkkkkkkkkk', 'kppppppppk', 'kppdpdpppk', 'kpdddddppk', 'kppdddpppk', 'kpppdppppk', 'kkkkkkkkkk'],
