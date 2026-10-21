@@ -15,6 +15,8 @@ test('the name beats the grape for sparkling, dessert, orange and rosé', () => 
   assert.equal(guessStyle('Brut Champagne', 'Pinot Noir'), 'sparkling')
   assert.equal(guessStyle('Pét-Nat', 'Gamay'), 'sparkling')
   assert.equal(guessStyle('Tokaji Aszú', 'Furmint'), 'dessert')
+  // Late harvest is about when the grapes were picked, not a style: it goes by the grape.
+  assert.equal(guessStyle('Hermann J. Wiemer Late Harvest Riesling', 'Riesling'), 'white')
   assert.equal(guessStyle('Skin-Contact Pinot Grigio', 'Pinot Grigio'), 'orange')
   assert.equal(guessStyle('Côtes de Provence Rosé', 'Grenache'), 'rosé')
 })
