@@ -8,8 +8,11 @@ const note = { wine: 'Dr. Loosen Blue Slate', grape: 'Riesling', vintage: '2022'
 const b64 = (text) => Buffer.from(text, 'utf8').toString('base64')
 const fromB64 = (text) => Buffer.from(text, 'base64').toString('utf8')
 
-/** A fake GitHub contents API holding one file; `script` lists canned answers for PUTs (by status). */
-function fakeGitHub({ notes = [], putStatuses = [200], readStatus = 200, rawContent } = {}) {
+/**
+ * A fake GitHub contents API holding one file. `putStatuses` lists canned answers for PUTs (by status);
+ * `onConflict` runs when a PUT is refused, to change the file the way a competing write would.
+ */
+function fakeGitHub({ notes = [], putStatuses = [200], readStatus = 200, rawContent, onConflict } = {}) {
   const state = { notes, sha: 'sha-1', requests: [] }
   globalThis.fetch = async (url, init = {}) => {
     state.requests.push({ url: String(url), init })
@@ -18,6 +21,7 @@ function fakeGitHub({ notes = [], putStatuses = [200], readStatus = 200, rawCont
       return Response.json({ content: rawContent ?? b64(JSON.stringify(state.notes)), sha: state.sha })
     }
     const status = putStatuses.shift() ?? 200
+    if (status === 409) onConflict?.(state)
     if (status === 200) {
       const body = JSON.parse(init.body)
       state.notes = JSON.parse(fromB64(body.content))
@@ -58,6 +62,25 @@ test('if the file changed in between (409), it re-reads and tries once more', as
   await appendNote(config, note, 'msg')
   assert.equal(github.requests.filter((r) => r.init.method === 'PUT').length, 2)
   assert.equal(github.requests.filter((r) => (r.init.method ?? 'GET') === 'GET').length, 2)
+  assert.equal(github.notes.length, 1)
+})
+
+test('two quick YES replies: if the competing write already added this note, the retry adds nothing', async () => {
+  // Arrange: the first PUT loses to another request that appended the same note
+  const github = fakeGitHub({ putStatuses: [409], onConflict: (state) => state.notes.push({ ...note }) })
+
+  // Act
+  await appendNote(config, note, 'msg')
+
+  // Assert: posted once, and no second PUT
+  assert.equal(github.notes.length, 1)
+  assert.equal(github.requests.filter((r) => r.init.method === 'PUT').length, 1)
+})
+
+test('does not write at all when the note is already in the file', async () => {
+  const github = fakeGitHub({ notes: [{ ...note }] })
+  await appendNote(config, note, 'msg')
+  assert.equal(github.requests.filter((r) => r.init.method === 'PUT').length, 0)
   assert.equal(github.notes.length, 1)
 })
 
