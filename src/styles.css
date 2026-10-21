@@ -1805,7 +1805,7 @@ a.pixel-button.substack-link:hover {
 }
 
 .meter-icons {
-  gap: 2px;
+  gap: 4px;
   align-items: flex-end;
 }
 
