@@ -87,6 +87,17 @@ export async function handleSms(request: Request, deps: SmsDeps): Promise<Respon
   // Anyone else who texts the number gets silence.
   if (!deps.allowedFrom || normalizeNumber(params.From ?? '') !== normalizeNumber(deps.allowedFrom)) return twiml()
 
+  try {
+    return await respond(params, deps)
+  } catch (error) {
+    // Storage or another service failed: say so instead of leaving the texter with no reply.
+    console.error('text handling failed', error)
+    return twiml('Something went wrong on my end. Try again in a minute.')
+  }
+}
+
+/** Handles a text from the owner (already checked: signed by Twilio, from the allowed number). */
+async function respond(params: Record<string, string>, deps: SmsDeps): Promise<Response> {
   const today = dateIn(deps.timeZone, deps.now())
   if ((await bump(deps.store, `texts/${today}`)) > MAX_TEXTS_PER_DAY) return twiml()
   if (!deps.publishing) return twiml('Posting by text is turned off right now.')
@@ -111,17 +122,30 @@ export async function handleSms(request: Request, deps: SmsDeps): Promise<Respon
       return twiml(`That’s ${MAX_POSTS_PER_DAY} posts today, the daily limit. Your preview is saved; reply YES tomorrow.`)
     }
     const note = pending.note
+    let slug: string
     try {
       const published = (await deps.readTextNotes()).filter(isTextNote)
-      const slug = deps.slugFor(note, published)
+      // Already posted (say, the preview couldn't be cleared after an earlier YES): don't post it twice.
+      const alreadyPosted = published.find((existing) => JSON.stringify(existing) === JSON.stringify(note))
+      if (alreadyPosted) {
+        await deps.store.delete(PENDING).catch(() => {})
+        return twiml(`That one’s already posted: ${deps.siteUrl}/#/wine/${deps.slugFor(note, published.filter((n) => n !== alreadyPosted))}`)
+      }
+      slug = deps.slugFor(note, published)
       await deps.publish(note, `Add tasting note by text: ${note.wine} ${note.vintage}`)
-      await deps.store.delete(PENDING)
-      await bump(deps.store, `posts/${today}`)
-      return twiml(`Posted! It’ll be live in a couple of minutes: ${deps.siteUrl}/#/wine/${slug}`)
     } catch (error) {
       console.error('publish failed', error)
       return twiml('I couldn’t post that just now. Your preview is still saved, so reply YES to try again.')
     }
+    // It's posted. Bookkeeping failures after this point must not make it look unposted (a second YES
+    // would post it twice), so they're logged and the reply still says it worked.
+    try {
+      await deps.store.delete(PENDING)
+      await bump(deps.store, `posts/${today}`)
+    } catch (error) {
+      console.error('posted, but clearing the preview failed', error)
+    }
+    return twiml(`Posted! It’ll be live in a couple of minutes: ${deps.siteUrl}/#/wine/${slug}`)
   }
 
   if (/^books?\b/i.test(body)) return twiml('Adding books by text isn’t set up yet.')

@@ -44,10 +44,15 @@ export async function readNotes(config: GitHubConfig): Promise<NoteFile> {
   return { notes, sha: file.sha }
 }
 
-/** Appends the note. Retries once if the file changed in between (for example two quick YES replies). */
+/**
+ * Appends the note. Retries once if the file changed in between (for example two quick YES replies),
+ * and does nothing if the note is already there, so the second of those replies can't post it twice.
+ */
 export async function appendNote(config: GitHubConfig, note: TastingNote, message: string): Promise<void> {
+  const same = JSON.stringify(note)
   for (let attempt = 0; attempt < 2; attempt++) {
     const { notes, sha } = await readNotes(config)
+    if (notes.some((existing) => JSON.stringify(existing) === same)) return
     const content = `${JSON.stringify([...notes, note], null, 2)}\n`
     const response = await github(config, TEXTS_PATH, {
       method: 'PUT',
