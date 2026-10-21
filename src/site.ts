@@ -3,6 +3,8 @@ export const site = {
   name: 'Aryn Davis',
   shortName: 'ARYN DAVIS',
   roles: ['Software engineer', 'Curriculum designer', 'Educator'],
+  /** After the name in the home page's title (keep in step with index.html). */
+  tagline: 'Software Engineer & Curriculum Designer',
   status: 'Open to curriculum projects',
   // Forwards to my personal inbox (email forwarding on the domain), so the real address stays private.
   email: 'hello@arynlynn.com',

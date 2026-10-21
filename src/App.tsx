@@ -33,7 +33,8 @@ export default function App() {
   // Scroll to the top only when moving between sections, not when opening a pop-up.
   useEffect(() => {
     window.scrollTo(0, 0)
-    document.title = titles[top] ? `${titles[top]} · ${site.name}` : site.name
+    // The home page keeps index.html's full title, which is what search results show.
+    document.title = titles[top] ? `${titles[top]} · ${site.name}` : `${site.name} · ${site.tagline}`
   }, [top])
 
   return (
