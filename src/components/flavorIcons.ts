@@ -91,7 +91,7 @@ export const FLAVOR_ART = {
   olive: recolor(OLIVE, { P: 'G', Q: 'L' }),
   'black olive': recolor(OLIVE, { P: 'X', Q: 'k', w: 'l' }),
   artichoke: ['....k....', '...kGk...', '..kGLGk..', '.kGLGLGk.', 'kGLGLGLGk', '.kLGLGLk.', '..kLGLk..', '...kkk...', '....k....'],
-  tea: ['.kkkkkkk..', '.kNNNNNkkk', '.kWWWWWk.k', '.kWWWWWkkk', '..kWWWk...', 'kkkkkkkkk.'],
+  tea: ['.kkkkk........', '.k...k........', '.k..kkkkkkkk..', '.k..kNNNNNNkkk', 'kkk.kWWWWWWk.k', 'kpk.kWWWWWWkkk', 'kkk..kWWWWk...', '...kkkkkkkkkk.'],
   hay: ['.kkkkkkkk.', 'kyoyyoyyok', 'kyyoyyoyyk', 'kNNNNNNNNk', 'kyoyyoyyok', 'kyyoyyoyyk', '.kkkkkkkk.'],
 
   // Riesling's famous petrol note (a good thing, not a flaw)

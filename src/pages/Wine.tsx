@@ -44,7 +44,7 @@ type MeterIcon = { name: IconName; size: number }
 const SUGAR: MeterIcon = { name: 'sugar', size: 20 }
 const KETTLEBELL: MeterIcon = { name: 'kettlebell', size: 15 }
 const BOLT: MeterIcon = { name: 'bolt', size: 13 }
-const TEA: MeterIcon = { name: 'tea', size: 20 }
+const TEA: MeterIcon = { name: 'tea', size: 22 }
 
 /** A label with a small icon in front of it. */
 const withIcon = (icon: IconName, text: ReactNode) => (
