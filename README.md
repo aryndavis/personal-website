@@ -26,7 +26,10 @@ npm run dev       # live preview at http://localhost:5173
 npm run build     # type-check and build to dist/
 npm run preview   # serve the production build at http://localhost:4173
 npm test          # content, Substack-sync and text-posting tests
+npm run lint      # ESLint (TypeScript + React hooks rules)
 ```
+
+Every pull request runs lint, type-check, tests and a build in GitHub Actions (`.github/workflows/ci.yml`).
 
 ## Pages
 
