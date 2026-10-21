@@ -31,6 +31,14 @@ npm run lint      # ESLint (TypeScript + React hooks rules)
 
 Every pull request runs lint, type-check, tests and a build in GitHub Actions (`.github/workflows/ci.yml`).
 
+**What the tests cover** (`npm test`):
+- **Text posting** (`scripts/text-posting.test.mjs`):
+  - parsing, every validation error, Twilio signatures, the sender allowlist, preview → YES / NO, expiry, daily limits
+  - storage and GitHub failures: a clear reply instead of silence, the preview kept for retry, and never posting a note twice
+- **Publishing to GitHub** (`scripts/github-publish.test.mjs`): retrying a conflict, giving up, other errors, a malformed file, and accents and emoji surviving encoding.
+- **Substack sync** (`scripts/sync-substack.test.mjs`, `scripts/substack-html.test.mjs`): HTML conversion, the image host allowlist, type and size limits, archive paging, and network failures.
+- **Tasting notes** (`scripts/tasting-notes.test.mjs`): the defaults, style and sweetness guesses, pairings, and stable links.
+
 ## Pages
 
 | URL | Page | Content file |

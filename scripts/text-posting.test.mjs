@@ -233,3 +233,91 @@ test('daily limits', async () => {
   assert.match((await send('yes')).reply, /daily limit/)
   assert.equal(published.length, 10)
 })
+
+// ---------- when the services behind it fail (sad paths) ----------
+
+const failingStore = (failOn) => {
+  const data = new Map()
+  const maybeFail = (op) => {
+    if (failOn.includes(op)) throw new Error(`blob store ${op} failed`)
+  }
+  return {
+    get: async (k) => (maybeFail('get'), data.has(k) ? structuredClone(data.get(k)) : null),
+    set: async (k, v) => (maybeFail('set'), void data.set(k, structuredClone(v))),
+    delete: async (k) => (maybeFail('delete'), void data.delete(k)),
+  }
+}
+
+const quietly = async (fn) => {
+  const original = console.error
+  console.error = () => {}
+  try {
+    return await fn()
+  } finally {
+    console.error = original
+  }
+}
+
+test('if storage is down, it replies that something went wrong instead of going silent', async () => {
+  // Arrange: the daily counter can't even be read
+  const { send } = setup({ store: failingStore(['get']) })
+
+  // Act
+  const { status, reply } = await quietly(() => send('wine: A, Gamay, 2023'))
+
+  // Assert
+  assert.equal(status, 200)
+  assert.match(reply, /Something went wrong on my end/)
+})
+
+test('if the preview cannot be saved, nothing is waiting for YES', async () => {
+  const store = failingStore(['set'])
+  const { send, published } = setup({ store })
+  assert.match((await quietly(() => send('wine: A, Gamay, 2023'))).reply, /Something went wrong/)
+  assert.equal(published.length, 0)
+})
+
+test('a note that posted is never posted twice, even if clearing its preview failed', async () => {
+  // Arrange: storage works until the preview is cleared after posting
+  const store = failingStore([])
+  const { send, published } = setup({ store })
+  await send('wine: Once Only, Gamay, 2023')
+  const originalDelete = store.delete
+  store.delete = async () => {
+    throw new Error('blob store delete failed')
+  }
+
+  // Act: YES posts it (cleanup fails quietly), then a second YES
+  const first = await quietly(() => send('yes'))
+  store.delete = originalDelete
+  const second = await send('yes')
+
+  // Assert
+  assert.match(first.reply, /Posted!/)
+  assert.match(second.reply, /already posted/)
+  assert.equal(published.length, 1)
+})
+
+test('if the published notes cannot be read, nothing posts and the preview is kept', async () => {
+  let readsFail = true
+  const { send, published } = setup({
+    readTextNotes: async () => {
+      if (readsFail) throw new Error('GitHub read failed (502)')
+      return published
+    },
+  })
+  await send('wine: A, Gamay, 2023')
+  assert.match((await quietly(() => send('yes'))).reply, /couldn’t post/)
+  readsFail = false
+  assert.match((await send('yes')).reply, /Posted!/)
+  assert.equal(published.length, 1)
+})
+
+// ---------- edge cases at the front door ----------
+
+test('only POST requests of a sensible size are accepted', async () => {
+  const deps = { authToken: 'secret-token', allowedFrom: OWNER, webhookUrl: URL_, publishing: true, timeZone: 'UTC', siteUrl: '', store: failingStore([]), readTextNotes: async () => [], publish: async () => {}, slugFor: () => '', now: () => new Date() }
+  assert.equal((await handleSms(new Request(URL_, { method: 'GET' }), deps)).status, 405)
+  const huge = new URLSearchParams({ Body: 'x'.repeat(20_000), From: OWNER })
+  assert.equal((await handleSms(new Request(URL_, { method: 'POST', body: huge }), deps)).status, 413)
+})
