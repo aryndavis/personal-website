@@ -110,6 +110,12 @@ function TastingCard({ post }: { post: WinePost }) {
         <section className="card-section">
           <h3>Paired with</h3>
           <p className="pairing">{wine.pairedWith}</p>
+          {wine.suggestedPairings && wine.suggestedPairings.length > 0 && (
+            <>
+              <h3>Would also go with</h3>
+              <p className="pairing">{wine.suggestedPairings.join(' · ')}</p>
+            </>
+          )}
         </section>
       ) : (
         wine.suggestedPairings &&

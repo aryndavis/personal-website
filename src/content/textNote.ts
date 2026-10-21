@@ -10,14 +10,14 @@
 // Only the first line is required. Values are checked against the same scales the site uses;
 // a bad value is never guessed, it's sent back as an error.
 import type { TastingNote } from './tastingNotes.ts'
-import { BODY, LEVEL, SWEETNESS, type BuyAgain, type WinePrice, type WineStyle } from './types.ts'
+import { BODY, LEVEL, RATINGS, SWEETNESS, type BuyAgain, type Rating, type WinePrice, type WineStyle } from './types.ts'
 
 export const TEXT_TEMPLATE = `wine: Name, Grape, 2022
 producer:
 region:
 style: red/white/rosé/orange/sparkling/dessert
 price: $ to $$$$
-rating: 1-5
+rating: 1-5 (halves ok: 4.5)
 buy again: yes/maybe/no
 verdict:
 flavors: a, b, c
@@ -113,8 +113,12 @@ function readField(field: Field, label: string, value: string): { value: unknown
       return price ? { value: price } : { error: 'price must be $, $$, $$$ or $$$$.' }
     }
     case 'rating': {
-      const match = value.match(/^([1-5])(\s*(\/\s*5|hearts?|stars?))?$/i)
-      return match ? { value: Number(match[1]) } : { error: 'rating must be a number from 1 to 5.' }
+      // 4, 4/5, 4 hearts, 4.5, 4½
+      const match = value.replace('½', '.5').match(/^(\d(?:\.\d+)?)(\s*(\/\s*5|hearts?|stars?))?$/i)
+      const rating = match ? Number(match[1]) : NaN
+      return (RATINGS as readonly number[]).includes(rating)
+        ? { value: rating as Rating }
+        : { error: 'rating must be from 1 to 5, in halves at most (4.5).' }
     }
     case 'buyAgain': {
       const answer = pick(value, BUY_AGAIN) ?? ({ y: 'yes', n: 'no' } as Record<string, BuyAgain>)[plain(value)]
@@ -215,7 +219,7 @@ export function isTextNote(value: unknown): value is TastingNote {
     } else if (field === 'price') {
       if (!PRICES.includes(value as WinePrice)) return false
     } else if (field === 'rating') {
-      if (![1, 2, 3, 4, 5].includes(value as number)) return false
+      if (!(RATINGS as readonly unknown[]).includes(value)) return false
     } else if (field === 'buyAgain') {
       if (!BUY_AGAIN.includes(value as BuyAgain)) return false
     } else if (field === 'sweetness') {

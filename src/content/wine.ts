@@ -11,7 +11,7 @@ import texted from './wine.texts.json'
 //
 // Add any of these when you have them (see tastingNotes.ts for details):
 //   style: 'red' | 'white' | 'rosé' | 'orange' | 'sparkling' | 'dessert'  (guessed from the grape if left out)
-//   The card:  producer, region, price: '$' | '$$' | '$$$' | '$$$$', rating: 1–5, buyAgain: 'yes' | 'maybe' | 'no',
+//   The card:  producer, region, price: '$' | '$$' | '$$$' | '$$$$', rating: 1–5 (halves ok, 4.5), buyAgain: 'yes' | 'maybe' | 'no',
 //              verdict (a one-line review), flavors (your tasting notes: 'red currant, rose petal'),
 //              sweetness: 'bone dry' | 'dry' | 'off-dry' | 'medium sweet' | 'sweet',
 //              body: 'light' | 'medium-light' | 'medium' | 'medium-full' | 'full',
@@ -20,7 +20,21 @@ import texted from './wine.texts.json'
 //   The post:  moment, look, nose, palate, finish, thoughts, and title/summary/tags to override the defaults.
 //
 // Tasting notes written here. (Notes can also be texted in; see textNotes below.)
-export const handNotes: TastingNote[] = []
+export const handNotes: TastingNote[] = [
+  {
+    wine: 'Hermann J. Wiemer Late Harvest Riesling',
+    grape: 'Riesling',
+    vintage: 2023,
+    date: '2026-10-21',
+    producer: 'Hermann J. Wiemer',
+    region: 'Finger Lakes, New York',
+    rating: 4.5,
+    buyAgain: 'yes',
+    sweetness: 'medium sweet',
+    pairedWith: 'Pretzels, for the sweet and salty mix',
+    suggestedPairings: ['a fruit tart', 'sweeter cheeses', 'salty crackers'],
+  },
+]
 
 // GUIDES are recipe cards: explainers, regions, how-tos. Write the body like the other blogs (see types.ts).
 // Example:
