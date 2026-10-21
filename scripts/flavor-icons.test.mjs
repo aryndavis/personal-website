@@ -41,30 +41,37 @@ test('notes without a picture get none, rather than a wrong guess', () => {
   for (const flavor of ['', '   ', 'zippy', 'joy', 'appleton', 'pearl', '🍐']) assert.equal(flavorIcon(flavor), undefined, flavor)
 })
 
-// The aroma wheel (Noble et al.), outer ring, written the way the wheel writes them.
+// The aroma wheel (Noble et al.), outer ring, written the way the wheel writes them. Its faults are split
+// out: a corked or spoiled bottle doesn't get a card, so those terms deliberately have no icon.
 const WHEEL = [
   'Grapefruit', 'Lemon', 'Orange', 'Blackberry', 'Raspberry', 'Strawberry', 'Blackcurrant (Cassis)', 'Cherry', 'Apricot',
   'Peach', 'Pear', 'Apple', 'Pineapple', 'Melon', 'Banana', 'Artificial Fruit', 'Strawberry Jam', 'Raisin', 'Prune', 'Fig',
   'Methyl Anthranilate', 'Stemmy', 'Grass/Cut', 'Green Pepper', 'Eucalyptus', 'Mint', 'Hay/Straw', 'Tea', 'Green Bean',
-  'Asparagus', 'Green Olive', 'Black Olive', 'Artichoke', 'Dusty', 'Mushroom', 'Earthy', 'Concrete', 'Musty', 'Mouldy Cork',
-  'Mouldy Cooperage', 'Tar', 'Plastic', 'Kerosene', 'Diesel', 'Rubbery', 'Hydrogen Sulphide', 'Mercaptan', 'Garlic', 'Onion',
-  'Cabbage', 'Skunk', 'Burnt Match', 'Wet Wool/Wet Dog', 'Filter Pad', 'Wet Cardboard', 'Wet Paper', 'Ethyl Acetate',
-  'Acetic Acid', 'Ethanol', 'Sulphur Dioxide', 'Fishy', 'Soapy', 'Sorbate', 'Fusel Alcohol', 'Acetaldehyde', 'Phenol',
-  'Vanilla', 'Pine', 'Cedar', 'Oak', 'Honey', 'Butterscotch', 'Buttery (Diacetyl)', 'Soy Sauce', 'Chocolate', 'Molasses',
-  'Smoky', 'Burnt Toast/Charred', 'Leesy', 'Flor-Yeast', 'Sauerkraut', 'Sweaty', 'Butyric Acid', 'Lactic Acid', 'Horsey',
-  'Linalool', 'Terpene', 'Jasmine', 'Rose', 'Violet', 'Geranium', 'Cloves', 'Black Peppercorn', 'Licorice, Aniseed', 'Cinnamon',
+  'Asparagus', 'Green Olive', 'Black Olive', 'Artichoke', 'Dusty', 'Mushroom', 'Earthy', 'Concrete', 'Tar', 'Kerosene',
+  'Diesel', 'Vanilla', 'Pine', 'Cedar', 'Oak', 'Honey', 'Butterscotch', 'Buttery (Diacetyl)', 'Soy Sauce', 'Chocolate',
+  'Molasses', 'Smoky', 'Burnt Toast/Charred', 'Leesy', 'Flor-Yeast', 'Lactic Acid', 'Linalool', 'Terpene', 'Jasmine', 'Rose',
+  'Violet', 'Geranium', 'Cloves', 'Black Peppercorn', 'Licorice, Aniseed', 'Cinnamon',
+]
+const FAULTS = [
+  'Musty', 'Mouldy Cork', 'Mouldy Cooperage', 'Plastic', 'Rubbery', 'Hydrogen Sulphide', 'Mercaptan', 'Garlic', 'Onion',
+  'Cabbage', 'Sauerkraut', 'Skunk', 'Burnt Match', 'Wet Wool/Wet Dog', 'Filter Pad', 'Wet Cardboard', 'Wet Paper',
+  'Ethyl Acetate', 'Acetic Acid', 'Ethanol', 'Sulphur Dioxide', 'Fishy', 'Soapy', 'Sorbate', 'Fusel Alcohol',
+  'Acetaldehyde', 'Phenol', 'Sweaty', 'Butyric Acid', 'Horsey',
 ]
 
-test('every term on the aroma wheel has an icon', () => {
-  const missing = WHEEL.filter((term) => !flavorIcon(term))
-  assert.deepEqual(missing, [])
+test('every pleasant term on the aroma wheel has an icon', () => {
+  assert.deepEqual(WHEEL.filter((term) => !flavorIcon(term)), [])
+})
+
+test('faults have no icon, since a faulty bottle never gets a card', () => {
+  assert.deepEqual(FAULTS.filter((term) => flavorIcon(term)), [])
 })
 
 test('the wheel’s trickier terms get the specific icon', () => {
   for (const [term, icon] of [
-    ['Wet Wool/Wet Dog', 'yarn'], ['Blackcurrant (Cassis)', 'blackberry'], ['Burnt Toast/Charred', 'toast'],
-    ['Buttery (Diacetyl)', 'butter'], ['Soy Sauce', 'soy'], ['Green Pepper', 'bell pepper'], ['Black Peppercorn', 'pepper'],
-    ['Methyl Anthranilate', 'grapes'], ['Mouldy Cork', 'cork'], ['Strawberry Jam', 'jam'], ['Flor-Yeast', 'bread'],
+    ['Blackcurrant (Cassis)', 'blackberry'], ['Burnt Toast/Charred', 'toast'], ['Buttery (Diacetyl)', 'butter'],
+    ['Soy Sauce', 'soy'], ['Green Pepper', 'bell pepper'], ['Black Peppercorn', 'pepper'], ['Methyl Anthranilate', 'grapes'],
+    ['Strawberry Jam', 'jam'], ['Flor-Yeast', 'bread'], ['Kerosene', 'petrol'],
   ]) {
     assert.equal(flavorIcon(term), icon, term)
   }

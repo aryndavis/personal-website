@@ -1,6 +1,7 @@
 // Pixel art for the wine tasting card: a little picture for most tasting notes (the aroma wheel's terms
-// and a few Riesling favorites), plus the card's own icons. Same format as PixelIcon: one letter per
-// pixel, '.' is transparent, letters are colors from PixelIcon's palette.
+// and a few Riesling favorites), plus the card's own icons. Faults (corked, sulfur, vinegar, wet
+// cardboard…) have none on purpose: a bottle with a fault doesn't get a card.
+// Same format as PixelIcon: one letter per pixel, '.' is transparent, letters are PixelIcon palette colors.
 
 /** Swaps colors in a grid, so one drawing can serve several things (a violet and a jasmine flower). */
 const recolor = (grid: string[], swaps: Record<string, string>) => grid.map((row) => row.replace(/./g, (ch) => swaps[ch] ?? ch))
@@ -8,7 +9,6 @@ const recolor = (grid: string[], swaps: Record<string, string>) => grid.map((row
 // Templates: P is the main color, Q its shadow, C the center or accent.
 const FLOWER = ['..kk.kk..', '.kPPkPPk.', '.kPPPPPk.', 'kkPPCPPkk', 'kPPCCCPPk', 'kQPPCPPQk', '.kkQQQkk.', '..kQkQk..', '...k.k...']
 const LEAF = ['......kk.', '....kkPk.', '...kPCPk.', '..kPCPQk.', '.kPCPQk..', '.kCPQk...', 'kCQkk....', 'kk.......']
-const BULB = ['....k....', '...kPk...', '..kPQPk..', '.kPQPQPk.', 'kPPQPPQPk', 'kPQPPQPQk', '.kPPQPPk.', '..kkkkk..']
 const WRAPPED_CANDY = ['kk..kkkkk..kk', 'kPkkPwPPPkkPk', 'kPPkPPPPPkPPk', 'kPkkPPPPQkkPk', 'kk..kkkkk..kk']
 const OLIVE = ['..kkkkk..', '.kPwPPPk.', 'kPPPPPPQk', 'kPPPPPQQk', '.kPPQQQk.', '..kkkkk..']
 
@@ -79,7 +79,6 @@ export const FLAVOR_ART = {
   mushroom: ['..kkkkk..', '.knnWnnk.', 'knnnnnWnk', 'knWnnnnnk', 'kkkkkkkkk', '...kwk...', '...kwk...', '..kwwwk..', '..kkkkk..'],
   earth: ['....G....', '...GkG...', '....k....', '...kkk...', '.kkNNNkk.', 'kNNnNNnNk', 'kkkkkkkkk'],
   stone: ['..kkkkk..', '.ksWsssk.', 'kssssssSk', 'ksssssSSk', '.kSSSSSk.', '..kkkkk..'],
-  cork: ['.kkkkk.', 'knnnnnk', 'kNnnGnk', 'knnNnnk', 'kNnnnNk', 'knGNnnk', 'kNnnnnk', '.kkkkk.'],
 
   // Green and vegetal
   grass: ['.k...k..k..', 'kGk.kGk.kGk', 'kGk.kGk.kGk', 'kGGkGGGkGGk', 'kGLGGLGGLGk', 'kkkkkkkkkkk'],
@@ -88,22 +87,11 @@ export const FLAVOR_ART = {
   olive: recolor(OLIVE, { P: 'G', Q: 'L' }),
   'black olive': recolor(OLIVE, { P: 'X', Q: 'k', w: 'l' }),
   artichoke: ['....k....', '...kGk...', '..kGLGk..', '.kGLGLGk.', 'kGLGLGLGk', '.kLGLGLk.', '..kLGLk..', '...kkk...', '....k....'],
-  cabbage: recolor(BULB, { P: 'g', Q: 'G' }),
   tea: ['.kkkkkkk..', '.kNNNNNkkk', '.kWWWWWk.k', '.kWWWWWkkk', '..kWWWk...', 'kkkkkkkkk.'],
   hay: ['.kkkkkkkk.', 'kyoyyoyyok', 'kyyoyyoyyk', 'kNNNNNNNNk', 'kyoyyoyyok', 'kyyoyyoyyk', '.kkkkkkkk.'],
 
-  // Chemical, sulfur and funk
+  // Riesling's famous petrol note (a good thing, not a flaw)
   petrol: ['....k....', '...kXk...', '...kXk...', '..kXXXk..', '.kXlXXXk.', '.kXbXpXk.', 'kXXXyXXXk', 'kXXXXXXXk', '.kXXXXXk.', '..kkkkk..'],
-  match: ['.kkk.', 'kcRck', 'kccck', '.kkk.', '.kNk.', '.kNk.', '.kNk.', '.kNk.', '.kNk.', '.kkk.'],
-  garlic: recolor(BULB, { P: 'W', Q: 'e' }),
-  onion: recolor(BULB, { P: 'l', Q: 'V' }),
-  rubber: ['..kkkkk..', '.kSSSSSk.', 'kSSkkkSSk', 'kSk...kSk', 'kSk...kSk', 'kSSkkkSSk', '.kSSSSSk.', '..kkkkk..'],
-  dog: ['.kk...kk.', 'kNNkkkNNk', 'kNnnnnnNk', 'kNnknknNk', '.knnkknk.', '..knnnk..', '...kkk...'],
-  yarn: ['..kkkkk...', '.kpdpppk..', 'kpppdppdk.', 'kdpppdppk.', 'kppdpppdk.', 'kpdpppdpk.', '.kppdppkk.', '..kkkkk.dd'],
-  cardboard: ['kkkkkkkkk', 'knnnNnnnk', 'kkkkkkkkk', 'knnnNnnnk', 'knnnNnnnk', 'knnnnnnnk', 'kkkkkkkkk'],
-  soap: ['.......kk.', '..k...kbWk', '.kbk...kk.', '..k.......', '.kkkkkkkk.', 'kpWppppppk', 'kppppppppk', 'kddddddddk', '.kkkkkkkk.'],
-  fish: ['...kkkk..k.', '.kkbbbbk.kk', 'kbkbbbbbkbk', 'kbbbbbbbbbk', '.kkBBBBk.kk', '...kkkk..k.'],
-  flask: ['...kkk...', '...kwk...', '...kwk...', '..kwwwk..', '.kwwwwwk.', 'kwmmmmmwk', 'kmmWmmmmk', 'kmmmmmmmk', 'kkkkkkkkk'],
 } satisfies Record<string, string[]>
 
 export type FlavorIcon = keyof typeof FLAVOR_ART
@@ -145,8 +133,8 @@ const WORDS: Record<FlavorIcon, string[]> = {
   mint: ['mint', 'herb', 'herbal', 'fresh herb', 'basil', 'sage', 'thyme', 'vegetative', 'green'],
   eucalyptus: ['eucalyptus', 'menthol'],
   bread: ['bread', 'yeast', 'yeasty', 'lees', 'leesy', 'flor', 'flor yeast', 'brioche', 'biscuit', 'dough'],
-  toast: ['toast', 'toasty', 'burnt toast', 'charred', 'burned', 'burnt'],
-  cheese: ['cheese', 'lactic', 'lactic acid', 'butyric acid', 'sweaty', 'yogurt', 'cream'],
+  toast: ['toast', 'toasty', 'burnt toast', 'charred', 'charcoal'],
+  cheese: ['cheese', 'lactic', 'lactic acid', 'yogurt', 'cream'],
   butter: ['butter', 'buttery', 'diacetyl'],
   honey: ['honey', 'beeswax', 'honeycomb'],
   caramel: ['caramel', 'caramelized', 'butterscotch', 'molasses', 'toffee', 'brown sugar', 'maple'],
@@ -158,27 +146,15 @@ const WORDS: Record<FlavorIcon, string[]> = {
   mushroom: ['mushroom', 'truffle', 'earthy mushroom'],
   earth: ['earth', 'earthy', 'dust', 'dusty', 'soil', 'dirt', 'potting soil'],
   stone: ['stone', 'wet stone', 'slate', 'mineral', 'minerality', 'flint', 'chalk', 'concrete', 'gravel', 'saline'],
-  cork: ['cork', 'corked', 'mouldy cork', 'moldy cork', 'mould', 'mold', 'mouldy', 'moldy', 'musty', 'mouldy cooperage', 'moldy cooperage'],
   grass: ['grass', 'cut grass', 'fresh cut grass', 'stemmy', 'stem', 'grassy'],
   'bell pepper': ['bell pepper', 'green pepper', 'capsicum', 'jalapeno'],
   asparagus: ['asparagus', 'green bean', 'canned vegetable', 'cooked vegetable'],
   olive: ['olive', 'green olive'],
   'black olive': ['black olive', 'tapenade'],
   artichoke: ['artichoke'],
-  cabbage: ['cabbage', 'sauerkraut'],
   tea: ['tea', 'black tea', 'green tea', 'chamomile'],
-  hay: ['hay', 'straw', 'dried herb', 'dried', 'tobacco', 'barnyard', 'horsey'],
-  petrol: ['petrol', 'petroleum', 'diesel', 'kerosene', 'gasoline', 'tdn', 'plastic', 'tar'],
-  match: ['match', 'burnt match', 'struck match', 'sulphur', 'sulfur', 'sulphur dioxide', 'sulfur dioxide', 'skunk', 'mercaptan', 'hydrogen sulphide', 'hydrogen sulfide', 'rotten egg'],
-  garlic: ['garlic'],
-  onion: ['onion', 'shallot'],
-  rubber: ['rubber', 'rubbery', 'tire', 'tyre'],
-  dog: ['wet dog'],
-  yarn: ['wool', 'wet wool', 'lanolin'],
-  cardboard: ['cardboard', 'wet cardboard', 'paper', 'wet paper', 'papery', 'filter pad'],
-  soap: ['soap', 'soapy'],
-  fish: ['fish', 'fishy'],
-  flask: ['chemical', 'pungent', 'ethanol', 'alcohol', 'acetic acid', 'vinegar', 'ethyl acetate', 'nail polish', 'sorbate', 'acetaldehyde', 'oxidized', 'oxidised', 'fusel alcohol', 'phenol', 'medicinal', 'band aid', 'nutty', 'sherry'],
+  hay: ['hay', 'straw', 'dried herb', 'dried', 'tobacco'],
+  petrol: ['petrol', 'petroleum', 'diesel', 'kerosene', 'gasoline', 'tdn', 'tar'],
 }
 
 const normalize = (text: string) =>
