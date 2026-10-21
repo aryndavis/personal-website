@@ -38,6 +38,7 @@ Every pull request runs lint, type-check, tests and a build in GitHub Actions (`
 - **Publishing to GitHub** (`scripts/github-publish.test.mjs`): retrying a conflict, never appending a note that is already there (two quick YES replies), giving up, other errors, a malformed file, and accents and emoji surviving encoding.
 - **Substack sync** (`scripts/sync-substack.test.mjs`, `scripts/substack-html.test.mjs`): HTML conversion, the image host allowlist, type and size limits, archive paging, and network failures.
 - **Tasting notes** (`scripts/tasting-notes.test.mjs`): the defaults, style and sweetness guesses, pairings, stable links, and how full each profile meter is (bone dry and none fill nothing).
+- **Search and link previews** (`scripts/seo.test.mjs`): the home title and description, preview tags and the 1200×630 image, the structured data matching the site's profile links, robots.txt and the sitemap.
 - **Tasting card icons** (`scripts/flavor-icons.test.mjs`): every drawing is a clean rectangle of palette colors; every pleasant aroma-wheel term gets an icon and every fault gets none; the most specific wording wins (strawberry jam, bell pepper).
 
 ## Pages

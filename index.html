@@ -4,14 +4,83 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#07030c" />
-    <meta name="description" content="Aryn Davis: software engineer and curriculum designer. Portfolio, an education blog, and a wine blog." />
+    <title>Aryn Davis · Software Engineer &amp; Curriculum Designer</title>
+    <meta
+      name="description"
+      content="Aryn Davis: software engineer and curriculum designer in New York City. Former Microsoft engineer, M.Ed. student at Teachers College, Columbia."
+    />
+    <link rel="canonical" href="https://arynlynn.com/" />
     <link rel="icon" href="/favicon.ico?v=2" sizes="32x32" />
     <link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" />
-    <title>Aryn Davis</title>
+
+    <!-- Link previews (iMessage, LinkedIn, Slack, social posts) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Aryn Davis" />
+    <meta property="og:url" content="https://arynlynn.com/" />
+    <meta property="og:title" content="Aryn Davis · Software Engineer &amp; Curriculum Designer" />
+    <meta property="og:description" content="Software engineer and curriculum designer in New York City. Portfolio, an education blog, and a wine blog." />
+    <meta property="og:image" content="https://arynlynn.com/images/social-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Aryn Davis: software engineer, curriculum designer, educator. arynlynn.com" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Tells search engines who this site is about and which profiles are hers. Data only: nothing runs. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Person",
+            "@id": "https://arynlynn.com/#aryn",
+            "name": "Aryn Davis",
+            "url": "https://arynlynn.com/",
+            "jobTitle": ["Software Engineer", "Curriculum Designer"],
+            "description": "Software engineer and curriculum designer in New York City, studying Technology, Media, and Learning at Teachers College, Columbia University.",
+            "email": "mailto:hello@arynlynn.com",
+            "address": { "@type": "PostalAddress", "addressLocality": "New York", "addressRegion": "NY", "addressCountry": "US" },
+            "affiliation": { "@type": "CollegeOrUniversity", "name": "Teachers College, Columbia University" },
+            "knowsAbout": ["Software engineering", "Curriculum design", "Instructional design", "Educational technology", "Computer science education"],
+            "sameAs": [
+              "https://www.linkedin.com/in/aryn-davis",
+              "https://www.instagram.com/aryn.creates",
+              "https://github.com/aryndavis",
+              "https://arynlynn.substack.com"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://arynlynn.com/#site",
+            "name": "Aryn Davis",
+            "url": "https://arynlynn.com/",
+            "author": { "@id": "https://arynlynn.com/#aryn" }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- What search engines and link previews read before the app starts. React replaces it on load. -->
+      <main class="prerender">
+        <h1>Aryn Davis</h1>
+        <p>Software engineer, curriculum designer and educator in New York City.</p>
+        <p>
+          I’m a software engineer and a curriculum designer, and I love the places where the two meet. I spent five years as a software engineer at Microsoft. Now
+          I’m in New York, studying Technology, Media, and Learning for a Master of Education at Teachers College, Columbia University.
+        </p>
+        <ul>
+          <li><a href="/#/portfolio">Portfolio</a></li>
+          <li><a href="/#/education">Education blog</a></li>
+          <li><a href="/#/wine">Gen Z With A Glass, a wine blog</a></li>
+          <li><a href="https://www.linkedin.com/in/aryn-davis">LinkedIn</a></li>
+          <li><a href="https://www.instagram.com/aryn.creates">Instagram</a></li>
+          <li><a href="https://github.com/aryndavis">GitHub</a></li>
+          <li><a href="mailto:hello@arynlynn.com">hello@arynlynn.com</a></li>
+        </ul>
+      </main>
+    </div>
     <noscript>This site needs JavaScript to show its windows.</noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>

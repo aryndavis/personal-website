@@ -2015,3 +2015,14 @@ a.pixel-button.substack-link:hover {
   margin: 4px 0 0;
   font: 1.2rem/1.2 var(--terminal);
 }
+
+/* index.html's plain-HTML summary, shown for a moment before the app starts (and to anything that doesn't run JavaScript). */
+.prerender {
+  max-width: 640px;
+  padding: 48px 24px;
+  color: var(--cream, #fff8ec);
+}
+
+.prerender a {
+  color: inherit;
+}
