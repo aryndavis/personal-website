@@ -1560,7 +1560,8 @@ a.pixel-button.substack-link:hover {
 
 .rack-disclaimer strong {
   font-weight: normal;
-  color: var(--pink-deep);
+  /* Darker than --pink-deep, so small text on cream passes WCAG AA (about 5.6:1). */
+  color: #a8266a;
 }
 
 .rack-window .window-body {

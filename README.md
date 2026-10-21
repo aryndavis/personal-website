@@ -71,10 +71,11 @@ Every project and post has its own address (for example `/wine/weeknight-white-u
     ```
 
     The title, link (`/wine/domaine-example-poulsard-2022`), tags and layout are made for you, and the style (red, white, rosé, orange, sparkling, dessert) is guessed from the grape and name. Optional extras fill in the tasting card and the post:
-    - **Card basics:** `producer`, `region`, `price` (`'$'` to `'$$$$'`), `rating` (1–5 hearts), `buyAgain` (`'yes' | 'maybe' | 'no'`), `style`.
-    - **Review:** `verdict` (a one-line review at the top of the card), `flavors` (tasting notes, e.g. `'red currant, rose petal'`).
-    - **Profile meters:** `sweetness` (bone dry → sweet), `body` (light → full), `acidity` and `tannin` (low → high). Sweetness is guessed for reds, orange and dessert wines if left out.
-    - **Pairings:** `pairedWith` (what you ate). Without it, the card shows "Try it with" suggestions from the grape or style, or your own `suggestedPairings`.
+    - **Card basics:** `producer`, `region`, `boughtAt` (the shop), `price` (`'$'` under $20, `'$$'` $20–30, `'$$$'` $30–50, `'$$$$'` $50+), `rating` (1–5 hearts, halves allowed: `4.5`), `buyAgain` (`'yes' | 'maybe' | 'no'`), `style`.
+    - **Review:** `verdict` (a one-line review at the top of the card), `flavors` (tasting notes, e.g. `'red currant, rose petal'`; most aroma-wheel words get a pixel icon, see `src/components/flavorIcons.ts`).
+    - **Profile meters:** `sweetness` (bone dry → sweet), `body` (light → full), `acidity` and `tannin` (`none`, then low → high). Bone dry and none show an empty meter; rows you leave out don't show. Sweetness is guessed for reds, orange and dessert wines if left out.
+    - **Pairings:** `pairedWith` (what you ate, shown as "I paired it with"), plus your own `suggestedPairings` ("Would also go with"). With neither, the card shows "Try it with" suggestions from the grape or style.
+    - **Reviewing a bottle again:** add another note for the same wine and vintage. It gets its own link (…`-2`), a "revisited" title, and a link back to the earlier review; nothing is overwritten.
     - **The post:** `moment`, `look`, `nose`, `palate`, `finish`, `thoughts`. See `src/content/tastingNotes.ts`.
   - **Guides** show as pinned recipe cards and are written like any other post, with `kind: 'guide'`.
 - **Links and italics** go inside a paragraph as a list of parts: `text: ['Read ', { text: 'this', href: 'https://…' }, ' and ', { text: 'that', em: true }]`. Only `http(s)` links become clickable.
