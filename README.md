@@ -45,13 +45,13 @@ Every pull request runs lint, type-check, tests and a build in GitHub Actions (`
 
 | URL | Page | Content file |
 | --- | --- | --- |
-| `#/` | About me (home) | `src/pages/Home.tsx` |
-| `#/portfolio` | Portfolio: curriculum design and software engineering | `src/content/portfolio.ts` |
-| `#/education` | Education blog | `src/content/education.ts` |
-| `#/wine` | Gen Z With A Glass (wine blog) | `src/content/wine.ts` |
-| `#/bookshelf` | Bookshelf (reading list) | `src/content/books.ts` |
+| `/` | About me (home) | `src/pages/Home.tsx` |
+| `/portfolio` | Portfolio: curriculum design and software engineering | `src/content/portfolio.ts` |
+| `/education` | Education blog | `src/content/education.ts` |
+| `/wine` | Gen Z With A Glass (wine blog) | `src/content/wine.ts` |
+| `/bookshelf` | Bookshelf (reading list) | `src/content/books.ts` |
 
-Every project and post has its own link (for example `#/wine/weeknight-white-under-20`). Opening it shows the entry in a pop-up window, and each section also has a plain `index.txt` list of links. Routes use the `#/` form so the site works on any static host without server rewrite rules.
+Every project and post has its own address (for example `/wine/weeknight-white-under-20`). Opening it shows the entry in a pop-up window, and each section also has a plain `index.txt` list of links. Moving around never reloads the page: the app handles its own links (`src/router.ts`). For first visits, search engines and link previews, `npm run build` also writes a page for every address with its own title, description and preview tags, plus `sitemap.xml` and a `404.html` (`scripts/prerender.mjs`, from the list in `src/routes.ts`). Old `#/` links still work: they're swapped for the new address on load.
 
 ## Editing content
 
@@ -67,7 +67,7 @@ Every project and post has its own link (for example `#/wine/weeknight-white-und
     { wine: 'Domaine Example Poulsard', grape: 'Poulsard', vintage: 2022, date: '2026-10-20' },
     ```
 
-    The title, link (`#/wine/domaine-example-poulsard-2022`), tags and layout are made for you, and the style (red, white, rosé, orange, sparkling, dessert) is guessed from the grape and name. Optional extras fill in the tasting card and the post:
+    The title, link (`/wine/domaine-example-poulsard-2022`), tags and layout are made for you, and the style (red, white, rosé, orange, sparkling, dessert) is guessed from the grape and name. Optional extras fill in the tasting card and the post:
     - **Card basics:** `producer`, `region`, `price` (`'$'` to `'$$$$'`), `rating` (1–5 hearts), `buyAgain` (`'yes' | 'maybe' | 'no'`), `style`.
     - **Review:** `verdict` (a one-line review at the top of the card), `flavors` (tasting notes, e.g. `'red currant, rose petal'`).
     - **Profile meters:** `sweetness` (bone dry → sweet), `body` (light → full), `acidity` and `tannin` (low → high). Sweetness is guessed for reds, orange and dessert wines if left out.

@@ -177,7 +177,7 @@ test('preview, then YES publishes and replies with the link', async () => {
   assert.equal(published.length, 0, 'nothing is published before YES')
 
   const yes = await send('Yes!')
-  assert.match(yes.reply, /Posted! .*https:\/\/arynlynn\.com\/#\/wine\/sample-gamay-2023/)
+  assert.match(yes.reply, /Posted! .*https:\/\/arynlynn\.com\/wine\/sample-gamay-2023/)
   assert.equal(published.length, 1)
   assert.equal(published[0].date, '2026-10-20')
 

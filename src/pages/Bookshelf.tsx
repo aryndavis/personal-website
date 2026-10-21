@@ -118,7 +118,7 @@ export default function BookshelfPage({ slug }: { slug?: string }) {
         <PixelWindow title="readme_bookshelf.txt" tone="lilac" className="page-intro">
           <div className="intro-row">
             <PixelIcon name="books" size={56} />
-            <p>What I’m reading now, what I’ve finished, and what’s up next. Pick any book to see my notes.</p>
+            <p>{bookshelf.blurb}</p>
           </div>
         </PixelWindow>
       </section>

@@ -241,7 +241,7 @@ function toPost(note: TastingNote, slug: string): WinePost {
 
 /**
  * Turns tasting notes into wine posts. Each gets a link made from its name and vintage,
- * e.g. #/wine/sample-poulsard-2022. If two notes would share a link, the newer one gets -2, -3, …
+ * e.g. /wine/sample-poulsard-2022. If two notes would share a link, the newer one gets -2, -3, …
  * (by date, so adding a note never changes an older note's link). `taken` are links used by other wine posts.
  */
 export function tastingNotes(notes: TastingNote[], taken: Iterable<string> = []): WinePost[] {

@@ -69,7 +69,7 @@ interface PostDialogProps {
   meta?: ReactNode
 }
 
-// Each post has its own URL (#/section/slug) and opens as a modal pop-up window.
+// Each post has its own URL (/section/slug) and opens as a modal pop-up window.
 export default function PostDialog({ entry, fileName, closePath, prev, next, meta }: PostDialogProps) {
   const titleId = useId()
 

@@ -14,7 +14,12 @@ export const site = {
   year: new Date().getFullYear(),
 }
 
-export const bookshelf = { path: '/bookshelf', label: 'Bookshelf', file: 'bookshelf.db' }
+export const bookshelf = {
+  path: '/bookshelf',
+  label: 'Bookshelf',
+  file: 'bookshelf.db',
+  blurb: 'What I’m reading now, what I’ve finished, and what’s up next. Pick any book to see my notes.',
+}
 
 export type SectionKey = 'portfolio' | 'education' | 'wine'
 
