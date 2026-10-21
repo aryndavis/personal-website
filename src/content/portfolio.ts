@@ -60,7 +60,7 @@ export const projects: Project[] = [
     format: 'React + Supabase web app with on-device ML',
     summary: 'A Y2K scrapbook lookbook that cuts each piece of clothing out of an outfit photo, on the device, and catalogs it.',
     tags: ['React', 'TypeScript', 'Computer vision', 'Supabase'],
-    cover: { src: 'images/portfolio/closet-lookbook.jpg', alt: 'Aryn’s Closet lookbook: an outfit polaroid taped into a pink scrapbook on a wooden desk.' },
+    cover: { src: 'images/portfolio/closet-lookbook.jpg', alt: 'Aryn’s Closet lookbook for October 2026: two outfit polaroids, “Brooklyn museum!” and “teal day”, taped into a pink scrapbook with sticker cut-outs of the pieces worn.' },
     links: [
       { label: 'Open the closet ↗', href: 'https://closet.arynlynn.com' },
       { label: 'Code on GitHub ↗', href: 'https://github.com/aryndavis/aryns-closet' },
@@ -71,7 +71,7 @@ export const projects: Project[] = [
         type: 'p',
         text: 'Upload an outfit photo and it becomes a page in a Bratz-meets-scrapbook lookbook. Every fully visible piece of clothing is cut out into a sticker and added to my closet, and an outfit roulette shuffles those pieces into new looks.',
       },
-      { type: 'image', src: 'images/portfolio/closet-scanner.jpg', alt: 'The review step: the scanner found three pieces in an outfit photo, each cut out as a sticker to name and categorize.' },
+      { type: 'image', src: 'images/portfolio/closet-board.jpg', alt: 'The closet page: four pieces cut out as stickers (teal and pink Dunks, a Negro Baseball League letterman jacket, dark red tabis and a dark red bandana bag), filterable by category.' },
       { type: 'h', text: 'Features' },
       {
         type: 'list',
