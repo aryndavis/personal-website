@@ -215,8 +215,7 @@ export default function WinePage({ slug }: { slug?: string }) {
           <div className="intro-row">
             <PixelIcon name="glass" size={56} />
             <p>
-              Honest tasting notes and easy guides, for anyone who likes wine and doesn’t speak sommelier. Every bottle on the rack is one I opened; pick one to read
-              my notes.
+              My little wine diary. I’m still learning, and I love every sip of it. Pick a bottle off the rack to see what I thought!
             </p>
           </div>
         </PixelWindow>
@@ -257,8 +256,8 @@ export default function WinePage({ slug }: { slug?: string }) {
             </ul>
           )}
           <p className="rack-disclaimer">
-            <strong>The fine print:</strong> I buy every bottle myself. Nothing here is gifted or sponsored. Ratings and notes are my own personal taste, not
-            objective truth.
+            <strong>A note:</strong> every bottle here is one I bought or one someone gave me just because, never so I’d write about it. And my ratings are only my
+            opinion, so drink what you love!
           </p>
         </section>
       </PixelWindow>
