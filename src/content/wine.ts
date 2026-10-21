@@ -11,7 +11,7 @@ import texted from './wine.texts.json'
 //
 // Add any of these when you have them (see tastingNotes.ts for details):
 //   style: 'red' | 'white' | 'rosé' | 'orange' | 'sparkling' | 'dessert'  (guessed from the grape if left out)
-//   The card:  producer, region, price: '$' | '$$' | '$$$' | '$$$$', rating: 1–5 (halves ok, 4.5), buyAgain: 'yes' | 'maybe' | 'no',
+//   The card:  producer, region, boughtAt (the shop), price: '$' | '$$' | '$$$' | '$$$$', rating: 1–5 (halves ok, 4.5), buyAgain: 'yes' | 'maybe' | 'no',
 //              verdict (a one-line review), flavors (your tasting notes: 'red currant, rose petal'),
 //              sweetness: 'bone dry' | 'dry' | 'off-dry' | 'medium sweet' | 'sweet',
 //              body: 'light' | 'medium-light' | 'medium' | 'medium-full' | 'full',
@@ -28,9 +28,11 @@ export const handNotes: TastingNote[] = [
     date: '2026-10-21',
     producer: 'Hermann J. Wiemer',
     region: 'Finger Lakes, New York',
+    boughtAt: 'Bed-Vyne Wine and Spirits, Bed-Stuy',
     rating: 4.5,
     buyAgain: 'yes',
     sweetness: 'medium sweet',
+    flavors: 'pear, apricot',
     pairedWith: 'Pretzels, for the sweet and salty mix',
     suggestedPairings: ['a fruit tart', 'sweeter cheeses', 'salty crackers'],
   },

@@ -40,6 +40,7 @@ function TastingCard({ post }: { post: WinePost }) {
     ['Producer', wine.producer],
     ['Grape', wine.grape],
     ['Region', wine.region],
+    ['Bought at', wine.boughtAt],
     ['Style', wine.style && <span className="style-name">{wine.style}</span>],
     ['Price', wine.price && `${wine.price} · ${priceLabel[wine.price]}`],
   ]

@@ -19,6 +19,8 @@ export interface TastingNote {
   style?: WineStyle
   producer?: string
   region?: string
+  /** Where you bought the bottle, e.g. 'Bed-Vyne Wine & Spirits, Bed-Stuy'. */
+  boughtAt?: string
   /** $ under $15, $$ $15–30, $$$ $30–60, $$$$ over $60 */
   price?: WinePrice
   /** 1 to 5 hearts, in halves: 4.5 shows four and a half */
@@ -214,6 +216,7 @@ function toPost(note: TastingNote, slug: string): WinePost {
       style,
       producer: note.producer,
       region: note.region,
+      boughtAt: note.boughtAt?.trim() || undefined,
       price: note.price,
       rating: note.rating,
       buyAgain: note.buyAgain,

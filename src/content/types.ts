@@ -69,8 +69,10 @@ export interface WineDetails {
   style?: WineStyle
   producer?: string
   region?: string
+  /** Where the bottle was bought. */
+  boughtAt?: string
   price?: WinePrice
-  /** 1 to 5 hearts */
+  /** 1 to 5 hearts, in halves */
   rating?: number
   buyAgain?: BuyAgain
   /** A one- or two-sentence review shown at the top of the card. */

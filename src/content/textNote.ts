@@ -15,6 +15,7 @@ import { BODY, LEVEL, RATINGS, SWEETNESS, type BuyAgain, type Rating, type WineP
 export const TEXT_TEMPLATE = `wine: Name, Grape, 2022
 producer:
 region:
+bought at:
 style: red/white/rosé/orange/sparkling/dessert
 price: $ to $$$$
 rating: 1-5 (halves ok: 4.5)
@@ -40,6 +41,11 @@ type Field = keyof TastingNote
 const LABELS: Record<string, Field> = {
   producer: 'producer',
   region: 'region',
+  boughtat: 'boughtAt',
+  bought: 'boughtAt',
+  purchasedat: 'boughtAt',
+  shop: 'boughtAt',
+  store: 'boughtAt',
   style: 'style',
   price: 'price',
   rating: 'rating',
@@ -200,7 +206,7 @@ export function parseTextNote(text: string, today: string): ParseResult {
   return { ok: true, note: note as unknown as TastingNote }
 }
 
-const STRING_FIELDS = ['wine', 'grape', 'vintage', 'date', 'producer', 'region', 'verdict', 'pairedWith', 'moment', 'look', 'nose', 'palate', 'finish', 'thoughts', 'title', 'summary'] as const
+const STRING_FIELDS = ['wine', 'grape', 'vintage', 'date', 'producer', 'region', 'boughtAt', 'verdict', 'pairedWith', 'moment', 'look', 'nose', 'palate', 'finish', 'thoughts', 'title', 'summary'] as const
 
 /** Checks a stored texted note before it reaches the site, so a bad file can't break the build or the page. */
 export function isTextNote(value: unknown): value is TastingNote {

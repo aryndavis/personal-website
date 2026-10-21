@@ -29,7 +29,7 @@ test('a note with only the required fields becomes a full post', () => {
     summary: 'Merlot.',
     tags: ['tasting note', 'red'],
     wine: {
-      name: 'Château Exemple', grape: 'Merlot', vintage: '2019', style: 'red', producer: undefined, region: undefined, price: undefined,
+      name: 'Château Exemple', grape: 'Merlot', vintage: '2019', style: 'red', producer: undefined, region: undefined, boughtAt: undefined, price: undefined,
       rating: undefined, buyAgain: undefined, verdict: undefined, sweetness: 'dry', body: undefined, acidity: undefined, tannin: undefined,
       flavors: [], pairedWith: undefined, suggestedPairings: ['roast chicken', 'mushroom pasta', 'meatloaf'],
     },
