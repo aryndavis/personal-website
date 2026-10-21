@@ -68,6 +68,8 @@ export type Level = (typeof LEVEL_OR_NONE)[number]
 /** The tasting card. Only name, grape and vintage are required. */
 export interface WineDetails {
   name: string
+  /** Earlier reviews of the same bottle (same wine and vintage), newest first. */
+  earlier?: { slug: string; title: string; date: string }[]
   grape: string
   /** A year, or 'NV' for non-vintage. */
   vintage: string

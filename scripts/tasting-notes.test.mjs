@@ -100,3 +100,35 @@ test('meters: "bone dry" and "none" fill nothing; every other step fills up to i
     assert.equal(meterFill(scale, value), filled, `${value} on ${scale.join('/')}`)
   }
 })
+
+test('reviewing the same bottle again: revisited titles, new links, and links back to earlier reviews', () => {
+  const visit = (date, rating) => ({ wine: 'Hermann J. Wiemer Late Harvest Riesling', grape: 'Riesling', vintage: 2023, date, rating })
+  const [first, second, third, fourth, otherYear] = tastingNotes([
+    visit('2026-10-18', 4.5), visit('2026-11-02', 4), visit('2026-12-01', 5), visit('2027-01-05', 5),
+    { wine: 'Hermann J. Wiemer Late Harvest Riesling', grape: 'Riesling', vintage: 2024, date: '2026-11-10' },
+  ])
+  assert.deepEqual(
+    [first, second, third, fourth].map((post) => [post.slug, post.title]),
+    [
+      ['hermann-j-wiemer-late-harvest-riesling-2023', 'Hermann J. Wiemer Late Harvest Riesling 2023'],
+      ['hermann-j-wiemer-late-harvest-riesling-2023-2', 'Hermann J. Wiemer Late Harvest Riesling 2023, revisited'],
+      ['hermann-j-wiemer-late-harvest-riesling-2023-3', 'Hermann J. Wiemer Late Harvest Riesling 2023, revisited again'],
+      ['hermann-j-wiemer-late-harvest-riesling-2023-4', 'Hermann J. Wiemer Late Harvest Riesling 2023, revisited 3 times'],
+    ],
+  )
+  assert.equal(first.wine.earlier, undefined, 'the first review has nothing earlier')
+  assert.deepEqual(third.wine.earlier.map((review) => review.slug), ['hermann-j-wiemer-late-harvest-riesling-2023-2', 'hermann-j-wiemer-late-harvest-riesling-2023'], 'newest first')
+  assert.equal(second.wine.earlier[0].title, 'Hermann J. Wiemer Late Harvest Riesling 2023')
+  // A different vintage is a different bottle.
+  assert.equal(otherYear.title, 'Hermann J. Wiemer Late Harvest Riesling 2024')
+  assert.equal(otherYear.wine.earlier, undefined)
+})
+
+test('the order notes are listed in does not change who is "revisited": the date does', () => {
+  const a = { wine: 'X', grape: 'Gamay', vintage: 2022, date: '2026-05-01' }
+  const b = { wine: 'X', grape: 'Gamay', vintage: 2022, date: '2026-03-01' }
+  const [later, earlier] = tastingNotes([a, b])
+  assert.equal(earlier.title, 'X 2022')
+  assert.equal(later.title, 'X 2022, revisited')
+})
+
