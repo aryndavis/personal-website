@@ -6,7 +6,6 @@ import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { chromium } from 'playwright'
-import { FLAVOR_ART } from '../src/components/flavorIcons.ts'
 import { site, winePreview } from '../src/site.ts'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
@@ -16,7 +15,11 @@ const file = (path) => pathToFileURL(join(root, path)).href
 const iconSource = readFileSync(join(root, 'src/components/PixelIcon.tsx'), 'utf8')
 const palette = Object.fromEntries([...iconSource.matchAll(/^ {2}(\w): '(#[0-9a-f]{6})'/gm)].map((m) => [m[1], m[2]]))
 palette.v = palette.r // the wine color: red on the card
+palette.h = '#cf9467' // skin, as in the avatar (public/favicon.svg)
+palette.H = '#b07850' // skin in shadow: the creases between fingers
 const glass = iconSource.match(/ {2}glass: \[([\s\S]*?)\]/)[1].match(/'([^']*)'/g).map((row) => row.slice(1, -1))
+// The glass with a hand around its stem, for the avatar to raise in a toast.
+const glassInHand = [...glass.slice(0, 7), '...kkk...', '..khhhk..', '.khhhhhk.', '.kHhHhHk.', '.khhhhhk.', '..khhhk..', '..khhhk..']
 const pixels = (rows, width) => {
   const rects = rows.flatMap((row, y) => [...row].map((char, x) => (char === '.' ? '' : `<rect x="${x}" y="${y}" width="1.02" height="1.02" fill="${palette[char]}"/>`)))
   return `<svg viewBox="0 0 ${rows[0].length} ${rows.length}" width="${width}" shape-rendering="crispEdges">${rects.join('')}</svg>`
@@ -67,9 +70,12 @@ const cards = {
     .url { position: absolute; left: 66px; bottom: 38px; font-family: VT; font-size: 30px; color: #ffd166 }
     .win { right: 70px; top: 110px; width: 360px; box-shadow: 8px 8px 0 #1c0711; transform: rotate(3deg) }
     .bar { background: #ffd166 }
-    .body { padding: 22px 18px; display: flex; align-items: flex-end; justify-content: center; gap: 18px; height: 200px }
+    .body { padding: 18px 18px 6px; display: flex; align-items: flex-end; justify-content: center; height: 214px }
     .hearts { text-align: center; font-family: VT; font-size: 30px; color: #d9468f; padding-bottom: 16px }
-    .me { width: 96px; height: 96px; image-rendering: pixelated; align-self: flex-end }
+    /* Aryn raising a glass: a small glass in a round pixel hand beside the avatar. */
+    .toast { position: relative; width: 300px; height: 210px }
+    .toast .me { position: absolute; left: 10px; bottom: 0; width: 200px; height: 200px; image-rendering: pixelated }
+    .toast svg { position: absolute; left: 186px; bottom: -6px; transform: rotate(-10deg); transform-origin: bottom center }
   </style><div class="card"><div class="grid"></div>
     <div class="path" style="color:#ffd166">C:\\HOME \\ WINE_CELLAR.DAT</div>
     <div class="spark" style="left:640px;top:70px;color:#ffd166">✦</div><div class="spark" style="left:700px;top:330px;font-size:20px;color:#ff8fcf">✦</div>
@@ -78,7 +84,7 @@ const cards = {
     <div class="sub">${escape(winePreview.subtitle)}</div>
     <div class="url">arynlynn.com/wine</div>
     <div class="win"><div class="bar"><span>tasting_card.dat</span><span>_ □ ×</span></div>
-      <div class="body"><img class="me" src="${file('public/favicon.svg')}" alt="">${pixels(glass, 150)}${pixels(FLAVOR_ART.pear, 52)}</div>
+      <div class="body"><div class="toast"><img class="me" src="${file('public/favicon.svg')}" alt="">${pixels(glassInHand, 84)}</div></div>
       <div class="hearts">♥ ♥ ♥ ♥ ♡</div></div>
   </div>`,
 }
