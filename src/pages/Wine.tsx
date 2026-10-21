@@ -133,7 +133,7 @@ function TastingCard({ post }: { post: WinePost }) {
 
       {wine.pairedWith ? (
         <section className="card-section">
-          <h3>{withIcon('cutlery', 'Paired with')}</h3>
+          <h3>{withIcon('cutlery', 'I paired it with')}</h3>
           <p className="pairing">{wine.pairedWith}</p>
           {wine.suggestedPairings && wine.suggestedPairings.length > 0 && (
             <>
