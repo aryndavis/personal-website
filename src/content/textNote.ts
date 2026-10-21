@@ -10,7 +10,7 @@
 // Only the first line is required. Values are checked against the same scales the site uses;
 // a bad value is never guessed, it's sent back as an error.
 import type { TastingNote } from './tastingNotes.ts'
-import { BODY, LEVEL, RATINGS, SWEETNESS, type BuyAgain, type Rating, type WinePrice, type WineStyle } from './types.ts'
+import { BODY, LEVEL_OR_NONE, RATINGS, SWEETNESS, type BuyAgain, type Rating, type WinePrice, type WineStyle } from './types.ts'
 
 export const TEXT_TEMPLATE = `wine: Name, Grape, 2022
 producer:
@@ -24,8 +24,8 @@ verdict:
 flavors: a, b, c
 sweetness: bone dry/dry/off-dry/medium sweet/sweet
 body: light to full
-acidity: low to high
-tannin: low to high
+acidity: none, low to high
+tannin: none, low to high
 paired with:
 notes:
 (anything else, as long as you like)`
@@ -140,8 +140,8 @@ function readField(field: Field, label: string, value: string): { value: unknown
     }
     case 'acidity':
     case 'tannin': {
-      const level = pick(value, LEVEL)
-      return level ? { value: level } : { error: oneOf(label, LEVEL) }
+      const level = pick(value, LEVEL_OR_NONE)
+      return level ? { value: level } : { error: oneOf(label, LEVEL_OR_NONE) }
     }
     case 'flavors':
     case 'suggestedPairings':
@@ -233,7 +233,7 @@ export function isTextNote(value: unknown): value is TastingNote {
     } else if (field === 'body') {
       if (!(BODY as readonly unknown[]).includes(value)) return false
     } else if (field === 'acidity' || field === 'tannin') {
-      if (!(LEVEL as readonly unknown[]).includes(value)) return false
+      if (!(LEVEL_OR_NONE as readonly unknown[]).includes(value)) return false
     } else {
       return false
     }

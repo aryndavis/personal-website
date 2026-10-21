@@ -15,7 +15,7 @@ import texted from './wine.texts.json'
 //              verdict (a one-line review), flavors (your tasting notes: 'red currant, rose petal'),
 //              sweetness: 'bone dry' | 'dry' | 'off-dry' | 'medium sweet' | 'sweet',
 //              body: 'light' | 'medium-light' | 'medium' | 'medium-full' | 'full',
-//              acidity, tannin: 'low' | 'medium-low' | 'medium' | 'medium-high' | 'high',
+//              acidity, tannin: 'none' | 'low' | 'medium-low' | 'medium' | 'medium-high' | 'high',
 //              pairedWith (what you ate), suggestedPairings (your ideas; made for you if both are left out)
 //   The post:  moment, look, nose, palate, finish, thoughts, and title/summary/tags to override the defaults.
 //

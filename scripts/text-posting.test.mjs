@@ -75,12 +75,20 @@ test('bad values are explained, never guessed', () => {
   assert.match(error('wine: X, Gamay, 2031'), /vintage/)
   assert.match(error('wine: X, Gamay, 22'), /vintage/)
   assert.match(error('wine: X, Gamay, 2020\nrating: 6'), /from 1 to 5/)
-  assert.match(error('wine: X, Gamay, 2020\nacidity: zingy'), /acidity must be low, medium-low, medium, medium-high or high/)
+  assert.match(error('wine: X, Gamay, 2020\nacidity: zingy'), /acidity must be none, low, medium-low, medium, medium-high or high/)
   assert.match(error('wine: X, Gamay, 2020\nstyle: purple'), /style must be/)
   assert.match(error('wine: X, Gamay, 2020\nfavorite: yes'), /don't know the label "favorite"/)
   assert.match(error('wine: X, Gamay, 2020\njust some words'), /label: value/)
   assert.match(error(`wine: ${'x'.repeat(130)}, Gamay, 2020`), /too long/)
   assert.match(error('wine: X, Gamay, 2020\nnotes: ' + 'x'.repeat(1700)), /too long/)
+})
+
+test('acidity and tannin can be none', () => {
+  const result = parseTextNote('wine: X, Sauvignon Blanc, 2024\ntannin: none\nacidity: None', TODAY)
+  assert.equal(result.ok, true)
+  assert.equal(result.note.tannin, 'none')
+  assert.equal(result.note.acidity, 'none')
+  assert.ok(isTextNote({ wine: 'X', grape: 'Y', vintage: '2020', date: TODAY, tannin: 'none' }))
 })
 
 test('ratings: whole or half hearts from 1 to 5, written a few ways', () => {

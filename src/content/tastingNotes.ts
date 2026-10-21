@@ -34,7 +34,7 @@ export interface TastingNote {
   body?: Body
   /** 'low' | 'medium-low' | 'medium' | 'medium-high' | 'high' */
   acidity?: Level
-  /** Same scale as acidity; usually only for reds and orange wines. */
+  /** Same scale as acidity, including 'none' (most whites); usually only for reds and orange wines. */
   tannin?: Level
   /** Tasting notes: a list, or one comma-separated string like 'red currant, rose petal, pepper'. */
   flavors?: string[] | string

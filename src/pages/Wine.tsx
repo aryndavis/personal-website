@@ -5,7 +5,7 @@ import PixelWindow from '../components/PixelWindow'
 import { useFocusReturn } from '../components/Popup'
 import PostDialog from '../components/PostDialog'
 import Rating from '../components/Rating'
-import { BODY, LEVEL, SWEETNESS, formatDate, newestFirst, type BuyAgain, type WinePost, type WinePrice, type WineStyle } from '../content/types'
+import { BODY, LEVEL, SWEETNESS, meterFill, formatDate, newestFirst, type BuyAgain, type WinePost, type WinePrice, type WineStyle } from '../content/types'
 import { winePosts } from '../content/wine'
 import { href } from '../router'
 import { sections } from '../site'
@@ -22,10 +22,10 @@ const buyAgainLabel: Record<BuyAgain, string> = { yes: 'Yes, I’d buy it again'
 
 /**
  * A five-step pixel meter: squares, or an icon (sweetness is piles of sugar) with the empty steps faded.
- * The text label next to it carries the meaning; the meter is decoration.
+ * "Bone dry" and "none" fill nothing. The text label next to it carries the meaning; the meter is decoration.
  */
 function Meter({ scale, value, icon }: { scale: readonly string[]; value: string; icon?: MeterIcon }) {
-  const filled = scale.indexOf(value) + 1
+  const filled = meterFill(scale, value)
   return (
     <span className={icon ? 'meter meter-icons' : 'meter'} aria-hidden="true">
       {scale.map((step, i) =>

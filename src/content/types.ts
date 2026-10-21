@@ -55,9 +55,15 @@ export type Rating = (typeof RATINGS)[number]
 export const SWEETNESS = ['bone dry', 'dry', 'off-dry', 'medium sweet', 'sweet'] as const
 export const BODY = ['light', 'medium-light', 'medium', 'medium-full', 'full'] as const
 export const LEVEL = ['low', 'medium-low', 'medium', 'medium-high', 'high'] as const
+/** Acidity and tannin can also be 'none' (tannin in most whites): the meter shows all five steps empty. */
+export const LEVEL_OR_NONE = ['none', ...LEVEL] as const
+/** Values that mean "nothing at all", so the meter shows no filled steps. */
+const NOTHING: readonly string[] = ['bone dry', 'none']
+/** How many of a meter's five steps to fill: 0 for "bone dry" or "none", otherwise the step's place on the scale. */
+export const meterFill = (scale: readonly string[], value: string) => (NOTHING.includes(value) ? 0 : scale.indexOf(value) + 1)
 export type Sweetness = (typeof SWEETNESS)[number]
 export type Body = (typeof BODY)[number]
-export type Level = (typeof LEVEL)[number]
+export type Level = (typeof LEVEL_OR_NONE)[number]
 
 /** The tasting card. Only name, grape and vintage are required. */
 export interface WineDetails {
