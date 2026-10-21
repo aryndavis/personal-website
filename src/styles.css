@@ -1804,6 +1804,27 @@ a.pixel-button.substack-link:hover {
   background: var(--glass);
 }
 
+.meter-icons {
+  gap: 2px;
+  align-items: flex-end;
+}
+
+/* Faded, but outlined enough that an empty white sugar pile still shows on the cream card. */
+.meter-icons .dim {
+  opacity: 0.35;
+  filter: grayscale(1) contrast(1.4);
+}
+
+.with-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.with-icon .pixel-icon {
+  flex: none;
+}
+
 .meter-label {
   text-transform: capitalize;
 }
