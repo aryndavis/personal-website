@@ -17,7 +17,7 @@ producer:
 region:
 bought at:
 style: red/white/rosé/orange/sparkling/dessert
-price: $ to $$$$
+price: $ (under 20), $$ (20-30), $$$ (30-50), $$$$ (50+)
 rating: 1-5 (halves ok: 4.5)
 buy again: yes/maybe/no
 verdict:

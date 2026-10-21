@@ -21,7 +21,7 @@ export interface TastingNote {
   region?: string
   /** Where you bought the bottle, e.g. 'Bed-Vyne Wine & Spirits, Bed-Stuy'. */
   boughtAt?: string
-  /** $ under $15, $$ $15–30, $$$ $30–60, $$$$ over $60 */
+  /** $ under $20, $$ $20–30, $$$ $30–50, $$$$ $50 and up */
   price?: WinePrice
   /** 1 to 5 hearts, in halves: 4.5 shows four and a half */
   rating?: Rating

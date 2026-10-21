@@ -17,7 +17,7 @@ const STYLES: WineStyle[] = ['red', 'white', 'rosé', 'orange', 'sparkling', 'de
 // CSS class names can't rely on accents.
 const styleClass = (style?: WineStyle) => `bottle-${style === 'rosé' ? 'rose' : (style ?? 'unknown')}`
 
-const priceLabel: Record<WinePrice, string> = { $: 'under $15', $$: '$15–30', $$$: '$30–60', $$$$: 'over $60' }
+const priceLabel: Record<WinePrice, string> = { $: 'under $20', $$: '$20–30', $$$: '$30–50', $$$$: '$50+' }
 const buyAgainLabel: Record<BuyAgain, string> = { yes: 'Yes, I’d buy it again', maybe: 'Maybe', no: 'No, once was enough' }
 
 /**

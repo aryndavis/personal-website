@@ -43,7 +43,7 @@ export interface Project extends Entry {
 
 export type WineStyle = 'red' | 'white' | 'rosé' | 'orange' | 'sparkling' | 'dessert'
 
-/** Rough price per bottle: $ under $15, $$ $15–30, $$$ $30–60, $$$$ over $60. */
+/** Rough price per bottle: $ under $20, $$ $20–30, $$$ $30–50, $$$$ $50 and up. */
 export type WinePrice = '$' | '$$' | '$$$' | '$$$$'
 
 export type BuyAgain = 'yes' | 'maybe' | 'no'

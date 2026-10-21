@@ -29,6 +29,7 @@ export const handNotes: TastingNote[] = [
     producer: 'Hermann J. Wiemer',
     region: 'Finger Lakes, New York',
     boughtAt: 'Bed-Vyne Wine and Spirits, Bed-Stuy',
+    price: '$$',
     rating: 4.5,
     buyAgain: 'yes',
     sweetness: 'medium sweet',
