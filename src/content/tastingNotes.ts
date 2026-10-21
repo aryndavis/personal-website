@@ -1,4 +1,4 @@
-import type { Block, Body, BuyAgain, Level, Sweetness, WinePost, WinePrice, WineStyle } from './types'
+import type { Block, Body, BuyAgain, Level, Rating, Sweetness, WinePost, WinePrice, WineStyle } from './types'
 
 /**
  * What you write for a tasting note. Only `wine`, `grape`, `vintage` and `date` are required;
@@ -19,10 +19,12 @@ export interface TastingNote {
   style?: WineStyle
   producer?: string
   region?: string
+  /** Where you bought the bottle, e.g. 'Bed-Vyne Wine & Spirits, Bed-Stuy'. */
+  boughtAt?: string
   /** $ under $15, $$ $15–30, $$$ $30–60, $$$$ over $60 */
   price?: WinePrice
-  /** 1 to 5 hearts */
-  rating?: 1 | 2 | 3 | 4 | 5
+  /** 1 to 5 hearts, in halves: 4.5 shows four and a half */
+  rating?: Rating
   buyAgain?: BuyAgain
   /** A one- or two-sentence review at the top of the card. */
   verdict?: string
@@ -38,7 +40,7 @@ export interface TastingNote {
   flavors?: string[] | string
   /** What you ate with it. */
   pairedWith?: string
-  /** Your own pairing ideas. If you leave out both pairing fields, suggestions are made from the grape or style. */
+  /** Your own pairing ideas; shown next to `pairedWith` as "would also go with". If you leave out both, suggestions are made from the grape or style. */
   suggestedPairings?: string[]
 
   // Optional: the post
@@ -214,6 +216,7 @@ function toPost(note: TastingNote, slug: string): WinePost {
       style,
       producer: note.producer,
       region: note.region,
+      boughtAt: note.boughtAt?.trim() || undefined,
       price: note.price,
       rating: note.rating,
       buyAgain: note.buyAgain,
@@ -224,10 +227,11 @@ function toPost(note: TastingNote, slug: string): WinePost {
       tannin: note.tannin,
       flavors: list(note.flavors),
       pairedWith: note.pairedWith?.trim() || undefined,
-      suggestedPairings: note.pairedWith?.trim()
-        ? undefined
-        : list(note.suggestedPairings).length
-          ? list(note.suggestedPairings)
+      // Your own ideas always show; made-up suggestions only when there's no pairing at all.
+      suggestedPairings: list(note.suggestedPairings).length
+        ? list(note.suggestedPairings)
+        : note.pairedWith?.trim()
+          ? undefined
           : suggestPairings(note.grape, style),
     },
     body,

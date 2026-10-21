@@ -47,6 +47,9 @@ export type WineStyle = 'red' | 'white' | 'rosé' | 'orange' | 'sparkling' | 'de
 export type WinePrice = '$' | '$$' | '$$$' | '$$$$'
 
 export type BuyAgain = 'yes' | 'maybe' | 'no'
+/** Hearts out of 5, in halves. */
+export const RATINGS = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5] as const
+export type Rating = (typeof RATINGS)[number]
 
 // Five-step scales for the tasting card's profile meters.
 export const SWEETNESS = ['bone dry', 'dry', 'off-dry', 'medium sweet', 'sweet'] as const
@@ -66,8 +69,10 @@ export interface WineDetails {
   style?: WineStyle
   producer?: string
   region?: string
+  /** Where the bottle was bought. */
+  boughtAt?: string
   price?: WinePrice
-  /** 1 to 5 hearts */
+  /** 1 to 5 hearts, in halves */
   rating?: number
   buyAgain?: BuyAgain
   /** A one- or two-sentence review shown at the top of the card. */

@@ -930,6 +930,24 @@ button.pixel-button:active {
   filter: grayscale(1);
 }
 
+.half-heart {
+  position: relative;
+  display: inline-flex;
+}
+
+.half-heart svg {
+  display: block;
+}
+
+/* The left 5 of the heart's 9 pixel columns, so the cut falls on a pixel edge. */
+.half-heart-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(100% * 5 / 9);
+  overflow: hidden;
+  display: flex;
+}
+
 .archive {
   max-width: 720px;
   margin-block: 80px 24px;
@@ -1758,6 +1776,10 @@ a.pixel-button.substack-link:hover {
   font: 600 12px/1 var(--pixel);
   text-transform: uppercase;
   color: var(--pink-deep);
+}
+
+.card-section .pairing + h3 {
+  margin-top: 16px;
 }
 
 .card-profile dd {

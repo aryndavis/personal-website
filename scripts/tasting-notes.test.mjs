@@ -29,7 +29,7 @@ test('a note with only the required fields becomes a full post', () => {
     summary: 'Merlot.',
     tags: ['tasting note', 'red'],
     wine: {
-      name: 'Château Exemple', grape: 'Merlot', vintage: '2019', style: 'red', producer: undefined, region: undefined, price: undefined,
+      name: 'Château Exemple', grape: 'Merlot', vintage: '2019', style: 'red', producer: undefined, region: undefined, boughtAt: undefined, price: undefined,
       rating: undefined, buyAgain: undefined, verdict: undefined, sweetness: 'dry', body: undefined, acidity: undefined, tannin: undefined,
       flavors: [], pairedWith: undefined, suggestedPairings: ['roast chicken', 'mushroom pasta', 'meatloaf'],
     },
@@ -74,6 +74,10 @@ test('pairings are suggested from the grape, then the style, unless the note has
   assert.equal(suggestPairings('Mystery Grape'), undefined)
   const [own] = tastingNotes([{ wine: 'X', grape: 'Merlot', vintage: 2020, date: '2026-01-01', suggestedPairings: ['tacos'] }])
   assert.deepEqual(own.wine.suggestedPairings, ['tacos'])
+  // Your own ideas stay next to what you actually paired it with; made-up ones don't.
+  const [both] = tastingNotes([{ wine: 'X', grape: 'Riesling', vintage: 2023, date: '2026-01-01', pairedWith: 'pretzels', suggestedPairings: ['fruit tart'] }])
+  assert.equal(both.wine.pairedWith, 'pretzels')
+  assert.deepEqual(both.wine.suggestedPairings, ['fruit tart'])
 })
 
 test('sweetness is only guessed for reds, orange and dessert wines', () => {

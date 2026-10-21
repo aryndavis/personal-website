@@ -52,7 +52,7 @@ export function preview(note: TastingNote): string {
   const style = note.style ?? guessStyle(note.wine, note.grape)
   const facts = [
     style && `${style}${note.style ? '' : ' (guessed)'}`,
-    note.rating && `${'♥'.repeat(note.rating)}${'♡'.repeat(5 - note.rating)}`,
+    note.rating && `${'♥'.repeat(Math.floor(note.rating))}${note.rating % 1 ? '½' : ''}${'♡'.repeat(5 - Math.ceil(note.rating))}`,
     note.buyAgain && `buy again: ${note.buyAgain}`,
     note.price,
   ].filter(Boolean)

@@ -16,6 +16,7 @@ test('reads a full note, including multi-line notes', () => {
       'Wine: Domaine Example Poulsard, Poulsard, 2022',
       'Producer: Domaine Example',
       'region: Jura, France',
+      'Bought at: Bed-Vyne Wine & Spirits, Bed-Stuy',
       'style: Rosé',
       'price: $ $',
       'rating: 4/5',
@@ -41,6 +42,7 @@ test('reads a full note, including multi-line notes', () => {
     date: TODAY,
     producer: 'Domaine Example',
     region: 'Jura, France',
+    boughtAt: 'Bed-Vyne Wine & Spirits, Bed-Stuy',
     style: 'rosé',
     price: '$$',
     rating: 4,
@@ -72,7 +74,7 @@ test('bad values are explained, never guessed', () => {
   assert.match(error('wine: Just a name'), /wine, grape and year/)
   assert.match(error('wine: X, Gamay, 2031'), /vintage/)
   assert.match(error('wine: X, Gamay, 22'), /vintage/)
-  assert.match(error('wine: X, Gamay, 2020\nrating: 6'), /1 to 5/)
+  assert.match(error('wine: X, Gamay, 2020\nrating: 6'), /from 1 to 5/)
   assert.match(error('wine: X, Gamay, 2020\nacidity: zingy'), /acidity must be low, medium-low, medium, medium-high or high/)
   assert.match(error('wine: X, Gamay, 2020\nstyle: purple'), /style must be/)
   assert.match(error('wine: X, Gamay, 2020\nfavorite: yes'), /don't know the label "favorite"/)
@@ -81,7 +83,22 @@ test('bad values are explained, never guessed', () => {
   assert.match(error('wine: X, Gamay, 2020\nnotes: ' + 'x'.repeat(1700)), /too long/)
 })
 
+test('ratings: whole or half hearts from 1 to 5, written a few ways', () => {
+  const rating = (value) => {
+    const result = parseTextNote(`wine: X, Riesling, 2023\nrating: ${value}`, TODAY)
+    return result.ok ? result.note.rating : result.error
+  }
+  for (const [text, expected] of [['4', 4], ['4/5', 4], ['4.5', 4.5], ['4½', 4.5], ['4.5 hearts', 4.5], ['1', 1], ['5', 5], ['1.5', 1.5]]) {
+    assert.equal(rating(text), expected, text)
+  }
+  for (const text of ['0', '0.5', '5.5', '6', '4.3', '4.25', '-1', 'great', '4.']) {
+    assert.match(String(rating(text)), /from 1 to 5, in halves/, text)
+  }
+})
+
 test('stored notes are checked before reaching the site', () => {
+  assert.ok(isTextNote({ wine: 'X', grape: 'Y', vintage: '2020', date: TODAY, rating: 4.5 }))
+  assert.equal(isTextNote({ wine: 'X', grape: 'Y', vintage: '2020', date: TODAY, rating: 4.3 }), false)
   assert.ok(isTextNote({ wine: 'X', grape: 'Y', vintage: '2020', date: TODAY, rating: 3, flavors: ['a'] }))
   assert.equal(isTextNote({ wine: 'X', grape: 'Y', vintage: '2020', date: TODAY, rating: 7 }), false)
   assert.equal(isTextNote({ wine: 'X', grape: 'Y', vintage: '2020', date: TODAY, html: '<b>' }), false)
@@ -135,6 +152,12 @@ function setup(overrides = {}) {
   }
   return { send, published, data, advance: (ms) => (clock += ms) }
 }
+
+test('the preview shows a half rating as a half heart', async () => {
+  const { send } = setup()
+  assert.match((await send('wine: Late Harvest, Riesling, 2023\nrating: 4.5')).reply, /· ♥♥♥♥½$/m)
+  assert.match((await send('wine: Late Harvest, Riesling, 2023\nrating: 1.5')).reply, /♥½♡♡♡/)
+})
 
 test('preview, then YES publishes and replies with the link', async () => {
   const { send, published } = setup()
