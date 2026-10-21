@@ -32,9 +32,12 @@ export const handNotes: TastingNote[] = [
     rating: 4.5,
     buyAgain: 'yes',
     sweetness: 'medium sweet',
+    body: 'light',
+    acidity: 'medium-low',
     flavors: 'pear, apricot',
     pairedWith: 'Pretzels, for the sweet and salty mix',
     suggestedPairings: ['a fruit tart', 'sweeter cheeses', 'salty crackers'],
+    thoughts: 'Slightly acidic, but only enough to balance out the sweetness so it doesn’t get too sweet. A very light body.',
   },
 ]
 
