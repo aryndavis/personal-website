@@ -1550,6 +1550,19 @@ a.pixel-button.substack-link:hover {
 .bottle-dessert { --glass: #b8731c; --foil: #4f2c07; }
 .bottle-unknown { --glass: var(--lilac); --foil: var(--ink); }
 
+.rack-disclaimer {
+  margin: 18px 0 0;
+  padding-top: 10px;
+  border-top: 2px dashed color-mix(in srgb, var(--ink) 25%, transparent);
+  font: 1.1rem/1.25 var(--terminal);
+  color: color-mix(in srgb, var(--ink) 75%, transparent);
+}
+
+.rack-disclaimer strong {
+  font-weight: normal;
+  color: var(--pink-deep);
+}
+
 .rack-window .window-body {
   padding: 20px clamp(12px, 3vw, 28px) 24px;
 }

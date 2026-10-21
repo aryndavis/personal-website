@@ -243,6 +243,10 @@ export default function WinePage({ slug }: { slug?: string }) {
               ))}
             </ul>
           )}
+          <p className="rack-disclaimer">
+            <strong>The fine print:</strong> I buy every bottle myself. Nothing here is gifted or sponsored. Ratings and notes are my own personal taste, not
+            objective truth.
+          </p>
         </section>
       </PixelWindow>
 

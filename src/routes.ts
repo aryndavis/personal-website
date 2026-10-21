@@ -5,7 +5,7 @@ import { educationPosts } from './content/education'
 import { projects } from './content/portfolio'
 import { newestFirst, type Entry } from './content/types'
 import { winePosts } from './content/wine'
-import { bookshelf, sections, site } from './site'
+import { bookshelf, sections, site, winePreview } from './site'
 
 export interface PageMeta {
   path: string
@@ -19,6 +19,8 @@ export interface PageMeta {
   links: { href: string; text: string }[]
   /** Posts and projects are articles; sections and the home page aren't. */
   article: boolean
+  /** A link-preview card other than the site's own (absolute path), with its description. */
+  image?: { src: string; alt: string }
 }
 
 const MAX_DESCRIPTION = 160
@@ -72,13 +74,42 @@ export function allPages(): PageMeta[] {
     },
     ...entryPages('portfolio', projects),
     ...entryPages('education', educationPosts),
-    ...entryPages('wine', winePosts),
+    ...winePages(),
     ...sectionPages(
       bookshelf.path,
       bookshelf.label,
       bookshelf.blurb,
       books.map((book) => ({ slug: book.slug, title: `${book.title} by ${book.author}`, summary: book.note ?? '' })),
     ),
+  ]
+}
+
+/** Gen Z With A Glass has its own voice in search and link previews (see winePreview in site.ts). */
+function winePages(): PageMeta[] {
+  const wine = sections.wine
+  const image = { src: winePreview.image, alt: winePreview.imageAlt }
+  const subtitle = winePreview.subtitle.charAt(0).toLowerCase() + winePreview.subtitle.slice(1)
+  const posts = newestFirst(winePosts)
+  return [
+    {
+      path: wine.path,
+      title: `${wine.label} · ${winePreview.tagline}`,
+      description: trimDescription(`${winePreview.tagline}: ${subtitle}`),
+      heading: wine.label,
+      links: posts.map((post) => ({ href: `${wine.path}/${post.slug}`, text: post.title })),
+      article: false,
+      image,
+    },
+    ...posts.map((post) => ({
+      path: `${wine.path}/${post.slug}`,
+      title: `${post.title} · ${wine.label}`,
+      // The post's own summary, shortened if needed so the sign-off always fits.
+      description: `${trimDescription(post.summary, MAX_DESCRIPTION - winePreview.postSignoff.length - 1)} ${winePreview.postSignoff}`,
+      heading: post.title,
+      links: [{ href: wine.path, text: `More from ${wine.label}` }],
+      article: true,
+      image,
+    })),
   ]
 }
 

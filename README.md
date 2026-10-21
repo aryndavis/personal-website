@@ -27,7 +27,10 @@ npm run build     # type-check and build to dist/
 npm run preview   # serve the production build at http://localhost:4173
 npm test          # content, Substack-sync and text-posting tests
 npm run lint      # ESLint (TypeScript + React hooks rules)
+npm run social-cards  # redraw the link-preview cards in public/images/ (first time: npx playwright install chromium)
 ```
+
+**Link previews:** the site's card shows the name and roles from `src/site.ts`. Gen Z With A Glass pages use their own card and wording from `winePreview` in `src/site.ts` (tagline, subtitle, and the sign-off added to each post's description). To change the wine tagline, say after graduating, edit it there, run `npm run social-cards`, and commit the new images.
 
 Every pull request runs lint, type-check, tests and a build in GitHub Actions (`.github/workflows/ci.yml`).
 
