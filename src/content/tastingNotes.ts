@@ -88,7 +88,8 @@ const WHITE_GRAPES = [
 // Checked against the wine's name first, since these beat the grape (a Champagne is often Pinot Noir).
 const NAME_HINTS: [RegExp, WineStyle][] = [
   [/\b(champagne|cava|prosecco|cremant|pet[- ]?nat|petillant|spumante|sekt|franciacorta|lambrusco|sparkling|brut)\b/, 'sparkling'],
-  [/\b(sauternes|port|porto|tokaji|ice ?wine|eiswein|late harvest|vin santo|sherry|madeira|dessert)\b/, 'dessert'],
+  // Not "late harvest": that's when the grapes were picked, and plenty of late-harvest wines are plain whites.
+  [/\b(sauternes|port|porto|tokaji|ice ?wine|eiswein|vin santo|sherry|madeira|dessert)\b/, 'dessert'],
   [/\b(orange|skin[- ]contact|amber|ramato)\b/, 'orange'],
   [/\b(rose|rosato|rosado|clairet)\b/, 'rosé'],
 ]
