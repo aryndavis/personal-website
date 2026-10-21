@@ -14,6 +14,19 @@ export const site = {
   year: new Date().getFullYear(),
 }
 
+/**
+ * How Gen Z With A Glass links look when shared (and in search results). Its own voice: no day-job details.
+ * The tagline is also drawn on the preview card, so after changing it run `npm run social-cards`.
+ */
+export const winePreview = {
+  tagline: 'Grand cru taste, grad school budget',
+  subtitle: 'Grapes and gossip from a young, aspiring sommelier in New York City.',
+  /** Added after each wine post's own summary. */
+  postSignoff: 'Grapes and gossip from Gen Z With A Glass.',
+  image: '/images/social-card-wine.png',
+  imageAlt: 'Gen Z With A Glass: grand cru taste, grad school budget. Grapes and gossip from a young, aspiring sommelier in New York City.',
+}
+
 export const bookshelf = {
   path: '/bookshelf',
   label: 'Bookshelf',

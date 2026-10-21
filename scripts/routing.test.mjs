@@ -65,6 +65,24 @@ test('each page has its own title, and a description that fits a search result',
   assert.equal(new Set(titles).size, titles.length, 'no two pages share a title')
 })
 
+test('Gen Z With A Glass speaks for itself: wine card, wine titles, no day-job details', async () => {
+  const { winePreview } = await vite.ssrLoadModule('/src/site.ts')
+  const wine = pages.filter((p) => p.path === '/wine' || p.path.startsWith('/wine/'))
+  assert.ok(wine.length >= 2)
+  for (const p of wine) {
+    assert.equal(p.image?.src, winePreview.image, p.path)
+    assert.doesNotMatch(`${p.title} ${p.description} ${p.image.alt}`, /software|engineer|microsoft|curriculum|portfolio/i, p.path)
+  }
+  const section = wine.find((p) => p.path === '/wine')
+  assert.equal(section.title, `Gen Z With A Glass · ${winePreview.tagline}`)
+  for (const post of wine.filter((p) => p.path !== '/wine')) {
+    assert.match(post.title, / · Gen Z With A Glass$/)
+    assert.ok(post.description.endsWith(winePreview.postSignoff) && post.description.length <= 160, post.description)
+  }
+  // Everything else keeps the site's own card.
+  assert.ok(pages.filter((p) => !wine.includes(p)).every((p) => p.image === undefined))
+})
+
 test('trimDescription cuts at a word and adds an ellipsis', async () => {
   const { trimDescription } = await vite.ssrLoadModule('/src/routes.ts')
   assert.equal(trimDescription('short'), 'short')
@@ -95,6 +113,13 @@ test('a post page gets its own title, description, address and preview tags, esc
   assert.doesNotMatch(html, /<wine>/, 'no raw HTML from content')
   // Everything else (scripts, styles, the structured data about Aryn) is kept.
   assert.equal(html.match(/<script/g).length, template.match(/<script/g).length)
+})
+
+test('a page with its own card swaps the preview image and its description; others keep the site card', () => {
+  const html = renderPage(template, { ...page, image: { src: '/images/social-card-wine.png', alt: 'Wine & "friends"' } })
+  assert.match(html, /property="og:image" content="https:\/\/arynlynn\.com\/images\/social-card-wine\.png"/)
+  assert.match(html, /property="og:image:alt" content="Wine &amp; &quot;friends&quot;"/)
+  assert.match(renderPage(template, page), /property="og:image" content="https:\/\/arynlynn\.com\/images\/social-card\.png"/)
 })
 
 test('the home page keeps index.html exactly as written', () => {

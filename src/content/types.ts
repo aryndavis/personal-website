@@ -93,6 +93,8 @@ export interface WineDetails {
   pairedWith?: string
   /** Shown as "Try it with" when there's no pairedWith. */
   suggestedPairings?: string[]
+  /** Earlier reviews of the same bottle (same wine and vintage), newest first. */
+  earlier?: { slug: string; title: string; date: string }[]
 }
 
 export interface WinePost extends Entry {

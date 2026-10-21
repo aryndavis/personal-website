@@ -153,6 +153,19 @@ function TastingCard({ post }: { post: WinePost }) {
           </section>
         )
       )}
+
+      {wine.earlier && wine.earlier.length > 0 && (
+        <section className="card-section">
+          <h3>{wine.earlier.length === 1 ? 'My earlier review' : 'My earlier reviews'}</h3>
+          <ul className="earlier-reviews">
+            {wine.earlier.map((review) => (
+              <li key={review.slug}>
+                <a href={href(`${section.path}/${review.slug}`)}>{review.title}</a> · <time dateTime={review.date}>{formatDate(review.date)}</time>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </div>
   )
 }
@@ -243,6 +256,10 @@ export default function WinePage({ slug }: { slug?: string }) {
               ))}
             </ul>
           )}
+          <p className="rack-disclaimer">
+            <strong>The fine print:</strong> I buy every bottle myself. Nothing here is gifted or sponsored. Ratings and notes are my own personal taste, not
+            objective truth.
+          </p>
         </section>
       </PixelWindow>
 

@@ -26,7 +26,7 @@ export const handNotes: TastingNote[] = [
     grape: 'Riesling',
     vintage: 2023,
     style: 'white',
-    date: '2026-10-21',
+    date: '2026-10-18',
     producer: 'Hermann J. Wiemer',
     region: 'Finger Lakes, New York',
     boughtAt: 'Bed-Vyne Wine and Spirits, Bed-Stuy',

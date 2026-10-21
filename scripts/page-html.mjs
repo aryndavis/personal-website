@@ -30,6 +30,10 @@ export function renderPage(template, page) {
   html = replaceOnce(html, /(<meta property="og:title" content=")[^"]*(")/, `$1${escape(page.title)}$2`, 'og:title')
   html = replaceOnce(html, /(<meta property="og:description" content=")[^"]*(")/, `$1${escape(page.description)}$2`, 'og:description')
   html = replaceOnce(html, /(<meta property="og:type" content=")[^"]*(")/, `$1${page.article ? 'article' : 'website'}$2`, 'og:type')
+  if (page.image) {
+    html = replaceOnce(html, /(<meta property="og:image" content=")[^"]*(")/, `$1${ORIGIN}${escape(page.image.src)}$2`, 'og:image')
+    html = replaceOnce(html, /(<meta property="og:image:alt" content=")[^"]*(")/, `$1${escape(page.image.alt)}$2`, 'og:image:alt')
+  }
   const links = page.links.map((link) => `          <li><a href="${escape(link.href)}">${escape(link.text)}</a></li>`).join('\n')
   const summary = `<main class="prerender">
         <h1>${escape(page.heading)}</h1>

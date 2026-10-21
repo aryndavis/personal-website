@@ -182,7 +182,22 @@ const paragraphs = (text: string): Block[] =>
     .filter(Boolean)
     .map((part) => ({ type: 'p', text: part }))
 
-function toPost(note: TastingNote, slug: string): WinePost {
+/** Which review of this bottle (same wine and vintage) a note is: 1 for the first, plus links to the earlier ones. */
+interface Visit {
+  round: number
+  earlier: { slug: string; title: string; date: string }[]
+}
+
+/** "X 2023", then "X 2023, revisited", "X 2023, revisited again", "X 2023, revisited 3 times"… */
+const reviewTitle = (note: TastingNote, round: number) => {
+  const base = `${note.wine} ${String(note.vintage).trim()}`
+  if (round === 1) return base
+  if (round === 2) return `${base}, revisited`
+  if (round === 3) return `${base}, revisited again`
+  return `${base}, revisited ${round - 1} times`
+}
+
+function toPost(note: TastingNote, slug: string, visit: Visit): WinePost {
   const vintage = String(note.vintage).trim()
   const style = note.style ?? guessStyle(note.wine, note.grape)
 
@@ -206,7 +221,7 @@ function toPost(note: TastingNote, slug: string): WinePost {
   return {
     kind: 'tasting',
     slug,
-    title: note.title ?? `${note.wine} ${vintage}`,
+    title: note.title ?? reviewTitle(note, visit.round),
     date: note.date,
     summary: note.summary ?? (note.verdict?.trim() || (note.moment ? firstSentence(note.moment.trim()) : `${note.grape}${where}.`)),
     tags: [...new Set(['tasting note', ...(style ? [style] : []), ...(note.tags ?? [])])],
@@ -234,6 +249,7 @@ function toPost(note: TastingNote, slug: string): WinePost {
         : note.pairedWith?.trim()
           ? undefined
           : suggestPairings(note.grape, style),
+      ...(visit.earlier.length ? { earlier: visit.earlier } : {}),
     },
     body,
   }
@@ -243,10 +259,13 @@ function toPost(note: TastingNote, slug: string): WinePost {
  * Turns tasting notes into wine posts. Each gets a link made from its name and vintage,
  * e.g. /wine/sample-poulsard-2022. If two notes would share a link, the newer one gets -2, -3, …
  * (by date, so adding a note never changes an older note's link). `taken` are links used by other wine posts.
+ * Reviewing the same bottle again gets a "revisited" title and links back to the earlier reviews.
  */
 export function tastingNotes(notes: TastingNote[], taken: Iterable<string> = []): WinePost[] {
   const used = new Set(taken)
   const slugs = new Map<TastingNote, string>()
+  const visits = new Map<TastingNote, Visit>()
+  const bottles = new Map<string, { slug: string; title: string; date: string }[]>()
   const oldestFirst = [...notes].sort((a, b) => a.date.localeCompare(b.date))
   for (const note of oldestFirst) {
     const base = slugify(`${note.wine} ${note.vintage}`)
@@ -254,6 +273,10 @@ export function tastingNotes(notes: TastingNote[], taken: Iterable<string> = [])
     for (let n = 2; used.has(slug); n++) slug = `${base}-${n}`
     used.add(slug)
     slugs.set(note, slug)
+    const before = bottles.get(base) ?? []
+    const visit = { round: before.length + 1, earlier: [...before].reverse() }
+    visits.set(note, visit)
+    bottles.set(base, [...before, { slug, title: note.title ?? reviewTitle(note, visit.round), date: note.date }])
   }
-  return notes.map((note) => toPost(note, slugs.get(note)!))
+  return notes.map((note) => toPost(note, slugs.get(note)!, visits.get(note)!))
 }

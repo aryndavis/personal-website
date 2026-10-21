@@ -1550,6 +1550,20 @@ a.pixel-button.substack-link:hover {
 .bottle-dessert { --glass: #b8731c; --foil: #4f2c07; }
 .bottle-unknown { --glass: var(--lilac); --foil: var(--ink); }
 
+.rack-disclaimer {
+  margin: 18px 0 0;
+  padding-top: 10px;
+  border-top: 2px dashed color-mix(in srgb, var(--ink) 25%, transparent);
+  font: 1.1rem/1.25 var(--terminal);
+  color: color-mix(in srgb, var(--ink) 75%, transparent);
+}
+
+.rack-disclaimer strong {
+  font-weight: normal;
+  /* Darker than --pink-deep, so small text on cream passes WCAG AA (about 5.6:1). */
+  color: #a8266a;
+}
+
 .rack-window .window-body {
   padding: 20px clamp(12px, 3vw, 28px) 24px;
 }
@@ -1848,6 +1862,13 @@ a.pixel-button.substack-link:hover {
 .pairing {
   margin: 0;
   font: 1.2rem/1.25 var(--terminal);
+}
+
+.earlier-reviews {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font: 1.15rem/1.3 var(--terminal);
 }
 
 .pairing-hint {
