@@ -1,4 +1,5 @@
 import type { ReactElement } from 'react'
+import { CARD_ART, FLAVOR_ART } from './flavorIcons'
 
 // Tiny pixel-art icons drawn from character grids.
 // Each letter maps to a palette color; '.' is transparent.
@@ -13,6 +14,26 @@ const palette: Record<string, string> = {
   b: '#8fb7ff', // blue
   l: '#c9a7ff', // lilac
   r: '#8c1c4a', // wine
+  v: 'var(--glass, #8c1c4a)', // the wine's own color inside a tasting card (red, white, rosé…), wine red elsewhere
+  // Extra colors for the tasting card's food and flavor icons (flavorIcons.ts).
+  W: '#ffffff', // white
+  e: '#e6dcf2', // white in shadow
+  g: '#c8e07a', // light green
+  G: '#8fb84a', // green
+  L: '#5e9a2e', // dark green
+  O: '#d9822b', // dark orange
+  P: '#ffbf94', // peach
+  R: '#f0567d', // berry pink
+  c: '#e8364f', // red
+  B: '#4f6bd8', // blueberry
+  V: '#8a4bb0', // purple
+  X: '#5a2a78', // dark purple
+  Y: '#f7b500', // honey
+  n: '#c27a3a', // tan
+  N: '#8a4b1f', // brown
+  D: '#5a3220', // dark brown
+  s: '#c9c4d9', // silver
+  S: '#8d86a3', // gray
 }
 
 const icons = {
@@ -42,9 +63,9 @@ const icons = {
   glass: [
     'kkkkkkkkk',
     'kwwwwwwwk',
-    'krrrrrrrk',
-    'krrrrrrrk',
-    '.krrrrrk.',
+    'kvvvvvvvk',
+    'kvvvvvvvk',
+    '.kvvvvvk.',
     '..kkkkk..',
     '....k....',
     '....k....',
@@ -103,17 +124,6 @@ const icons = {
     'kbwwwwwwwbk',
     'kkkkkkkkkkk',
   ],
-  grapes: [
-    '....kk...',
-    '...km....',
-    '.kkkkkkk.',
-    'klllklllk',
-    'kllklllk.',
-    '.klllllk.',
-    '..klllk..',
-    '...klk...',
-    '....k....',
-  ],
   books: [
     'kkkk.......',
     'kppkkkkk...',
@@ -127,6 +137,8 @@ const icons = {
     'kppkyyykmmk',
     'kkkkkkkkkkk',
   ],
+  ...CARD_ART,
+  ...FLAVOR_ART,
 } satisfies Record<string, string[]>
 
 export type IconName = keyof typeof icons

@@ -87,3 +87,14 @@ test('sweetness is only guessed for reds, orange and dessert wines', () => {
   assert.equal(guess('Furmint', { style: 'dessert' }), 'sweet')
   assert.equal(guess('Riesling', { sweetness: 'off-dry' }), 'off-dry')
 })
+
+test('meters: "bone dry" and "none" fill nothing; every other step fills up to its place', async () => {
+  const { BODY, LEVEL, SWEETNESS, meterFill } = await import('../src/content/types.ts')
+  for (const [scale, value, filled] of [
+    [SWEETNESS, 'bone dry', 0], [SWEETNESS, 'dry', 2], [SWEETNESS, 'medium sweet', 4], [SWEETNESS, 'sweet', 5],
+    [LEVEL, 'none', 0], [LEVEL, 'low', 1], [LEVEL, 'high', 5],
+    [BODY, 'light', 1], [BODY, 'full', 5],
+  ]) {
+    assert.equal(meterFill(scale, value), filled, `${value} on ${scale.join('/')}`)
+  }
+})

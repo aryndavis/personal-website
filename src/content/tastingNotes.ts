@@ -21,7 +21,7 @@ export interface TastingNote {
   region?: string
   /** Where you bought the bottle, e.g. 'Bed-Vyne Wine & Spirits, Bed-Stuy'. */
   boughtAt?: string
-  /** $ under $15, $$ $15–30, $$$ $30–60, $$$$ over $60 */
+  /** $ under $20, $$ $20–30, $$$ $30–50, $$$$ $50 and up */
   price?: WinePrice
   /** 1 to 5 hearts, in halves: 4.5 shows four and a half */
   rating?: Rating
@@ -34,7 +34,7 @@ export interface TastingNote {
   body?: Body
   /** 'low' | 'medium-low' | 'medium' | 'medium-high' | 'high' */
   acidity?: Level
-  /** Same scale as acidity; usually only for reds and orange wines. */
+  /** Same scale as acidity, including 'none' (most whites); usually only for reds and orange wines. */
   tannin?: Level
   /** Tasting notes: a list, or one comma-separated string like 'red currant, rose petal, pepper'. */
   flavors?: string[] | string

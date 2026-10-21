@@ -1,10 +1,11 @@
 import type { ReactNode } from 'react'
-import PixelIcon from '../components/PixelIcon'
+import { flavorIcon } from '../components/flavorIcons'
+import PixelIcon, { type IconName } from '../components/PixelIcon'
 import PixelWindow from '../components/PixelWindow'
 import { useFocusReturn } from '../components/Popup'
 import PostDialog from '../components/PostDialog'
 import Rating from '../components/Rating'
-import { BODY, LEVEL, SWEETNESS, formatDate, newestFirst, type BuyAgain, type WinePost, type WinePrice, type WineStyle } from '../content/types'
+import { BODY, LEVEL, SWEETNESS, meterFill, formatDate, newestFirst, type BuyAgain, type WinePost, type WinePrice, type WineStyle } from '../content/types'
 import { winePosts } from '../content/wine'
 import { href } from '../router'
 import { sections } from '../site'
@@ -16,20 +17,42 @@ const STYLES: WineStyle[] = ['red', 'white', 'rosé', 'orange', 'sparkling', 'de
 // CSS class names can't rely on accents.
 const styleClass = (style?: WineStyle) => `bottle-${style === 'rosé' ? 'rose' : (style ?? 'unknown')}`
 
-const priceLabel: Record<WinePrice, string> = { $: 'under $15', $$: '$15–30', $$$: '$30–60', $$$$: 'over $60' }
+const priceLabel: Record<WinePrice, string> = { $: 'under $20', $$: '$20–30', $$$: '$30–50', $$$$: '$50+' }
 const buyAgainLabel: Record<BuyAgain, string> = { yes: 'Yes, I’d buy it again', maybe: 'Maybe', no: 'No, once was enough' }
 
-/** A five-step pixel meter. The text label next to it carries the meaning; the meter is decoration. */
-function Meter({ scale, value }: { scale: readonly string[]; value: string }) {
-  const filled = scale.indexOf(value) + 1
+/**
+ * A five-step pixel meter: squares, or an icon (sweetness is piles of sugar) with the empty steps faded.
+ * "Bone dry" and "none" fill nothing. The text label next to it carries the meaning; the meter is decoration.
+ */
+function Meter({ scale, value, icon }: { scale: readonly string[]; value: string; icon?: MeterIcon }) {
+  const filled = meterFill(scale, value)
   return (
-    <span className="meter" aria-hidden="true">
-      {scale.map((step, i) => (
-        <span key={step} className={i < filled ? 'on' : ''} />
-      ))}
+    <span className={icon ? 'meter meter-icons' : 'meter'} aria-hidden="true">
+      {scale.map((step, i) =>
+        icon ? (
+          <PixelIcon key={step} name={icon.name} size={icon.size} className={i < filled ? '' : 'dim'} />
+        ) : (
+          <span key={step} className={i < filled ? 'on' : ''} />
+        ),
+      )}
     </span>
   )
 }
+
+/** Widths that make each meter icon about 16px tall (the tea cup is wide and short). */
+type MeterIcon = { name: IconName; size: number }
+const SUGAR: MeterIcon = { name: 'sugar', size: 20 }
+const KETTLEBELL: MeterIcon = { name: 'kettlebell', size: 15 }
+const BOLT: MeterIcon = { name: 'bolt', size: 13 }
+const TEA: MeterIcon = { name: 'tea', size: 22 }
+
+/** A label with a small icon in front of it. */
+const withIcon = (icon: IconName, text: ReactNode) => (
+  <span className="with-icon">
+    <PixelIcon name={icon} size={14} />
+    {text}
+  </span>
+)
 
 /** The tasting card at the top of a tasting note: verdict, ratings, facts, profile, tasting notes and pairings. */
 function TastingCard({ post }: { post: WinePost }) {
@@ -39,16 +62,16 @@ function TastingCard({ post }: { post: WinePost }) {
     ['Wine', `${wine.name} ${wine.vintage}`],
     ['Producer', wine.producer],
     ['Grape', wine.grape],
-    ['Region', wine.region],
-    ['Bought at', wine.boughtAt],
-    ['Style', wine.style && <span className="style-name">{wine.style}</span>],
+    ['Region', wine.region && withIcon('pin', wine.region)],
+    ['Bought at', wine.boughtAt && withIcon('bag', wine.boughtAt)],
+    ['Style', wine.style && withIcon('bottle', <span className="style-name">{wine.style}</span>)],
     ['Price', wine.price && `${wine.price} · ${priceLabel[wine.price]}`],
   ]
-  const profile: [string, readonly string[], string | undefined][] = [
-    ['Sweetness', SWEETNESS, wine.sweetness],
-    ['Body', BODY, wine.body],
-    ['Acidity', LEVEL, wine.acidity],
-    ['Tannin', LEVEL, wine.tannin],
+  const profile: [string, readonly string[], string | undefined, MeterIcon?][] = [
+    ['Sweetness', SWEETNESS, wine.sweetness, SUGAR],
+    ['Body', BODY, wine.body, KETTLEBELL],
+    ['Acidity', LEVEL, wine.acidity, BOLT],
+    ['Tannin', LEVEL, wine.tannin, TEA],
   ]
   const shownProfile = profile.filter(([, , value]) => value)
   const flavors = wine.flavors ?? []
@@ -83,11 +106,11 @@ function TastingCard({ post }: { post: WinePost }) {
         <section className="card-section">
           <h3>Profile</h3>
           <dl className="card-profile">
-            {shownProfile.map(([label, scale, value]) => (
+            {shownProfile.map(([label, scale, value, icon]) => (
               <div key={label}>
                 <dt>{label}</dt>
                 <dd>
-                  <Meter scale={scale} value={value!} />
+                  <Meter scale={scale} value={value!} icon={icon} />
                   <span className="meter-label">{value}</span>
                 </dd>
               </div>
@@ -100,16 +123,17 @@ function TastingCard({ post }: { post: WinePost }) {
         <section className="card-section">
           <h3>Tasting notes</h3>
           <ul className="flavor-chips">
-            {flavors.map((flavor) => (
-              <li key={flavor}>{flavor}</li>
-            ))}
+            {flavors.map((flavor) => {
+              const icon = flavorIcon(flavor)
+              return <li key={flavor}>{icon ? withIcon(icon, flavor) : flavor}</li>
+            })}
           </ul>
         </section>
       )}
 
       {wine.pairedWith ? (
         <section className="card-section">
-          <h3>Paired with</h3>
+          <h3>{withIcon('cutlery', 'Paired with')}</h3>
           <p className="pairing">{wine.pairedWith}</p>
           {wine.suggestedPairings && wine.suggestedPairings.length > 0 && (
             <>
@@ -122,7 +146,7 @@ function TastingCard({ post }: { post: WinePost }) {
         wine.suggestedPairings &&
         wine.suggestedPairings.length > 0 && (
           <section className="card-section">
-            <h3>Try it with</h3>
+            <h3>{withIcon('cutlery', 'Try it with')}</h3>
             <p className="pairing">
               {wine.suggestedPairings.join(' · ')} <span className="pairing-hint">(suggested)</span>
             </p>
