@@ -7,7 +7,8 @@ import BookshelfPage from './pages/Bookshelf'
 import { EducationPage, PortfolioPage } from './pages/Sections'
 import WinePage from './pages/Wine'
 import { href, useRoute } from './router'
-import { bookshelf, sections, site } from './site'
+import { pageAt } from './routes'
+import { site } from './site'
 
 const marquee = '✦ stay curious ✦ take the long way ✦ pour something interesting'
 
@@ -18,12 +19,6 @@ const pages = {
   bookshelf: BookshelfPage,
 }
 
-const titles: Record<string, string> = {
-  portfolio: sections.portfolio.label,
-  education: sections.education.label,
-  wine: sections.wine.label,
-  bookshelf: bookshelf.label,
-}
 
 export default function App() {
   const route = useRoute()
@@ -33,9 +28,12 @@ export default function App() {
   // Scroll to the top only when moving between sections, not when opening a pop-up.
   useEffect(() => {
     window.scrollTo(0, 0)
-    // The home page keeps index.html's full title, which is what search results show.
-    document.title = titles[top] ? `${titles[top]} · ${site.name}` : `${site.name} · ${site.tagline}`
   }, [top])
+
+  // Each page and post has its own title (the same one its prerendered page and search results show).
+  useEffect(() => {
+    document.title = pageAt(route)?.title ?? `Page not found · ${site.name}`
+  }, [route])
 
   return (
     <>
@@ -62,9 +60,9 @@ export default function App() {
           <span>{`${marquee} ${marquee} `}</span>
         </span>
         <span className="footer-links">
-          <a href="/sms">SMS policy</a>
-          <a href="/terms">Terms</a>
-          <a href="/privacy">Privacy</a>
+          <a href="/sms/">SMS policy</a>
+          <a href="/terms/">Terms</a>
+          <a href="/privacy/">Privacy</a>
           <a href={href('/')}>Back home ↑</a>
         </span>
       </footer>

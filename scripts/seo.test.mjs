@@ -31,8 +31,7 @@ test('the structured data is valid JSON and lists the same profiles as the site'
   assert.equal(person.email, `mailto:${site.email}`)
 })
 
-test('robots.txt allows crawling and points at a sitemap that lists the home page', () => {
+test('robots.txt allows crawling and points at the sitemap the build writes', () => {
   assert.match(read('public/robots.txt'), /^Allow: \/$/m)
   assert.match(read('public/robots.txt'), /^Sitemap: https:\/\/arynlynn\.com\/sitemap\.xml$/m)
-  assert.match(read('public/sitemap.xml'), /<loc>https:\/\/arynlynn\.com\/<\/loc>/)
 })

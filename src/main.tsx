@@ -5,7 +5,10 @@ import '@fontsource/pixelify-sans/latin-500.css'
 import '@fontsource/pixelify-sans/latin-600.css'
 import '@fontsource/vt323/latin-400.css'
 import App from './App.tsx'
+import { adoptHashLink } from './router'
 import './styles.css'
+
+adoptHashLink()
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
