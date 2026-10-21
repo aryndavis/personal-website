@@ -33,7 +33,7 @@ export const handNotes: TastingNote[] = [
     buyAgain: 'yes',
     sweetness: 'medium sweet',
     body: 'light',
-    acidity: 'medium-low',
+    acidity: 'low',
     flavors: 'pear, apricot',
     pairedWith: 'Pretzels, for the sweet and salty mix',
     suggestedPairings: ['a fruit tart', 'sweeter cheeses', 'salty crackers'],
