@@ -69,6 +69,7 @@ const cards = {
     .bar { background: #ffd166 }
     .body { padding: 22px 18px; display: flex; align-items: flex-end; justify-content: center; gap: 18px; height: 200px }
     .hearts { text-align: center; font-family: VT; font-size: 30px; color: #d9468f; padding-bottom: 16px }
+    .me { width: 96px; height: 96px; image-rendering: pixelated; align-self: flex-end }
   </style><div class="card"><div class="grid"></div>
     <div class="path" style="color:#ffd166">C:\\HOME \\ WINE_CELLAR.DAT</div>
     <div class="spark" style="left:640px;top:70px;color:#ffd166">✦</div><div class="spark" style="left:700px;top:330px;font-size:20px;color:#ff8fcf">✦</div>
@@ -77,7 +78,7 @@ const cards = {
     <div class="sub">${escape(winePreview.subtitle)}</div>
     <div class="url">arynlynn.com/wine</div>
     <div class="win"><div class="bar"><span>tasting_card.dat</span><span>_ □ ×</span></div>
-      <div class="body">${pixels(FLAVOR_ART.grapes, 70)}${pixels(glass, 150)}${pixels(FLAVOR_ART.pear, 52)}</div>
+      <div class="body"><img class="me" src="${file('public/favicon.svg')}" alt="">${pixels(glass, 150)}${pixels(FLAVOR_ART.pear, 52)}</div>
       <div class="hearts">♥ ♥ ♥ ♥ ♡</div></div>
   </div>`,
 }
