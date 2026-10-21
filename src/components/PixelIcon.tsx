@@ -14,6 +14,7 @@ const palette: Record<string, string> = {
   b: '#8fb7ff', // blue
   l: '#c9a7ff', // lilac
   r: '#8c1c4a', // wine
+  v: 'var(--glass, #8c1c4a)', // the wine's own color inside a tasting card (red, white, rosé…), wine red elsewhere
   // Extra colors for the tasting card's food and flavor icons (flavorIcons.ts).
   W: '#ffffff', // white
   e: '#e6dcf2', // white in shadow
@@ -62,9 +63,9 @@ const icons = {
   glass: [
     'kkkkkkkkk',
     'kwwwwwwwk',
-    'krrrrrrrk',
-    'krrrrrrrk',
-    '.krrrrrk.',
+    'kvvvvvvvk',
+    'kvvvvvvvk',
+    '.kvvvvvk.',
     '..kkkkk..',
     '....k....',
     '....k....',

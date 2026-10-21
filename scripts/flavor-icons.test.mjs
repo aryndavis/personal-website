@@ -7,7 +7,7 @@ import { CARD_ART, FLAVOR_ART, flavorIcon } from '../src/components/flavorIcons.
 
 // PixelIcon.tsx is JSX, so read its palette and built-in icon names from the source.
 const source = readFileSync(new URL('../src/components/PixelIcon.tsx', import.meta.url), 'utf8')
-const palette = new Set([...source.matchAll(/^ {2}(\w): '#[0-9a-f]{6}'/gm)].map((m) => m[1]))
+const palette = new Set([...source.matchAll(/^ {2}(\w): '(#[0-9a-f]{6}|var\(--[\w-]+, #[0-9a-f]{6}\))'/gm)].map((m) => m[1]))
 const builtIn = [...source.slice(source.indexOf('const icons')).matchAll(/^ {2}(\w+): \[/gm)].map((m) => m[1])
 
 test('every drawing is a rectangle of known colors', () => {

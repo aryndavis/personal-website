@@ -14,10 +14,13 @@ const OLIVE = ['..kkkkk..', '.kPwPPPk.', 'kPPPPPPQk', 'kPPPPPQQk', '.kPPQQQk.', 
 
 /** Icons the card uses for its own labels. */
 export const CARD_ART = {
+  // The profile meters: wine drops for body (in the wine's color), lightning for acidity, sugar for sweetness.
+  drop: ['...kk...', '..kvvk..', '..kvvk..', '.kvvvvk.', 'kvwvvvvk', 'kvwvvvvk', 'kvvvvvvk', '.kvvvvk.', '..kkkk..'],
+  bolt: ['....kkk', '...kyyk', '..kyyk.', '.kyyykk', 'kkkyyyk', '..kyyk.', '.kyyk..', '.kyk...', 'kkk....'],
   sugar: ['.....kk.....', '....kWWk....', '...kWWWek...', '..kWWbWWek..', '.kWWWWWWeek.', 'kWbWWWWbWeek', 'kkkkkkkkkkkk'],
   bag: ['...kkkk...', '..k....k..', '..k....k..', 'kkkkkkkkkk', 'kppppppppk', 'kppdpdpppk', 'kpdddddppk', 'kppdddpppk', 'kpppdppppk', 'kkkkkkkkkk'],
   pin: ['..kkkkk..', '.kdddddk.', 'kddwwdddk', 'kddwwdddk', 'kdddddddk', '.kdddddk.', '.kdddddk.', '..kdddk..', '...kdk...', '....k....'],
-  bottle: ['...kkk...', '...krk...', '...krk...', '..krrrk..', '.krrrrrk.', '.krwwwrk.', '.krwpwrk.', '.krwwwrk.', '.krrrrrk.', '.kkkkkkk.'],
+  bottle: ['...kkk...', '...kvk...', '...kvk...', '..kvvvk..', '.kvvvvvk.', '.kvwwwvk.', '.kvwpwvk.', '.kvwwwvk.', '.kvvvvvk.', '.kkkkkkk.'],
   cutlery: ['k.k.k..k.', 'kwkwk.kwk', 'kwkwk.kwk', 'kwwwk.kwk', '.kwk..kwk', '..kw..kkk', '..kw...kw', '..kw...kw', '..kw...kw', '..kk...kk'],
 } satisfies Record<string, string[]>
 

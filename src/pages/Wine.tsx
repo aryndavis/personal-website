@@ -24,16 +24,26 @@ const buyAgainLabel: Record<BuyAgain, string> = { yes: 'Yes, I’d buy it again'
  * A five-step pixel meter: squares, or an icon (sweetness is piles of sugar) with the empty steps faded.
  * The text label next to it carries the meaning; the meter is decoration.
  */
-function Meter({ scale, value, icon }: { scale: readonly string[]; value: string; icon?: IconName }) {
+function Meter({ scale, value, icon }: { scale: readonly string[]; value: string; icon?: MeterIcon }) {
   const filled = scale.indexOf(value) + 1
   return (
     <span className={icon ? 'meter meter-icons' : 'meter'} aria-hidden="true">
       {scale.map((step, i) =>
-        icon ? <PixelIcon key={step} name={icon} size={18} className={i < filled ? '' : 'dim'} /> : <span key={step} className={i < filled ? 'on' : ''} />,
+        icon ? (
+          <PixelIcon key={step} name={icon.name} size={icon.size} className={i < filled ? '' : 'dim'} />
+        ) : (
+          <span key={step} className={i < filled ? 'on' : ''} />
+        ),
       )}
     </span>
   )
 }
+
+/** Widths that make each meter icon about 16px tall. */
+type MeterIcon = { name: IconName; size: number }
+const SUGAR: MeterIcon = { name: 'sugar', size: 20 }
+const DROP: MeterIcon = { name: 'drop', size: 14 }
+const BOLT: MeterIcon = { name: 'bolt', size: 13 }
 
 /** A label with a small icon in front of it. */
 const withIcon = (icon: IconName, text: ReactNode) => (
@@ -56,10 +66,10 @@ function TastingCard({ post }: { post: WinePost }) {
     ['Style', wine.style && withIcon('bottle', <span className="style-name">{wine.style}</span>)],
     ['Price', wine.price && `${wine.price} · ${priceLabel[wine.price]}`],
   ]
-  const profile: [string, readonly string[], string | undefined, IconName?][] = [
-    ['Sweetness', SWEETNESS, wine.sweetness, 'sugar'],
-    ['Body', BODY, wine.body],
-    ['Acidity', LEVEL, wine.acidity],
+  const profile: [string, readonly string[], string | undefined, MeterIcon?][] = [
+    ['Sweetness', SWEETNESS, wine.sweetness, SUGAR],
+    ['Body', BODY, wine.body, DROP],
+    ['Acidity', LEVEL, wine.acidity, BOLT],
     ['Tannin', LEVEL, wine.tannin],
   ]
   const shownProfile = profile.filter(([, , value]) => value)
