@@ -11,6 +11,8 @@
   --blue: #8fb7ff;
   --peach: #ffb38a;
   --lime: #c2e86a;
+  --yellow-hover: #ffc23d;
+  --pink-hover: #ff6fbf;
   --drop: rgba(5, 0, 12, 0.6);
   --gutter: clamp(16px, 3vw, 40px);
   --pixel: 'Pixelify Sans', ui-monospace, monospace;
@@ -362,9 +364,21 @@ main {
   cursor: pointer;
 }
 
+/* Primary buttons (yellow) move around the site; secondary buttons (pink) open other sites. Both lift and deepen on hover. */
+.pixel-button.secondary {
+  background: var(--pink);
+}
+
 a.pixel-button:hover,
 button.pixel-button:hover {
-  background: var(--pink);
+  translate: -2px -2px;
+  box-shadow: 6px 6px 0 var(--ink);
+  background: var(--yellow-hover);
+}
+
+a.pixel-button.secondary:hover,
+button.pixel-button.secondary:hover {
+  background: var(--pink-hover);
 }
 
 a.pixel-button:active,
@@ -1117,16 +1131,6 @@ button.pixel-button:active {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-}
-
-.pixel-button.substack-link,
-.pixel-button.library-link {
-  background: var(--pink);
-}
-
-a.pixel-button.substack-link:hover,
-a.pixel-button.library-link:hover {
-  background: var(--yellow);
 }
 
 .intro-row .substack-link,

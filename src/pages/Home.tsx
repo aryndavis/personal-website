@@ -108,10 +108,10 @@ export default function Home() {
                 </li>
               </ul>
               <p className="social-links">
-                <a className="pixel-button" href={site.linkedin} target="_blank" rel="noopener noreferrer">
+                <a className="pixel-button secondary" href={site.linkedin} target="_blank" rel="noopener noreferrer">
                   LinkedIn ↗
                 </a>
-                <a className="pixel-button" href={site.instagram} target="_blank" rel="noopener noreferrer">
+                <a className="pixel-button secondary" href={site.instagram} target="_blank" rel="noopener noreferrer">
                   Instagram: @aryn.creates ↗
                 </a>
               </p>
@@ -144,7 +144,7 @@ export default function Home() {
                       Open folder ▶
                     </a>
                     {key === 'education' && (
-                      <a className="pixel-button substack-link" href={site.substack} target="_blank" rel="noopener noreferrer">
+                      <a className="pixel-button secondary substack-link" href={site.substack} target="_blank" rel="noopener noreferrer">
                         ✉ Substack ↗
                       </a>
                     )}

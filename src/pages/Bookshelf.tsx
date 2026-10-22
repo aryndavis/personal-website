@@ -122,7 +122,7 @@ export default function BookshelfPage({ slug }: { slug?: string }) {
               <p>
                 {bookshelf.blurb} This is just the highlight reel. My whole collection lives in my library, if you want to snoop!
               </p>
-              <a className="pixel-button library-link" href={site.library} target="_blank" rel="noopener noreferrer">
+              <a className="pixel-button secondary library-link" href={site.library} target="_blank" rel="noopener noreferrer">
                 📚 Browse my full library ↗
               </a>
             </div>

@@ -92,7 +92,7 @@ export default function PostDialog({ entry, fileName, closePath, prev, next, met
       {entry.substackUrl && (
         <p className="substack-note">
           Also published on Substack.{' '}
-          <a className="pixel-button" href={entry.substackUrl} target="_blank" rel="noopener noreferrer">
+          <a className="pixel-button secondary" href={entry.substackUrl} target="_blank" rel="noopener noreferrer">
             Read &amp; subscribe on Substack ↗
           </a>
         </p>
