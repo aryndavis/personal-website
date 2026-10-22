@@ -1119,15 +1119,18 @@ button.pixel-button:active {
   gap: 12px;
 }
 
-.pixel-button.substack-link {
+.pixel-button.substack-link,
+.pixel-button.library-link {
   background: var(--pink);
 }
 
-a.pixel-button.substack-link:hover {
+a.pixel-button.substack-link:hover,
+a.pixel-button.library-link:hover {
   background: var(--yellow);
 }
 
-.intro-row .substack-link {
+.intro-row .substack-link,
+.intro-row .library-link {
   margin-top: 12px;
 }
 
