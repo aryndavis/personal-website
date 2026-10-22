@@ -6,7 +6,7 @@ import Rating from '../components/Rating'
 import { books, type Book, type BookStatus } from '../content/books'
 import { formatDate } from '../content/types'
 import { href } from '../router'
-import { bookshelf } from '../site'
+import { bookshelf, site } from '../site'
 
 const newestFirst = (list: Book[]) => [...list].sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''))
 const bookLink = (book: Book) => href(`${bookshelf.path}/${book.slug}`)
@@ -118,7 +118,14 @@ export default function BookshelfPage({ slug }: { slug?: string }) {
         <PixelWindow title="readme_bookshelf.txt" tone="lilac" className="page-intro">
           <div className="intro-row">
             <PixelIcon name="books" size={56} />
-            <p>{bookshelf.blurb}</p>
+            <div>
+              <p>
+                {bookshelf.blurb} This is just the highlight reel. My whole collection lives in my library, if you want to snoop!
+              </p>
+              <a className="pixel-button library-link" href={site.library} target="_blank" rel="noopener noreferrer">
+                📚 Browse my full library ↗
+              </a>
+            </div>
           </div>
         </PixelWindow>
       </section>

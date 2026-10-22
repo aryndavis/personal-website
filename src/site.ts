@@ -11,6 +11,8 @@ export const site = {
   linkedin: 'https://www.linkedin.com/in/aryn-davis',
   instagram: 'https://www.instagram.com/aryn.creates',
   substack: 'https://arynlynn.substack.com',
+  /** The full personal library app (its own repo: aryndavis/bookshelf). */
+  library: 'https://library.arynlynn.com',
   year: new Date().getFullYear(),
 }
 
