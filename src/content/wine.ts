@@ -22,6 +22,28 @@ import texted from './wine.texts.json'
 // Tasting notes written here. (Notes can also be texted in; see textNotes below.)
 export const handNotes: TastingNote[] = [
   {
+    wine: 'Rukatac Bura',
+    grape: 'Rukatac',
+    vintage: 2025,
+    style: 'orange',
+    date: '2026-10-23',
+    producer: 'Bura Estate Vintner',
+    region: 'Dalmatia, Croatia',
+    boughtAt: 'Table Wine, Jackson Heights',
+    rating: 3.5,
+    buyAgain: 'maybe',
+    verdict: 'I’m not a huge fan of acidic wines, but this was still a fun tasting.',
+    sweetness: 'dry',
+    body: 'medium',
+    acidity: 'medium-high',
+    tannin: 'low',
+    flavors: 'lemon zest, lime zest, flower petals, grass, hay',
+    suggestedPairings: ['fish'],
+    moment:
+      'My dad (who is a high-level somm) was visiting my neighborhood recently, so we went to my local wine shop. He said he wanted to buy me an orange wine for my small wine fridge and picked this one out. Then we went back to my place, opened it, got high, and watched Harlem Nights. It was a great time.',
+    finish: 'A lovely bit of acid on the aftertaste.',
+  },
+  {
     wine: 'Hermann J. Wiemer Late Harvest Riesling',
     grape: 'Riesling',
     vintage: 2023,
