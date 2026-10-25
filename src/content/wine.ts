@@ -40,7 +40,7 @@ export const handNotes: TastingNote[] = [
     flavors: 'lemon zest, lime zest, flower petals, grass, hay',
     suggestedPairings: ['fish'],
     moment:
-      'My dad (who is a high-level somm) was visiting my neighborhood recently, so we went to my local wine shop. He said he wanted to buy me an orange wine for my small wine fridge and picked this one out. Then we went back to my place, opened it, got high, and watched Harlem Nights. It was a great time.',
+      'My dad (who is a high-level somm) was visiting my neighborhood recently, so we went to my local wine shop. He said he wanted to buy me an orange wine for my small wine fridge and picked this one out. The whole time we were in the shop, he was embarrassing me by telling everyone that I just started a wine blog.',
     finish: 'A lovely bit of acid on the aftertaste.',
   },
   {
