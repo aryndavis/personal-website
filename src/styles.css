@@ -1527,6 +1527,33 @@ a.pixel-button.library-link:hover {
   line-height: 1.6;
 }
 
+/* Empty hearts while a book is still being read. */
+.book-rating-pending {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font: 1.1rem/1 var(--terminal);
+  opacity: 0.75;
+}
+
+.book-section {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 2px dashed rgba(59, 35, 70, 0.35);
+}
+
+.book-section h3 {
+  margin: 0 0 6px;
+  font: 600 12px/1 var(--pixel);
+  text-transform: uppercase;
+  color: var(--pink-deep);
+}
+
+.book-section .book-note {
+  margin: 0;
+}
+
 .archive-group h3 {
   margin: 18px 0 2px;
   font: 500 14px var(--pixel);

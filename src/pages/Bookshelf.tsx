@@ -85,8 +85,25 @@ function BookPopup({ book }: { book: Book }) {
             {book.title}
           </h2>
           <p className="book-author">by {book.author}</p>
-          {book.rating !== undefined && <Rating value={book.rating} />}
+          {book.rating !== undefined ? (
+            <Rating value={book.rating} />
+          ) : (
+            book.status === 'reading' && (
+              <p className="book-rating-pending">
+                <span aria-hidden="true">
+                  <Rating value={0} />
+                </span>
+                Rating: when I finish
+              </p>
+            )
+          )}
           {book.note && <p className="book-note">{book.note}</p>}
+          {book.summary && (
+            <section className="book-section">
+              <h3>About the book</h3>
+              <p className="book-note">{book.summary}</p>
+            </section>
+          )}
         </div>
       </div>
     </Popup>
