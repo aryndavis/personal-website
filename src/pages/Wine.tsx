@@ -256,8 +256,8 @@ export default function WinePage({ slug }: { slug?: string }) {
             </ul>
           )}
           <p className="rack-disclaimer">
-            <strong>A note:</strong> every bottle here is one I bought or one someone gave me just because, never so I’d write about it. And my ratings are only my
-            opinion, so drink what you love!
+            <strong>A note:</strong> every bottle here is one I bought or one someone gave me just because, never so I’d write about it. Not every tasting means
+            drinking a whole bottle, either: some are just a glass. And my ratings are only my opinion, so drink what you love!
           </p>
         </section>
       </PixelWindow>
