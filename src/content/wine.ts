@@ -22,6 +22,25 @@ import texted from './wine.texts.json'
 // Tasting notes written here. (Notes can also be texted in; see textNotes below.)
 export const handNotes: TastingNote[] = [
   {
+    wine: 'Negretti Barolo',
+    grape: 'Nebbiolo',
+    vintage: 2021,
+    style: 'red',
+    date: '2026-10-26',
+    producer: 'Negretti',
+    region: 'Barolo, Piedmont, Italy',
+    rating: 3.5,
+    buyAgain: 'maybe',
+    verdict: 'Very balanced, and the type of red wine I love as someone who only drinks white wine.',
+    sweetness: 'dry',
+    body: 'medium',
+    acidity: 'medium',
+    tannin: 'medium',
+    flavors: 'blackcurrant, fig, blackberry, peppercorn',
+    pairedWith: 'Greens, which brought out a lot of the acidity',
+    suggestedPairings: ['braised beef', 'mushroom risotto', 'aged Parmesan'],
+  },
+  {
     wine: 'Rukatac Bura',
     grape: 'Rukatac',
     vintage: 2025,
