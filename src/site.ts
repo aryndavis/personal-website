@@ -16,6 +16,16 @@ export const site = {
   year: new Date().getFullYear(),
 }
 
+/** The home page's search and link-preview text and card (keep in step with index.html). */
+export const homePreview = {
+  url: 'https://arynlynn.com',
+  description:
+    'Aryn Davis: software engineer and curriculum designer in New York City. Former Microsoft engineer, M.Ed. student at Teachers College, Columbia.',
+  previewDescription: 'Software engineer and curriculum designer in New York City. Portfolio, an education blog, and a wine blog.',
+  image: '/images/social-card.png',
+  imageAlt: 'Aryn Davis: software engineer, curriculum designer, educator. arynlynn.com',
+}
+
 /**
  * How Gen Z With A Glass links look when shared (and in search results). Its own voice: no day-job details.
  * The tagline is also drawn on the preview card, so after changing it run `npm run social-cards`.
