@@ -6,9 +6,11 @@
   --yellow: #ffd166;
   --pink: #ff8fcf;
   --pink-deep: #d9468f;
+  --raspberry: #b0306f; /* a darker --pink-deep, dark enough for light text */
   --lilac: #c9a7ff;
   --mint: #8be0c4;
   --blue: #8fb7ff;
+  --blue-light: #b6d0ff;
   --peach: #ffb38a;
   --lime: #c2e86a;
   --drop: rgba(5, 0, 12, 0.6);
@@ -348,29 +350,57 @@ main {
   margin-bottom: 0;
 }
 
+/* Two kinds of button, the same on every card: plum goes somewhere on this site (Open folder ▶), and
+   secondary, in light blue, leaves it (LinkedIn ↗, Substack ↗). Each gets darker on hover. Text contrast stays at
+   least 4.5:1 in every state: 13.3 on plum, 5.8 on raspberry, 8.9 on light blue, 6.9 on blue. */
 .pixel-button {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   padding: 8px 14px;
   border: 3px solid var(--ink);
-  background: var(--yellow);
-  color: var(--ink);
-  box-shadow: 4px 4px 0 var(--ink);
-  font: 500 15px/1 var(--pixel);
+  background: var(--ink);
+  color: var(--white);
+  /* The card's own title-bar color (--bar, set by its tone), so the shadow shows against the plum button and
+     matches the card it's on; pink outside a card. */
+  box-shadow: 4px 4px 0 var(--bar, var(--pink));
+  font: 600 15px/1 var(--pixel);
   text-decoration: none;
   cursor: pointer;
 }
 
+.pixel-button.secondary {
+  background: var(--blue-light);
+  color: var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
 a.pixel-button:hover,
-button.pixel-button:hover {
-  background: var(--pink);
+button.pixel-button:hover,
+.card-window:hover .card-open {
+  background: var(--raspberry);
+}
+
+a.pixel-button.secondary:hover,
+button.pixel-button.secondary:hover {
+  background: var(--blue);
 }
 
 a.pixel-button:active,
 button.pixel-button:active {
   translate: 3px 3px;
+  box-shadow: 1px 1px 0 var(--bar, var(--pink));
+}
+
+a.pixel-button.secondary:active,
+button.pixel-button.secondary:active {
   box-shadow: 1px 1px 0 var(--ink);
+}
+
+/* The site's yellow focus ring is for the dark page; on a pastel card, plum shows up better. */
+.pixel-button:focus-visible {
+  outline: 3px dashed var(--ink);
+  outline-offset: 3px;
 }
 
 .tag-list {
@@ -572,6 +602,8 @@ button.pixel-button:active {
 .desktop-windows > .reopen {
   grid-column: 1 / -1;
   justify-self: start;
+  /* On the dark page rather than a card, so a light border keeps the plum button visible. */
+  border-color: var(--white);
 }
 
 .about-head,
@@ -1117,16 +1149,6 @@ button.pixel-button:active {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-}
-
-.pixel-button.substack-link,
-.pixel-button.library-link {
-  background: var(--pink);
-}
-
-a.pixel-button.substack-link:hover,
-a.pixel-button.library-link:hover {
-  background: var(--yellow);
 }
 
 .intro-row .substack-link,
