@@ -79,7 +79,7 @@ export function allPages(): PageMeta[] {
       bookshelf.path,
       bookshelf.label,
       bookshelf.blurb,
-      books.map((book) => ({ slug: book.slug, title: `${book.title} by ${book.author}`, summary: book.note ?? '' })),
+      books.map((book) => ({ slug: book.slug, title: `${book.title} by ${book.author}`, summary: book.note || book.summary || '' })),
     ),
   ]
 }
