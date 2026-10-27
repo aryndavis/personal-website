@@ -24,6 +24,8 @@ export interface PageMeta {
 }
 
 const MAX_DESCRIPTION = 160
+/** The least of a wine post's summary worth keeping in its description. */
+const MIN_SUMMARY = 40
 
 /** Cuts long text at a word, with an ellipsis, so it fits a search result. */
 export function trimDescription(text: string, max = MAX_DESCRIPTION) {
@@ -100,16 +102,24 @@ function winePages(): PageMeta[] {
       article: false,
       image,
     },
-    ...posts.map((post) => ({
-      path: `${wine.path}/${post.slug}`,
-      title: `${post.title} · ${wine.label}`,
-      // The post's own summary, shortened if needed so the sign-off always fits.
-      description: `${trimDescription(post.summary, MAX_DESCRIPTION - winePreview.postSignoff.length - 1)} ${winePreview.postSignoff}`,
-      heading: post.title,
-      links: [{ href: wine.path, text: `More from ${wine.label}` }],
-      article: true,
-      image,
-    })),
+    ...posts.map((post) => {
+      // A tasting note's preview says which wine's card is being shared, unless the name is so long
+      // it would crowd out the summary (the title names the wine too).
+      const afterSignoff = MAX_DESCRIPTION - winePreview.postSignoff.length - 1
+      const label = post.kind === 'tasting' && post.wine ? `Tasting card: ${post.wine.name} ${post.wine.vintage}.` : ''
+      const card = label && afterSignoff - label.length - 1 >= MIN_SUMMARY ? label : ''
+      const room = afterSignoff - (card ? card.length + 1 : 0)
+      return {
+        path: `${wine.path}/${post.slug}`,
+        title: `${post.title} · ${wine.label}`,
+        // The post's own summary, shortened if needed so the card name and sign-off always fit.
+        description: [card, trimDescription(post.summary, room), winePreview.postSignoff].filter(Boolean).join(' '),
+        heading: post.title,
+        links: [{ href: wine.path, text: `More from ${wine.label}` }],
+        article: true,
+        image,
+      }
+    }),
   ]
 }
 
