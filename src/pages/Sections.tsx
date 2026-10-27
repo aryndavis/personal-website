@@ -100,7 +100,7 @@ export function EducationPage({ slug }: { slug?: string }) {
       intro={
         <>
           <p>Writing about teaching, learning, and designing for real classrooms. These posts also go out on my Substack, so subscribe there to get them by email.</p>
-          <a className="pixel-button secondary substack-link" href={site.substack} target="_blank" rel="noopener noreferrer">
+          <a className="pixel-button secondary" href={site.substack} target="_blank" rel="noopener noreferrer">
             ✉ Visit my Substack ↗
           </a>
         </>
