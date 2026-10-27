@@ -79,6 +79,10 @@ test('Gen Z With A Glass speaks for itself: wine card, wine titles, no day-job d
     assert.match(post.title, / · Gen Z With A Glass$/)
     assert.ok(post.description.endsWith(winePreview.postSignoff) && post.description.length <= 160, post.description)
   }
+  // A shared tasting note names the wine whose card it is.
+  const barolo = wine.find((p) => p.path === '/wine/negretti-barolo-2021')
+  assert.ok(barolo.description.startsWith('Tasting card: Negretti Barolo 2021. '), barolo.description)
+  assert.ok(barolo.image.alt.startsWith('Tasting card: Negretti Barolo 2021. '), barolo.image.alt)
   // Everything else keeps the site's own card.
   assert.ok(pages.filter((p) => !wine.includes(p)).every((p) => p.image === undefined))
 })

@@ -100,16 +100,21 @@ function winePages(): PageMeta[] {
       article: false,
       image,
     },
-    ...posts.map((post) => ({
-      path: `${wine.path}/${post.slug}`,
-      title: `${post.title} · ${wine.label}`,
-      // The post's own summary, shortened if needed so the sign-off always fits.
-      description: `${trimDescription(post.summary, MAX_DESCRIPTION - winePreview.postSignoff.length - 1)} ${winePreview.postSignoff}`,
-      heading: post.title,
-      links: [{ href: wine.path, text: `More from ${wine.label}` }],
-      article: true,
-      image,
-    })),
+    ...posts.map((post) => {
+      // A tasting note's preview says which wine's card is being shared.
+      const card = post.kind === 'tasting' ? `Tasting card: ${post.title}.` : ''
+      const room = MAX_DESCRIPTION - winePreview.postSignoff.length - 1 - (card ? card.length + 1 : 0)
+      return {
+        path: `${wine.path}/${post.slug}`,
+        title: `${post.title} · ${wine.label}`,
+        // The post's own summary, shortened if needed so the card name and sign-off always fit.
+        description: [card, trimDescription(post.summary, room), winePreview.postSignoff].filter(Boolean).join(' '),
+        heading: post.title,
+        links: [{ href: wine.path, text: `More from ${wine.label}` }],
+        article: true,
+        image: card ? { ...image, alt: `${card} ${image.alt}` } : image,
+      }
+    }),
   ]
 }
 
