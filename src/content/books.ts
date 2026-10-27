@@ -38,6 +38,15 @@ export const books: Book[] = [
     summary:
       'Lola keeps running into her exes all over New York, one after another, and it’s too weird to be a coincidence. The trail leads back to her old boss, a magazine editor turned self-help guru, and a strange experiment in nostalgia and love.',
   },
+  {
+    slug: 'empire-of-ai',
+    title: 'Empire of AI',
+    author: 'Karen Hao',
+    status: 'want',
+    color: 'blue',
+    summary:
+      'A reporter who has covered OpenAI since its early days tells the inside story of the company and Sam Altman, from its nonprofit beginnings to the 2023 boardroom fight. She argues that the AI industry works like a new kind of empire, and she travels from Kenya to Chile to meet the workers and communities paying for it.',
+  },
 ]
 
 export const currentlyReading = books.filter((book) => book.status === 'reading')
