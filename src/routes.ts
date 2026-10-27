@@ -106,9 +106,9 @@ function winePages(): PageMeta[] {
       path: `${wine.path}/${post.slug}`,
       title: `${post.title} · ${wine.label}`,
       // A shared tasting note says which wine's card it is.
-      previewTitle: post.kind === 'tasting' && post.wine ? `Tasting card: ${post.wine.name} ${post.wine.vintage} · ${wine.label}` : undefined,
+      previewTitle: post.kind === 'tasting' ? `Tasting card: ${post.title} · ${wine.label}` : undefined,
       // The post's own summary, shortened if needed so the sign-off always fits.
-      description: `${trimDescription(post.summary, MAX_DESCRIPTION - winePreview.postSignoff.length - 1)} ${winePreview.postSignoff}`,
+      description: [trimDescription(post.summary, MAX_DESCRIPTION - winePreview.postSignoff.length - 1), winePreview.postSignoff].filter(Boolean).join(' '),
       heading: post.title,
       links: [{ href: wine.path, text: `More from ${wine.label}` }],
       article: true,

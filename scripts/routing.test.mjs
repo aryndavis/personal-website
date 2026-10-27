@@ -63,15 +63,18 @@ test('each page has its own title, and a description that fits a search result',
   }
   const titles = pages.map((page) => page.title)
   assert.equal(new Set(titles).size, titles.length, 'no two pages share a title')
+  const previewTitles = pages.map((page) => page.previewTitle ?? page.title)
+  assert.equal(new Set(previewTitles).size, previewTitles.length, 'no two pages share a link-preview title')
 })
 
 test('Gen Z With A Glass speaks for itself: wine card, wine titles, no day-job details', async () => {
   const { winePreview } = await vite.ssrLoadModule('/src/site.ts')
+  const { winePosts } = await vite.ssrLoadModule('/src/content/wine.ts')
   const wine = pages.filter((p) => p.path === '/wine' || p.path.startsWith('/wine/'))
   assert.ok(wine.length >= 2)
   for (const p of wine) {
     assert.equal(p.image?.src, winePreview.image, p.path)
-    assert.doesNotMatch(`${p.title} ${p.description} ${p.image.alt}`, /software|engineer|microsoft|curriculum|portfolio/i, p.path)
+    assert.doesNotMatch(`${p.title} ${p.previewTitle ?? ''} ${p.description} ${p.image.alt}`, /software|engineer|microsoft|curriculum|portfolio/i, p.path)
   }
   const section = wine.find((p) => p.path === '/wine')
   assert.equal(section.title, `Gen Z With A Glass · ${winePreview.tagline}`)
@@ -79,10 +82,13 @@ test('Gen Z With A Glass speaks for itself: wine card, wine titles, no day-job d
     assert.match(post.title, / · Gen Z With A Glass$/)
     assert.ok(post.description.endsWith(winePreview.postSignoff) && post.description.length <= 160, post.description)
   }
-  // A shared tasting note's preview title names the wine whose card it is; the tab title doesn't change.
-  const barolo = wine.find((p) => p.path === '/wine/negretti-barolo-2021')
-  assert.equal(barolo.previewTitle, 'Tasting card: Negretti Barolo 2021 · Gen Z With A Glass')
-  assert.equal(barolo.title, 'Negretti Barolo 2021 · Gen Z With A Glass')
+  // A shared tasting note's preview title names the card it is (its own title, "revisited" and all);
+  // the tab title doesn't change.
+  for (const post of winePosts.filter((p) => p.kind === 'tasting')) {
+    const p = wine.find((p) => p.path === `/wine/${post.slug}`)
+    assert.equal(p.previewTitle, `Tasting card: ${post.title} · Gen Z With A Glass`)
+    assert.equal(p.title, `${post.title} · Gen Z With A Glass`)
+  }
   // Everything else keeps the site's own card.
   assert.ok(pages.filter((p) => !wine.includes(p)).every((p) => p.image === undefined))
 })
@@ -132,8 +138,8 @@ test('a page with its own card swaps the preview image and its description; othe
   assert.match(renderPage(template, page), /property="og:image" content="https:\/\/arynlynn\.com\/images\/social-card\.png"/)
 })
 
-test('the home page keeps index.html exactly as written', () => {
-  assert.equal(renderPage(template, { ...page, path: '/' }), template)
+test('the home page keeps index.html exactly as written, so its tags and the app’s agree', () => {
+  assert.equal(renderPage(template, pages.find((p) => p.path === '/')), template)
 })
 
 test('a template missing a tag stops the build instead of writing a half-finished page', () => {
@@ -145,6 +151,12 @@ test('the 404 page is not indexed and has no canonical address', () => {
   assert.match(html, /<title>Page not found · Aryn Davis<\/title>/)
   assert.match(html, /<meta name="robots" content="noindex" \/>/)
   assert.doesNotMatch(html, /rel="canonical"/)
+  // Otherwise it previews like the home page.
+  const home = renderPage(template, pages.find((p) => p.path === '/'))
+  for (const tag of ['og:url', 'og:title', 'og:description', 'og:image', 'og:image:alt']) {
+    const content = (text) => text.match(new RegExp(`property="${tag}" content="([^"]*)"`))[1]
+    assert.equal(content(html), content(home), tag)
+  }
 })
 
 test('the sitemap lists every page and the static pages, and files go where Netlify serves them', () => {

@@ -1,6 +1,8 @@
 // Site-wide details. Edit these first.
 export const site = {
   name: 'Aryn Davis',
+  /** Every page's address and preview card hang off this. */
+  url: 'https://arynlynn.com',
   shortName: 'ARYN DAVIS',
   roles: ['Software engineer', 'Curriculum designer', 'Educator'],
   /** After the name in the home page's title (keep in step with index.html). */
@@ -16,14 +18,12 @@ export const site = {
   year: new Date().getFullYear(),
 }
 
-/** The home page's search and link-preview text and card (keep in step with index.html). */
+/** The home page's search and link-preview text, and the card every page shares unless it has its own (index.html must match; a test checks). */
 export const homePreview = {
-  url: 'https://arynlynn.com',
   description:
     'Aryn Davis: software engineer and curriculum designer in New York City. Former Microsoft engineer, M.Ed. student at Teachers College, Columbia.',
   previewDescription: 'Software engineer and curriculum designer in New York City. Portfolio, an education blog, and a wine blog.',
-  image: '/images/social-card.png',
-  imageAlt: 'Aryn Davis: software engineer, curriculum designer, educator. arynlynn.com',
+  card: { src: '/images/social-card.png', alt: 'Aryn Davis: software engineer, curriculum designer, educator. arynlynn.com' },
 }
 
 /**

@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { test } from 'node:test'
-import { homePreview, site } from '../src/site.ts'
+import { site } from '../src/site.ts'
 
 const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8')
 const html = read('index.html')
@@ -21,15 +21,6 @@ test('link previews have a title, description and a full-size image on this site
   assert.match(meta('property', 'og:image'), /^https:\/\/arynlynn\.com\/images\/social-card\.png$/)
   const png = readFileSync(new URL('../public/images/social-card.png', import.meta.url))
   assert.deepEqual([png.readUInt32BE(16), png.readUInt32BE(20)], [1200, 630], 'the preview image is 1200×630')
-})
-
-test('the home preview the app restores matches index.html', () => {
-  const unescape = (text) => text.replace(/&amp;/g, '&')
-  assert.equal(unescape(html.match(/name="description"\s+content="([^"]*)"/)[1]), homePreview.description)
-  assert.equal(unescape(meta('property', 'og:description')), homePreview.previewDescription)
-  assert.equal(meta('property', 'og:image'), `${homePreview.url}${homePreview.image}`)
-  assert.equal(unescape(meta('property', 'og:image:alt')), homePreview.imageAlt)
-  assert.equal(meta('property', 'og:url'), `${homePreview.url}/`)
 })
 
 test('the structured data is valid JSON and lists the same profiles as the site', () => {

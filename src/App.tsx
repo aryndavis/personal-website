@@ -33,9 +33,7 @@ export default function App() {
 
   // Each page and post has its own title and link preview (the same ones its prerendered page shows).
   useEffect(() => {
-    const page = pageAt(route)
-    document.title = page?.title ?? `Page not found · ${site.name}`
-    showLinkPreview(page)
+    showLinkPreview(pageAt(route))
   }, [route])
 
   return (
