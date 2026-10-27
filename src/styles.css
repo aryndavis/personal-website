@@ -6,9 +6,11 @@
   --yellow: #ffd166;
   --pink: #ff8fcf;
   --pink-deep: #d9468f;
+  --raspberry: #b0306f; /* a darker --pink-deep, dark enough for light text */
   --lilac: #c9a7ff;
   --mint: #8be0c4;
   --blue: #8fb7ff;
+  --blue-light: #b6d0ff;
   --peach: #ffb38a;
   --lime: #c2e86a;
   --drop: rgba(5, 0, 12, 0.6);
@@ -348,29 +350,59 @@ main {
   margin-bottom: 0;
 }
 
+/* Two kinds of button, the same everywhere: plum goes somewhere on this site (Open folder ▶), and secondary,
+   in light blue, leaves it (LinkedIn ↗, Substack ↗). Each gets darker on hover. Text contrast stays at least
+   4.5:1 in every state: 13.3 on plum, 5.8 on raspberry, 8.9 on light blue, 6.9 on blue.
+   The --btn-* values below are for the dark page; a card (.pixel-window) swaps in its own (see below). */
 .pixel-button {
+  --btn-bg: var(--ink);
+  --btn-text: var(--white);
+  --btn-hover: var(--raspberry);
+  --btn-border: var(--white);
+  --btn-shadow: var(--pink);
   display: inline-flex;
   align-items: center;
   gap: 6px;
   padding: 8px 14px;
-  border: 3px solid var(--ink);
-  background: var(--yellow);
-  color: var(--ink);
-  box-shadow: 4px 4px 0 var(--ink);
-  font: 500 15px/1 var(--pixel);
+  border: 3px solid var(--btn-border);
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  box-shadow: 4px 4px 0 var(--btn-shadow);
+  font: 600 15px/1 var(--pixel);
   text-decoration: none;
   cursor: pointer;
 }
 
+/* On a card: a plum border, and a shadow in the card's own title-bar color (--bar, set by its tone). */
+.pixel-window .pixel-button {
+  --btn-border: var(--ink);
+  --btn-shadow: var(--bar);
+}
+
+.pixel-button.secondary {
+  --btn-bg: var(--blue-light);
+  --btn-text: var(--ink);
+  --btn-hover: var(--blue);
+  --btn-shadow: var(--ink);
+}
+
+/* A card's Open button is part of the card's link, so it changes when the card is hovered or focused. */
 a.pixel-button:hover,
-button.pixel-button:hover {
-  background: var(--pink);
+button.pixel-button:hover,
+.card-window:is(:hover, :focus-within) .card-open {
+  background: var(--btn-hover);
 }
 
 a.pixel-button:active,
 button.pixel-button:active {
   translate: 3px 3px;
-  box-shadow: 1px 1px 0 var(--ink);
+  box-shadow: 1px 1px 0 var(--btn-shadow);
+}
+
+/* The site's yellow focus ring suits the dark page; on a pastel card, plum shows up better. */
+.pixel-window .pixel-button:focus-visible {
+  outline: 3px dashed var(--ink);
+  outline-offset: 3px;
 }
 
 .tag-list {
@@ -1119,18 +1151,7 @@ button.pixel-button:active {
   gap: 12px;
 }
 
-.pixel-button.substack-link,
-.pixel-button.library-link {
-  background: var(--pink);
-}
-
-a.pixel-button.substack-link:hover,
-a.pixel-button.library-link:hover {
-  background: var(--yellow);
-}
-
-.intro-row .substack-link,
-.intro-row .library-link {
+.intro-row .pixel-button {
   margin-top: 12px;
 }
 

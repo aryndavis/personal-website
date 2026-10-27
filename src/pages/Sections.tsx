@@ -18,7 +18,7 @@ function ProjectLinks({ project }: { project: Project }) {
   return (
     <p className="project-links">
       {links.map((link) => (
-        <a key={link.href} className="pixel-button" href={link.href} target="_blank" rel="noopener noreferrer">
+        <a key={link.href} className="pixel-button secondary" href={link.href} target="_blank" rel="noopener noreferrer">
           {link.label}
         </a>
       ))}
@@ -100,7 +100,7 @@ export function EducationPage({ slug }: { slug?: string }) {
       intro={
         <>
           <p>Writing about teaching, learning, and designing for real classrooms. These posts also go out on my Substack, so subscribe there to get them by email.</p>
-          <a className="pixel-button substack-link" href={site.substack} target="_blank" rel="noopener noreferrer">
+          <a className="pixel-button secondary" href={site.substack} target="_blank" rel="noopener noreferrer">
             ✉ Visit my Substack ↗
           </a>
         </>
