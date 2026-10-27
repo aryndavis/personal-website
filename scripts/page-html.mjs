@@ -27,7 +27,7 @@ export function renderPage(template, page) {
   html = replaceOnce(html, /(<meta\s+name="description"\s+content=")[^"]*(")/, `$1${escape(page.description)}$2`, 'description')
   html = replaceOnce(html, /(<link rel="canonical" href=")[^"]*(")/, `$1${url}$2`, 'canonical link')
   html = replaceOnce(html, /(<meta property="og:url" content=")[^"]*(")/, `$1${url}$2`, 'og:url')
-  html = replaceOnce(html, /(<meta property="og:title" content=")[^"]*(")/, `$1${escape(page.title)}$2`, 'og:title')
+  html = replaceOnce(html, /(<meta property="og:title" content=")[^"]*(")/, `$1${escape(page.previewTitle ?? page.title)}$2`, 'og:title')
   html = replaceOnce(html, /(<meta property="og:description" content=")[^"]*(")/, `$1${escape(page.description)}$2`, 'og:description')
   html = replaceOnce(html, /(<meta property="og:type" content=")[^"]*(")/, `$1${page.article ? 'article' : 'website'}$2`, 'og:type')
   if (page.image) {
