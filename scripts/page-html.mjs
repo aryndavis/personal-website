@@ -1,7 +1,10 @@
 // Builds each page's HTML from the built index.html: its own title, description, address and link-preview
 // tags, plus a plain-HTML summary that search engines can read before the app starts. Used by prerender.mjs.
 
-export const ORIGIN = 'https://arynlynn.com'
+import { previewTags } from '../src/previewTags.ts'
+import { site } from '../src/site.ts'
+
+export const ORIGIN = site.url
 
 /** Separate static pages (public/), listed in the sitemap alongside the app's pages. */
 export const STATIC_PAGES = ['/sms/', '/terms/', '/privacy/']
@@ -18,22 +21,24 @@ function replaceOnce(html, pattern, replacement, what) {
 
 const PRERENDER = /<main class="prerender">[\s\S]*?<\/main>/
 
-/** The HTML for one page. The home page keeps index.html as written. */
-export function renderPage(template, page) {
-  if (page.path === '/') return template
-  const url = `${ORIGIN}${page.path}`
+/** Writes a page's title, description, address and link-preview tags (src/previewTags.ts, which the app uses too). */
+function writeTags(template, tags) {
   let html = template
-  html = replaceOnce(html, /<title>[^<]*<\/title>/, `<title>${escape(page.title)}</title>`, '<title>')
-  html = replaceOnce(html, /(<meta\s+name="description"\s+content=")[^"]*(")/, `$1${escape(page.description)}$2`, 'description')
-  html = replaceOnce(html, /(<link rel="canonical" href=")[^"]*(")/, `$1${url}$2`, 'canonical link')
-  html = replaceOnce(html, /(<meta property="og:url" content=")[^"]*(")/, `$1${url}$2`, 'og:url')
-  html = replaceOnce(html, /(<meta property="og:title" content=")[^"]*(")/, `$1${escape(page.title)}$2`, 'og:title')
-  html = replaceOnce(html, /(<meta property="og:description" content=")[^"]*(")/, `$1${escape(page.description)}$2`, 'og:description')
-  html = replaceOnce(html, /(<meta property="og:type" content=")[^"]*(")/, `$1${page.article ? 'article' : 'website'}$2`, 'og:type')
-  if (page.image) {
-    html = replaceOnce(html, /(<meta property="og:image" content=")[^"]*(")/, `$1${ORIGIN}${escape(page.image.src)}$2`, 'og:image')
-    html = replaceOnce(html, /(<meta property="og:image:alt" content=")[^"]*(")/, `$1${escape(page.image.alt)}$2`, 'og:image:alt')
-  }
+  html = replaceOnce(html, /<title>[^<]*<\/title>/, `<title>${escape(tags.title)}</title>`, '<title>')
+  html = replaceOnce(html, /(<meta\s+name="description"\s+content=")[^"]*(")/, `$1${escape(tags.description)}$2`, 'description')
+  html = replaceOnce(html, /(<link rel="canonical" href=")[^"]*(")/, `$1${escape(tags.url)}$2`, 'canonical link')
+  html = replaceOnce(html, /(<meta property="og:url" content=")[^"]*(")/, `$1${escape(tags.url)}$2`, 'og:url')
+  html = replaceOnce(html, /(<meta property="og:title" content=")[^"]*(")/, `$1${escape(tags.previewTitle)}$2`, 'og:title')
+  html = replaceOnce(html, /(<meta property="og:description" content=")[^"]*(")/, `$1${escape(tags.previewDescription)}$2`, 'og:description')
+  html = replaceOnce(html, /(<meta property="og:type" content=")[^"]*(")/, `$1${tags.article ? 'article' : 'website'}$2`, 'og:type')
+  html = replaceOnce(html, /(<meta property="og:image" content=")[^"]*(")/, `$1${ORIGIN}${escape(tags.image.src)}$2`, 'og:image')
+  return replaceOnce(html, /(<meta property="og:image:alt" content=")[^"]*(")/, `$1${escape(tags.image.alt)}$2`, 'og:image:alt')
+}
+
+/** The HTML for one page. The home page keeps index.html's own summary (and, as tests check, its tags). */
+export function renderPage(template, page) {
+  const html = writeTags(template, previewTags(page))
+  if (page.path === '/') return html
   const links = page.links.map((link) => `          <li><a href="${escape(link.href)}">${escape(link.text)}</a></li>`).join('\n')
   const summary = `<main class="prerender">
         <h1>${escape(page.heading)}</h1>
@@ -48,8 +53,7 @@ ${links}
 
 /** Served by Netlify for addresses that don't exist (with a 404 status); the app shows its "not found" page. */
 export function notFoundPage(template) {
-  let html = template
-  html = replaceOnce(html, /<title>[^<]*<\/title>/, '<title>Page not found · Aryn Davis</title>', '<title>')
+  let html = writeTags(template, previewTags(undefined))
   html = replaceOnce(html, /\s*<link rel="canonical" href="[^"]*" \/>/, '\n    <meta name="robots" content="noindex" />', 'canonical link')
   return replaceOnce(
     html,

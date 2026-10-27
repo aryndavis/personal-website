@@ -7,6 +7,7 @@ import BookshelfPage from './pages/Bookshelf'
 import { EducationPage, PortfolioPage } from './pages/Sections'
 import WinePage from './pages/Wine'
 import { href, useRoute } from './router'
+import { showLinkPreview } from './linkPreview'
 import { pageAt } from './routes'
 import { site } from './site'
 
@@ -30,9 +31,9 @@ export default function App() {
     window.scrollTo(0, 0)
   }, [top])
 
-  // Each page and post has its own title (the same one its prerendered page and search results show).
+  // Each page and post has its own title and link preview (the same ones its prerendered page shows).
   useEffect(() => {
-    document.title = pageAt(route)?.title ?? `Page not found · ${site.name}`
+    showLinkPreview(pageAt(route))
   }, [route])
 
   return (
