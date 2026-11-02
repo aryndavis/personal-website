@@ -43,6 +43,8 @@ interface CollectionProps<T extends Entry> {
   /** Where the entries live, when it's a part of the section (a portfolio track) rather than the section itself. */
   part?: Section
   entries: T[]
+  /** The entries are already in the order to show them (a portfolio track). Otherwise they're sorted newest first. */
+  ordered?: boolean
   slug?: string
   headline: ReactNode
   /** A title word longer than PORTFOLIO, shrunk so it doesn't break mid-word. */
@@ -58,9 +60,9 @@ interface CollectionProps<T extends Entry> {
   openLabel?: (entry: T) => string
 }
 
-export default function Collection<T extends Entry>({ sectionKey, part, entries, slug, headline, longTitle, intro, icon, layout, fileExtension, cardExtra, dialogMeta, openLabel = () => 'Open case study ▶' }: CollectionProps<T>) {
+export default function Collection<T extends Entry>({ sectionKey, part, entries, ordered, slug, headline, longTitle, intro, icon, layout, fileExtension, cardExtra, dialogMeta, openLabel = () => 'Open case study ▶' }: CollectionProps<T>) {
   const section = part ?? sections[sectionKey]
-  const sorted = newestFirst(entries)
+  const sorted = ordered ? entries : newestFirst(entries)
   const index = slug ? sorted.findIndex((entry) => entry.slug === slug) : -1
   const open = index >= 0 ? sorted[index] : undefined
   const missing = slug !== undefined && !open

@@ -61,6 +61,12 @@ test('the portfolio links to both tracks, and each project lives under its own t
   const { projects } = await vite.ssrLoadModule('/src/content/portfolio.ts')
   const portfolio = pages.find((page) => page.path === '/portfolio')
   assert.deepEqual(portfolio.links.map((link) => link.href), ['/portfolio/curriculum', '/portfolio/software'], 'curriculum comes first')
+  const curriculum = pages.find((page) => page.path === '/portfolio/curriculum')
+  assert.deepEqual(
+    curriculum.links.map((link) => link.href),
+    projects.filter((project) => project.track === 'curriculum').map((project) => `/portfolio/curriculum/${project.slug}`),
+    'a track lists its projects in the order portfolio.ts has them, not by date',
+  )
   for (const project of projects) {
     const track = pages.find((page) => page.path === `/portfolio/${project.track}`)
     assert.ok(track.links.some((link) => link.href === `/portfolio/${project.track}/${project.slug}`), project.slug)
