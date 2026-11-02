@@ -163,6 +163,7 @@ Anything after "notes:" becomes the post's extra notes.
 
 1. In Netlify, **Add new site → Import an existing project → GitHub** and pick this repo. `netlify.toml` already sets the build (`npm run build`, publish `dist`, Node 22), so leave the defaults.
 2. **Domain:** `arynlynn.com` (registered at Porkbun) uses **Netlify DNS**: Porkbun's nameservers point to Netlify, and the records for `arynlynn.com`, `www`, `library` and `closet` live in Netlify. HTTPS is set up automatically.
+   - `genzwithaglass.com` (also at Porkbun, also on Netlify DNS) is a domain alias of this site. `public/_redirects` sends it to the wine blog: the bare domain opens `/wine`, and `genzwithaglass.com/<post>` opens `/wine/<post>`.
 3. Every push to `main` redeploys. Security headers come from `public/_headers`.
 
 ## Security
