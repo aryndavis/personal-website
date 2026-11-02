@@ -2,7 +2,7 @@ import { educationPosts } from '../content/education'
 import { projectsIn } from '../content/portfolio'
 import PixelIcon from '../components/PixelIcon'
 import PixelWindow from '../components/PixelWindow'
-import { newestFirst, type Project, type Track } from '../content/types'
+import type { Project, Track } from '../content/types'
 import { href } from '../router'
 import { portfolioTracks, projectPath, sections, site } from '../site'
 import Collection, { PageHero } from './Collection'
@@ -70,7 +70,7 @@ export function PortfolioHome() {
       <ul className="portfolio-doors">
         {tracks.map((track, i) => {
           const folder = portfolioTracks[track]
-          const list = newestFirst(projectsIn(track))
+          const list = projectsIn(track)
           return (
             <li key={track}>
               <PixelWindow as="section" title={folder.file} tone={i === 0 ? 'mint' : 'lime'} labelledBy={`door-${track}`}>
@@ -113,6 +113,7 @@ export function PortfolioTrackPage({ track, slug }: { track: Track; slug?: strin
       sectionKey="portfolio"
       part={portfolioTracks[track]}
       entries={projectsIn(track)}
+      ordered
       slug={slug}
       layout="windows"
       fileExtension="cur"

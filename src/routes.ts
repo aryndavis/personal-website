@@ -77,7 +77,7 @@ function portfolioPages(): PageMeta[] {
       article: false,
     },
     ...tracks.flatMap(([key, track]) =>
-      sectionPages(track.path, track.label, track.blurb, newestFirst(projectsIn(key))),
+      sectionPages(track.path, track.label, track.blurb, projectsIn(key)),
     ),
   ]
 }
