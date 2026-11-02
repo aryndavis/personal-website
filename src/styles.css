@@ -740,9 +740,15 @@ button.pixel-button:active {
 }
 
 /* Shrink page titles to fit their column, so a long word like BOOKSHELF never breaks mid-word.
-   5.8em fits the longest single word plus its file extension (e.g. PORTFOLIO.exe). */
+   --title-ems fits the longest single word plus its file extension: 5.8em for PORTFOLIO.exe,
+   and long-title pages (CURRICULUM.exe) set more. */
 .page-hero .mega {
-  font-size: min(clamp(3.4rem, 10.5vw, 9.5rem), (100cqi - var(--hero-side) - 40px) / 5.8);
+  --title-ems: 5.8;
+  font-size: min(clamp(3.4rem, 10.5vw, 9.5rem), (100cqi - var(--hero-side) - 40px) / var(--title-ems));
+}
+
+.page-hero .mega.long-title {
+  --title-ems: 7;
 }
 
 .page-path {
@@ -1258,7 +1264,7 @@ button.pixel-button:active {
   }
 
   .page-hero .mega {
-    font-size: min(clamp(3.4rem, 10.5vw, 9.5rem), 100cqi / 5.8);
+    font-size: min(clamp(3.4rem, 10.5vw, 9.5rem), 100cqi / var(--title-ems));
   }
 
   .home-hero > *,
@@ -2025,17 +2031,23 @@ button.pixel-button:active {
   }
 }
 
-/* ---------- Portfolio groups ---------- */
+/* ---------- Portfolio ---------- */
 
-.board-group + .board-group {
-  margin-top: 72px;
+.portfolio-doors {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+  gap: 44px 36px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.board-group-title {
-  margin: 0 0 20px;
-  font: 600 clamp(1.6rem, 4vw, 2.2rem)/1 var(--pixel);
-  color: var(--white);
-  text-shadow: 3px 3px 0 var(--ink);
+.portfolio-doors li:nth-child(odd) > * {
+  rotate: -0.8deg;
+}
+
+.portfolio-doors li:nth-child(even) > * {
+  rotate: 0.9deg;
 }
 
 .card-cover {

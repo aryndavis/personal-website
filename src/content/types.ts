@@ -37,7 +37,7 @@ export interface Project extends Entry {
   format: string
   /** A screenshot or image on the project's card. src is a file in public/. */
   cover?: { src: string; alt: string }
-  /** Buttons in the project's pop-up, e.g. the live site and the code. Only http(s) links are shown. */
+  /** Buttons in the project's pop-up, e.g. the live site and the code. Only http(s) links and files on this site (/files/…) are shown. */
   links?: { label: string; href: string }[]
 }
 

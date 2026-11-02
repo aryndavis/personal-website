@@ -1,3 +1,5 @@
+import type { Track } from './content/types'
+
 // Site-wide details. Edit these first.
 export const site = {
   name: 'Aryn Davis',
@@ -53,7 +55,7 @@ export const sections: Record<SectionKey, { path: string; label: string; file: s
     path: '/portfolio',
     label: 'Portfolio',
     file: 'portfolio.exe',
-    blurb: 'Software I’ve built, plus the courses, clubs and classes I’ve designed and taught.',
+    blurb: 'The courses, clubs and classes I’ve designed and taught, and software I’ve built.',
   },
   education: {
     path: '/education',
@@ -68,3 +70,22 @@ export const sections: Record<SectionKey, { path: string; label: string; file: s
     blurb: 'Honest tasting notes and easy wine guides.',
   },
 }
+
+/** The portfolio's two halves, each its own page under /portfolio, in the order they're shown. */
+export const portfolioTracks: Record<Track, { path: string; label: string; file: string; blurb: string }> = {
+  curriculum: {
+    path: '/portfolio/curriculum',
+    label: 'Curriculum design',
+    file: 'curriculum.exe',
+    blurb: 'Courses, clubs and classes I’ve designed and taught, from middle school coding clubs to adult cohorts.',
+  },
+  software: {
+    path: '/portfolio/software',
+    label: 'Software engineering',
+    file: 'software.exe',
+    blurb: 'Web apps, tools and experiments I’ve designed and built.',
+  },
+}
+
+/** A project's address: /portfolio/<track>/<slug>. */
+export const projectPath = (project: { track: Track; slug: string }) => `${portfolioTracks[project.track].path}/${project.slug}`

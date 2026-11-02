@@ -8,16 +8,18 @@ import { winePosts } from '../content/wine'
 import { href } from '../router'
 import { currentlyReading } from '../content/books'
 import { school } from '../content/school'
-import { bookshelf, sections, site, type SectionKey } from '../site'
+import { bookshelf, projectPath, sections, site, type SectionKey } from '../site'
 
 const latest = <T extends Entry>(entries: T[], count = 2) => newestFirst(entries).slice(0, count)
 // The featured project is the newest one people can open and try.
 const featuredProject = latest(projects.filter((project) => project.links?.length), 1)[0]
 
-const folders: { key: SectionKey; icon: IconName; tone: 'lime' | 'mint' | 'pink'; entries: Entry[] }[] = [
-  { key: 'portfolio', icon: 'folder', tone: 'lime', entries: latest(projects) },
-  { key: 'education', icon: 'notebook', tone: 'mint', entries: latest(educationPosts) },
-  { key: 'wine', icon: 'glass', tone: 'pink', entries: latest(winePosts) },
+const inSection = (key: SectionKey) => (entry: Entry) => ({ slug: entry.slug, title: entry.title, path: `${sections[key].path}/${entry.slug}` })
+
+const folders: { key: SectionKey; icon: IconName; tone: 'lime' | 'mint' | 'pink'; entries: { slug: string; title: string; path: string }[] }[] = [
+  { key: 'portfolio', icon: 'folder', tone: 'lime', entries: latest(projects).map((project) => ({ slug: project.slug, title: project.title, path: projectPath(project) })) },
+  { key: 'education', icon: 'notebook', tone: 'mint', entries: latest(educationPosts).map(inSection('education')) },
+  { key: 'wine', icon: 'glass', tone: 'pink', entries: latest(winePosts).map(inSection('wine')) },
 ]
 
 type WindowId = 'about' | 'currently' | 'school' | 'mail' | SectionKey
@@ -64,7 +66,7 @@ export default function Home() {
               <PixelIcon name="star" size={40} />
             </div>
             <p className="featured-label">▶ Latest project</p>
-            <a className="featured-link" href={href(`${sections.portfolio.path}/${featured.slug}`)}>
+            <a className="featured-link" href={href(projectPath(featured))}>
               {featured.title}
             </a>
           </PixelWindow>
@@ -135,7 +137,7 @@ export default function Home() {
                   <ul className="folder-list">
                     {entries.map((entry) => (
                       <li key={entry.slug}>
-                        <a href={href(`${sections[key].path}/${entry.slug}`)}>{entry.title}</a>
+                        <a href={href(entry.path)}>{entry.title}</a>
                       </li>
                     ))}
                   </ul>
@@ -159,7 +161,7 @@ export default function Home() {
                 <div>
                   <dt>Building</dt>
                   <dd>
-                    <a href={href(`${sections.portfolio.path}/${featuredProject?.slug ?? ''}`)}>{featuredProject?.title ?? 'something new'}</a>
+                    <a href={href(featuredProject ? projectPath(featuredProject) : sections.portfolio.path)}>{featuredProject?.title ?? 'something new'}</a>
                   </dd>
                 </div>
                 <div>

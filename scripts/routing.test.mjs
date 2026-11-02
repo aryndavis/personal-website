@@ -4,7 +4,7 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { after, before, test } from 'node:test'
 import { createServer } from 'vite'
-import { fileFor, notFoundPage, renderPage, sitemap } from './page-html.mjs'
+import { fileFor, notFoundPage, redirectsFile, renderPage, sitemap } from './page-html.mjs'
 import { fromHashLink, isAppPath, normalize } from '../src/router.ts'
 
 const template = readFileSync(new URL('../index.html', import.meta.url), 'utf8')
@@ -48,10 +48,41 @@ after(() => vite?.close())
 test('every section, post, project and book has exactly one page, under an address the app handles', () => {
   const paths = pages.map((page) => page.path)
   assert.equal(new Set(paths).size, paths.length, 'no two pages share an address')
-  for (const path of ['/', '/portfolio', '/portfolio/aryns-closet', '/education', '/wine', '/wine/hermann-j-wiemer-late-harvest-riesling-2023', '/bookshelf', '/bookshelf/survivor']) {
+  for (const path of [
+    '/', '/portfolio', '/portfolio/curriculum', '/portfolio/curriculum/codepath-web101-web102', '/portfolio/software', '/portfolio/software/aryns-closet',
+    '/education', '/wine', '/wine/hermann-j-wiemer-late-harvest-riesling-2023', '/bookshelf', '/bookshelf/survivor',
+  ]) {
     assert.ok(paths.includes(path), path)
   }
   for (const path of paths) assert.ok(isAppPath(path) && normalize(path) === path, path)
+})
+
+test('the portfolio links to both tracks, and each project lives under its own track', async () => {
+  const { projects } = await vite.ssrLoadModule('/src/content/portfolio.ts')
+  const portfolio = pages.find((page) => page.path === '/portfolio')
+  assert.deepEqual(portfolio.links.map((link) => link.href), ['/portfolio/curriculum', '/portfolio/software'], 'curriculum comes first')
+  for (const project of projects) {
+    const track = pages.find((page) => page.path === `/portfolio/${project.track}`)
+    assert.ok(track.links.some((link) => link.href === `/portfolio/${project.track}/${project.slug}`), project.slug)
+  }
+})
+
+test('old and wrong-track project addresses redirect to the project’s page', async () => {
+  const { movedTo, portfolioRedirects } = await vite.ssrLoadModule('/src/routes.ts')
+  const paths = new Set(pages.map((page) => page.path))
+  const redirects = portfolioRedirects()
+  assert.ok(redirects.length > 0)
+  for (const { from, to } of redirects) {
+    assert.ok(paths.has(to), `${from} → ${to} goes to a real page`)
+    assert.ok(!paths.has(from), `${from} isn't also a page`)
+    assert.equal(movedTo(from), to)
+  }
+  assert.equal(movedTo('/portfolio/aryns-closet'), '/portfolio/software/aryns-closet')
+  assert.equal(movedTo('/portfolio/curriculum/aryns-closet'), '/portfolio/software/aryns-closet', 'a project under the wrong track')
+  assert.equal(movedTo('/portfolio/made-space-hand-sewing'), '/portfolio/curriculum', 'a retired project opens its track')
+  assert.equal(movedTo('/portfolio/curriculum'), undefined)
+  assert.equal(movedTo('/portfolio/software/aryns-closet'), undefined)
+  assert.equal(redirectsFile([{ from: '/a', to: '/b/a' }]), '/a /b/a 301\n')
 })
 
 test('each page has its own title, and a description that fits a search result', () => {

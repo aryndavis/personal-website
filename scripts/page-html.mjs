@@ -66,6 +66,9 @@ export function notFoundPage(template) {
   )
 }
 
+/** Netlify's _redirects file: a permanent redirect for each address that moved. */
+export const redirectsFile = (redirects) => redirects.map(({ from, to }) => `${from} ${to} 301\n`).join('')
+
 export function sitemap(pages) {
   const urls = [...pages.map((page) => page.path), ...STATIC_PAGES]
     .map((path) => `  <url><loc>${escape(`${ORIGIN}${path}`)}</loc></url>`)

@@ -1,19 +1,23 @@
 import { educationPosts } from '../content/education'
-import { projects } from '../content/portfolio'
-import type { Project } from '../content/types'
-import { site } from '../site'
-import Collection from './Collection'
+import { projectsIn } from '../content/portfolio'
+import PixelIcon from '../components/PixelIcon'
+import PixelWindow from '../components/PixelWindow'
+import { newestFirst, type Project, type Track } from '../content/types'
+import { href } from '../router'
+import { portfolioTracks, projectPath, sections, site } from '../site'
+import Collection, { PageHero } from './Collection'
 
-const isWebLink = (url: string) => /^https?:\/\//i.test(url)
+// Web links, or a file on this site (/files/deck.pdf).
+const isShownLink = (url: string) => /^https?:\/\//i.test(url) || url.startsWith('/files/')
 
-/** Screenshot on a software project's card. Decorative there: the card's title and summary say what it is. */
+/** Screenshot or title slide on a project's card. Decorative there: the card's title and summary say what it is. */
 function ProjectCover({ project }: { project: Project }) {
   if (!project.cover) return null
   return <img className="card-cover" src={`${import.meta.env.BASE_URL}${project.cover.src}`} alt="" loading="lazy" />
 }
 
 function ProjectLinks({ project }: { project: Project }) {
-  const links = (project.links ?? []).filter((link) => isWebLink(link.href))
+  const links = (project.links ?? []).filter((link) => isShownLink(link.href))
   if (!links.length) return null
   return (
     <p className="project-links">
@@ -45,27 +49,90 @@ function ProjectFacts({ project }: { project: Project }) {
   )
 }
 
-export function PortfolioPage({ slug }: { slug?: string }) {
+const tracks = Object.keys(portfolioTracks) as Track[]
+
+/** /portfolio: a door into each track. */
+export function PortfolioHome() {
+  return (
+    <div className="collection collection-portfolio">
+      <PageHero
+        sectionKey="portfolio"
+        trail={[sections.portfolio]}
+        icon="folder"
+        headline={
+          <>
+            Portfolio
+            <span className="mega-ext">.exe</span>
+          </>
+        }
+        intro={<p>Two kinds of work, each in its own folder: the courses, clubs and classes I’ve designed and taught, and software I’ve designed and built.</p>}
+      />
+      <ul className="portfolio-doors">
+        {tracks.map((track, i) => {
+          const folder = portfolioTracks[track]
+          const list = newestFirst(projectsIn(track))
+          return (
+            <li key={track}>
+              <PixelWindow as="section" title={folder.file} tone={i === 0 ? 'mint' : 'lime'} labelledBy={`door-${track}`}>
+                <div className="folder-head">
+                  <PixelIcon name={track === 'curriculum' ? 'notebook' : 'folder'} size={44} />
+                  <div>
+                    <h2 id={`door-${track}`}>
+                      <a href={href(folder.path)}>{folder.label}</a>
+                    </h2>
+                    <p>{folder.blurb}</p>
+                  </div>
+                </div>
+                <p className="folder-recent">Inside:</p>
+                <ul className="folder-list">
+                  {list.map((project) => (
+                    <li key={project.slug}>
+                      <a href={href(projectPath(project))}>{project.title}</a>
+                    </li>
+                  ))}
+                </ul>
+                <div className="folder-actions">
+                  <a className="pixel-button" href={href(folder.path)}>
+                    Open folder ▶
+                  </a>
+                </div>
+              </PixelWindow>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+}
+
+/** /portfolio/curriculum and /portfolio/software. */
+export function PortfolioTrackPage({ track, slug }: { track: Track; slug?: string }) {
+  const curriculum = track === 'curriculum'
   return (
     <Collection
       sectionKey="portfolio"
-      entries={projects}
+      part={portfolioTracks[track]}
+      entries={projectsIn(track)}
       slug={slug}
       layout="windows"
       fileExtension="cur"
-      icon="folder"
+      icon={curriculum ? 'notebook' : 'folder'}
+      longTitle={curriculum}
       headline={
         <>
-          Portfolio
+          {curriculum ? 'Curriculum' : 'Software'}
           <span className="mega-ext">.exe</span>
         </>
       }
-      intro={<p>Two kinds of work: software I’ve designed and built, and the courses, clubs and classes I’ve designed and taught. Open any project for the full story.</p>}
-      groups={[
-        { id: 'software-engineering', title: 'Software engineering', filter: (project) => project.track === 'software' },
-        { id: 'curriculum-design', title: 'Curriculum design', filter: (project) => project.track === 'curriculum' },
-      ]}
-      openLabel={(project) => (project.track === 'software' ? 'Open project ▶' : 'Open case study ▶')}
+      intro={
+        <p>
+          {curriculum
+            ? 'Courses, clubs and classes I’ve designed and taught. Each case study covers the learners, the goals, the design decisions, my role, and how it went.'
+            : 'Things I’ve designed and built, most with a live demo and the code on GitHub.'}{' '}
+          <a href={href(portfolioTracks[curriculum ? 'software' : 'curriculum'].path)}>See {curriculum ? 'my software' : 'my curriculum design'} work ▶</a>
+        </p>
+      }
+      openLabel={() => (curriculum ? 'Open case study ▶' : 'Open project ▶')}
       cardExtra={(project) => (
         <>
           <ProjectCover project={project} />

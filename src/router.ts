@@ -34,6 +34,12 @@ export function adoptHashLink() {
   if (path) window.history.replaceState(null, '', path)
 }
 
+/** Swaps the current address for another without adding a history step (an old link that moved). */
+export function redirect(path: string) {
+  window.history.replaceState(null, '', path)
+  window.dispatchEvent(new Event(CHANGE))
+}
+
 export function navigate(path: string) {
   if (normalize(path) === readRoute() && !window.location.hash) return
   window.history.pushState(null, '', path)
