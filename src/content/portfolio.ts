@@ -394,7 +394,7 @@ export const projects: Project[] = [
     role: 'Curriculum Development Contractor, CodePath.org',
     audience: 'Beginner and intermediate web development students',
     format: 'Two courses: slides, instructor notes, demos and projects',
-    summary: 'Beginner and intermediate web development courses in HTML/CSS, JavaScript and React, with slides, instructor notes, demo projects and project instructions for every unit.',
+    summary: 'Beginner and intermediate web development courses in HTML/CSS, JavaScript and React, built as instructor kits so faculty could teach them without the original designer.',
     tags: ['curriculum development', 'web development', 'React'],
     body: [
       { type: 'h', text: 'Who it was for' },
@@ -413,7 +413,7 @@ export const projects: Project[] = [
         type: 'list',
         items: [
           'Analysis: CodePath set the objectives and the broad lesson structure with a subject matter expert. As we contractors designed each course, we could add concepts we felt were missing.',
-          'Design: lessons are sequenced so each one builds on the last, from web basics in WEB101 to full web apps in WEB102. Every unit has the same pieces: teaching slides, instructor notes, a demo project for every lesson, and a project for students to build.',
+          'Design: lessons are sequenced so each one builds on the last, from web basics in WEB101 to full web apps in WEB102. Every unit is an instructor kit with the same pieces (teaching slides, instructor notes, a demo project for every lesson, and a project for students to build) so faculty could teach it without the original designer.',
           'Development: I worked with subject matter experts on full code examples and clear student instructions, and built the demo projects below.',
           'Implementation: before launch, every lesson, in-class lab and take-home project was tested by us contractors and by supervisors on the team. I also set up a daily GitHub Actions job that keeps course databases and APIs from shutting down for inactivity.',
         ],
