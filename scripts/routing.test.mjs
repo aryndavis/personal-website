@@ -205,3 +205,20 @@ test('the sitemap lists every page and the static pages, and files go where Netl
   assert.equal(fileFor('/wine/a-post'), 'wine/a-post.html')
   assert.equal(fileFor('/portfolio'), 'portfolio.html')
 })
+
+test('genzwithaglass.com sends every address to the wine blog, before any other rule', () => {
+  const rules = readFileSync(new URL('../public/_redirects', import.meta.url), 'utf8')
+    .split('\n')
+    .filter((line) => line.trim() && !line.startsWith('#'))
+    .map((line) => line.trim().split(/\s+/))
+  for (const rule of rules) assert.equal(rule.length, 3, rule.join(' '))
+  for (const scheme of ['http', 'https']) {
+    for (const host of ['genzwithaglass.com', 'www.genzwithaglass.com']) {
+      const root = rules.findIndex(([from]) => from === `${scheme}://${host}/`)
+      const posts = rules.findIndex(([from]) => from === `${scheme}://${host}/*`)
+      assert.deepEqual(rules[root]?.slice(1), ['https://arynlynn.com/wine', '301!'], `${scheme}://${host}/`)
+      assert.deepEqual(rules[posts]?.slice(1), ['https://arynlynn.com/wine/:splat', '301!'], `${scheme}://${host}/*`)
+      assert.ok(root < posts, 'the bare domain is matched before the catch-all')
+    }
+  }
+})
