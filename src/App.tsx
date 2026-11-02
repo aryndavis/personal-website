@@ -33,10 +33,11 @@ export default function App() {
   // An old project address shows its new page right away; the effect below fixes the address bar.
   const moved = movedTo(current)
   const route = moved ?? current
-  const [, top, slug, ...rest] = route.split('/')
+  const [, top, ...parts] = route.split('/')
+  const [slug, ...rest] = parts
   const Page = Object.hasOwn(pages, top) && rest.length === 0 ? pages[top as keyof typeof pages] : undefined
-  const page = route === '/' ? <Home /> : top === 'portfolio' ? portfolioPage(route.split('/').slice(2)) : Page && <Page slug={slug} />
-  // The portfolio's tracks count as their own sections.
+  const page = route === '/' ? <Home /> : top === 'portfolio' ? portfolioPage(parts) : Page && <Page slug={slug} />
+  // The portfolio's tracks count as their own sections (under /portfolio, `slug` is the track).
   const sectionKey = top === 'portfolio' ? `${top}/${slug ?? ''}` : top
 
   useEffect(() => {

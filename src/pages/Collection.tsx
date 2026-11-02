@@ -40,8 +40,8 @@ export function PageHero({ sectionKey, trail, headline, longTitle, intro, icon }
 
 interface CollectionProps<T extends Entry> {
   sectionKey: SectionKey
-  /** Where the entries live, when it isn't the section itself (a portfolio track). Defaults to the section. */
-  section?: Section
+  /** Where the entries live, when it's a part of the section (a portfolio track) rather than the section itself. */
+  part?: Section
   entries: T[]
   slug?: string
   headline: ReactNode
@@ -58,7 +58,8 @@ interface CollectionProps<T extends Entry> {
   openLabel?: (entry: T) => string
 }
 
-export default function Collection<T extends Entry>({ sectionKey, section = sections[sectionKey], entries, slug, headline, longTitle, intro, icon, layout, fileExtension, cardExtra, dialogMeta, openLabel = () => 'Open case study ▶' }: CollectionProps<T>) {
+export default function Collection<T extends Entry>({ sectionKey, part, entries, slug, headline, longTitle, intro, icon, layout, fileExtension, cardExtra, dialogMeta, openLabel = () => 'Open case study ▶' }: CollectionProps<T>) {
+  const section = part ?? sections[sectionKey]
   const sorted = newestFirst(entries)
   const index = slug ? sorted.findIndex((entry) => entry.slug === slug) : -1
   const open = index >= 0 ? sorted[index] : undefined
@@ -96,7 +97,7 @@ export default function Collection<T extends Entry>({ sectionKey, section = sect
 
   return (
     <div className={`collection collection-${sectionKey}`}>
-      <PageHero sectionKey={sectionKey} trail={section === sections[sectionKey] ? [section] : [sections[sectionKey], section]} headline={headline} longTitle={longTitle} intro={intro} icon={icon} />
+      <PageHero sectionKey={sectionKey} trail={part ? [sections[sectionKey], part] : [section]} headline={headline} longTitle={longTitle} intro={intro} icon={icon} />
 
       {missing && (
         <PixelWindow title="error.exe" tone="pink" className="error-window">

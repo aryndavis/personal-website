@@ -2,7 +2,7 @@
 // (scripts/prerender.mjs) and the sitemap. Posts and projects get their own entries.
 import { books } from './content/books'
 import { educationPosts } from './content/education'
-import { projects } from './content/portfolio'
+import { projects, projectsIn } from './content/portfolio'
 import { newestFirst, type Entry, type Track } from './content/types'
 import { winePosts } from './content/wine'
 import { bookshelf, portfolioTracks, projectPath, sections, site, winePreview } from './site'
@@ -77,18 +77,30 @@ function portfolioPages(): PageMeta[] {
       article: false,
     },
     ...tracks.flatMap(([key, track]) =>
-      sectionPages(track.path, track.label, track.blurb, newestFirst(projects.filter((project) => project.track === key))),
+      sectionPages(track.path, track.label, track.blurb, newestFirst(projectsIn(key))),
     ),
   ]
 }
 
+/** Projects taken off the site: their old address opens their track instead of "not found". */
+const retiredProjects: { slug: string; track: Track }[] = [{ slug: 'made-space-hand-sewing', track: 'curriculum' }]
+
 /**
- * Projects used to live at /portfolio/<slug>, before the portfolio split into tracks. Each old address
- * points at the new one: Netlify sends a 301 (dist/_redirects, from prerender.mjs) and the app follows
- * old #/ links the same way.
+ * Addresses that moved. Projects used to live at /portfolio/<slug>, before the portfolio split into
+ * tracks, and a project under the wrong track (one that changed tracks) belongs under its own. Netlify
+ * sends a 301 for each (dist/_redirects, from prerender.mjs) and the app follows old #/ links the same way.
  */
-export const portfolioRedirects = () =>
-  projects.map((project) => ({ from: `${sections.portfolio.path}/${project.slug}`, to: projectPath(project) }))
+export function portfolioRedirects() {
+  const tracks = Object.keys(portfolioTracks) as Track[]
+  return [
+    ...projects.flatMap((project) =>
+      [`${sections.portfolio.path}/${project.slug}`, ...tracks.filter((track) => track !== project.track).map((track) => `${portfolioTracks[track].path}/${project.slug}`)].map(
+        (from) => ({ from, to: projectPath(project) }),
+      ),
+    ),
+    ...retiredProjects.map(({ slug, track }) => ({ from: `${sections.portfolio.path}/${slug}`, to: portfolioTracks[track].path })),
+  ]
+}
 
 let redirects: Map<string, string> | undefined
 

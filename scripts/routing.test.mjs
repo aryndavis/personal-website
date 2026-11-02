@@ -67,7 +67,7 @@ test('the portfolio links to both tracks, and each project lives under its own t
   }
 })
 
-test('old /portfolio/<slug> addresses redirect to the project’s new page', async () => {
+test('old and wrong-track project addresses redirect to the project’s page', async () => {
   const { movedTo, portfolioRedirects } = await vite.ssrLoadModule('/src/routes.ts')
   const paths = new Set(pages.map((page) => page.path))
   const redirects = portfolioRedirects()
@@ -78,7 +78,10 @@ test('old /portfolio/<slug> addresses redirect to the project’s new page', asy
     assert.equal(movedTo(from), to)
   }
   assert.equal(movedTo('/portfolio/aryns-closet'), '/portfolio/software/aryns-closet')
+  assert.equal(movedTo('/portfolio/curriculum/aryns-closet'), '/portfolio/software/aryns-closet', 'a project under the wrong track')
+  assert.equal(movedTo('/portfolio/made-space-hand-sewing'), '/portfolio/curriculum', 'a retired project opens its track')
   assert.equal(movedTo('/portfolio/curriculum'), undefined)
+  assert.equal(movedTo('/portfolio/software/aryns-closet'), undefined)
   assert.equal(redirectsFile([{ from: '/a', to: '/b/a' }]), '/a /b/a 301\n')
 })
 

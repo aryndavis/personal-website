@@ -1,5 +1,5 @@
 import { educationPosts } from '../content/education'
-import { projects } from '../content/portfolio'
+import { projectsIn } from '../content/portfolio'
 import PixelIcon from '../components/PixelIcon'
 import PixelWindow from '../components/PixelWindow'
 import { newestFirst, type Project, type Track } from '../content/types'
@@ -8,7 +8,7 @@ import { portfolioTracks, projectPath, sections, site } from '../site'
 import Collection, { PageHero } from './Collection'
 
 // Web links, or a file on this site (/files/deck.pdf).
-const isShownLink = (url: string) => /^https?:\/\//i.test(url) || /^\/(?![/\\])/.test(url)
+const isShownLink = (url: string) => /^https?:\/\//i.test(url) || url.startsWith('/files/')
 
 /** Screenshot or title slide on a project's card. Decorative there: the card's title and summary say what it is. */
 function ProjectCover({ project }: { project: Project }) {
@@ -70,7 +70,7 @@ export function PortfolioHome() {
       <ul className="portfolio-doors">
         {tracks.map((track, i) => {
           const folder = portfolioTracks[track]
-          const list = newestFirst(projects.filter((project) => project.track === track))
+          const list = newestFirst(projectsIn(track))
           return (
             <li key={track}>
               <PixelWindow as="section" title={folder.file} tone={i === 0 ? 'mint' : 'lime'} labelledBy={`door-${track}`}>
@@ -111,8 +111,8 @@ export function PortfolioTrackPage({ track, slug }: { track: Track; slug?: strin
   return (
     <Collection
       sectionKey="portfolio"
-      section={portfolioTracks[track]}
-      entries={projects.filter((project) => project.track === track)}
+      part={portfolioTracks[track]}
+      entries={projectsIn(track)}
       slug={slug}
       layout="windows"
       fileExtension="cur"

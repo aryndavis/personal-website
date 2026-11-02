@@ -30,5 +30,7 @@ for (const page of pages) {
 }
 await writeFile(join(dist, '404.html'), notFoundPage(template))
 await writeFile(join(dist, 'sitemap.xml'), sitemap(pages))
-await writeFile(join(dist, '_redirects'), redirectsFile(redirects))
+// Hand-written rules (public/_redirects, copied in by Vite) come first: Netlify uses the first match.
+const handWritten = await readFile(join(dist, '_redirects'), 'utf8').catch(() => '')
+await writeFile(join(dist, '_redirects'), `${handWritten}${handWritten && !handWritten.endsWith('\n') ? '\n' : ''}${redirectsFile(redirects)}`)
 console.log(`Prerendered ${pages.length} pages, 404.html, sitemap.xml and ${redirects.length} redirects.`)

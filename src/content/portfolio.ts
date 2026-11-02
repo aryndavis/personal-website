@@ -1,4 +1,4 @@
-import type { Project } from './types'
+import type { Project, Track } from './types'
 
 // Two tracks, each its own page under /portfolio (curriculum first; see portfolioTracks in site.ts):
 //   'software'   — things I've built that are on github.com/aryndavis (job work stays off the site)
@@ -536,3 +536,6 @@ export const projects: Project[] = [
     ],
   },
 ]
+
+/** One track's projects, in the order they're listed above. */
+export const projectsIn = (track: Track) => projects.filter((project) => project.track === track)
