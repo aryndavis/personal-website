@@ -4,32 +4,49 @@ import HoloBackground from './components/HoloBackground'
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
 import BookshelfPage from './pages/Bookshelf'
-import { EducationPage, PortfolioPage } from './pages/Sections'
+import { EducationPage, PortfolioHome, PortfolioTrackPage } from './pages/Sections'
 import WinePage from './pages/Wine'
-import { href, useRoute } from './router'
+import { href, redirect, useRoute } from './router'
 import { showLinkPreview } from './linkPreview'
-import { pageAt } from './routes'
-import { site } from './site'
+import { movedTo, pageAt } from './routes'
+import { portfolioTracks, site } from './site'
+import type { Track } from './content/types'
 
 const marquee = '✦ stay curious ✦ take the long way ✦ pour something interesting'
 
 const pages = {
-  portfolio: PortfolioPage,
   education: EducationPage,
   wine: WinePage,
   bookshelf: BookshelfPage,
 }
 
+/** /portfolio, /portfolio/<track> and /portfolio/<track>/<slug>. */
+function portfolioPage(parts: string[]) {
+  const [track, slug, ...rest] = parts
+  if (track === undefined) return <PortfolioHome />
+  if (!Object.hasOwn(portfolioTracks, track) || rest.length) return undefined
+  return <PortfolioTrackPage track={track as Track} slug={slug} />
+}
 
 export default function App() {
-  const route = useRoute()
+  const current = useRoute()
+  // An old project address shows its new page right away; the effect below fixes the address bar.
+  const moved = movedTo(current)
+  const route = moved ?? current
   const [, top, slug, ...rest] = route.split('/')
   const Page = Object.hasOwn(pages, top) && rest.length === 0 ? pages[top as keyof typeof pages] : undefined
+  const page = route === '/' ? <Home /> : top === 'portfolio' ? portfolioPage(route.split('/').slice(2)) : Page && <Page slug={slug} />
+  // The portfolio's tracks count as their own sections.
+  const sectionKey = top === 'portfolio' ? `${top}/${slug ?? ''}` : top
+
+  useEffect(() => {
+    if (moved) redirect(moved)
+  }, [moved])
 
   // Scroll to the top only when moving between sections, not when opening a pop-up.
   useEffect(() => {
     window.scrollTo(0, 0)
-  }, [top])
+  }, [sectionKey])
 
   // Each page and post has its own title and link preview (the same ones its prerendered page shows).
   useEffect(() => {
@@ -51,7 +68,7 @@ export default function App() {
       <HoloBackground />
       <Header route={route} />
       <main id="main" tabIndex={-1}>
-        {route === '/' ? <Home /> : Page ? <Page slug={slug} /> : <NotFound />}
+        {page ?? <NotFound />}
       </main>
       <footer className="site-footer">
         <span>

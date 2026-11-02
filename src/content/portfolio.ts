@@ -1,6 +1,6 @@
 import type { Project } from './types'
 
-// Two tracks, each under its own heading on the Portfolio page:
+// Two tracks, each its own page under /portfolio (curriculum first; see portfolioTracks in site.ts):
 //   'software'   — things I've built that are on github.com/aryndavis (job work stays off the site)
 //   'curriculum' — curriculum design and teaching (from my CV; most of these have no public demo)
 // `date` sorts newest first; `period` is shown instead of the date for work that spans time.
@@ -161,21 +161,113 @@ export const projects: Project[] = [
       },
     ],
   },
+  // Curriculum case studies share one outline: who it was for, goals, design decisions
+  // (framed by ADDIE: analysis, design, development, implementation), my role, and how it went (evaluation).
   {
-    slug: 'made-space-hand-sewing',
+    slug: 'ai-brainstorming-lesson',
     track: 'curriculum',
-    title: 'Basic hand sewing',
-    date: '2026-04-01',
-    period: 'Oct 2025 – Apr 2026',
-    role: 'Volunteer instructor, Made Space Seattle',
-    audience: 'Adult beginners',
-    format: 'Hands-on classes',
-    summary: 'Beginner classes on garment repair and introductory embroidery: stitches, tools, and fabric care.',
-    tags: ['teaching', 'making', 'community'],
+    title: 'Using AI to brainstorm: a 30-minute lesson',
+    date: '2026-10-04',
+    period: 'Oct 2026',
+    role: 'Instructional design interview take-home',
+    audience: 'Adults in an AI-native course',
+    format: '30-minute live online lesson: slide deck and facilitator plan',
+    summary: 'An instructional design take-home: a 30-minute lesson for an AI-native adult course on using AI as a brainstorming partner that points out your blind spots.',
+    tags: ['AI literacy', 'lesson design', 'adult learners'],
+    cover: {
+      src: 'images/portfolio/ai-brainstorming-slide-01.jpg',
+      alt: 'Title slide, “Using AI to Brainstorm!”, with a hand-drawn mind map, people brainstorming around a table, and a rubber ducking comic.',
+    },
+    links: [
+      { label: 'Slide deck (PDF) ↗', href: '/files/ai-brainstorming-deck.pdf' },
+      { label: 'Facilitator plan (PDF) ↗', href: '/files/ai-brainstorming-facilitator-plan.pdf' },
+    ],
     body: [
+      { type: 'h', text: 'Who it was for' },
       {
         type: 'p',
-        text: 'I led basic hand-sewing classes focused on garment repairs and introductory embroidery, teaching foundational stitches, tool use and fabric care while building creativity and confidence in a supportive space.',
+        text: 'This was a take-home task for an instructional design interview: designing a lesson for an AI-native course for adults. I was given a sample brief (a project to redesign a client’s web page) and a survey of the cohort’s experience and comfort with AI, and asked to design a 30-minute lesson on one AI skill that would help them solve it. The lesson would come early in the program and be taught live online, so the cohort would still be getting to know each other.',
+      },
+      {
+        type: 'p',
+        text: 'From the survey, it didn’t look like many people had used AI to push their own thinking, rather than as a fancy search engine. Since the lesson came early, I wanted a skill that shows how to take critical thinking we already do in our lives, like brainstorming with other people, and bring it to AI. The market research part of the brief also seemed like it would be the hardest part of the project, and that’s exactly where this skill helps.',
+      },
+      { type: 'h', text: 'Goals' },
+      { type: 'p', text: 'I wanted learners to be able to:' },
+      {
+        type: 'list',
+        items: [
+          'Name what makes a brainstorming session productive, and what you miss when you brainstorm alone',
+          'Use the Six Thinking Hats to notice the perspectives they’re leaving out',
+          'Prompt AI to be a curious observer that only asks questions, a critic, or another “hat”',
+          'Give AI enough background to get useful ideas back, and keep iterating: prompt, review, tweak, repeat',
+          'Steer clear of leading questions, unverified output, and outsourcing their own thinking',
+        ],
+      },
+      { type: 'h', text: 'Design decisions' },
+      {
+        type: 'list',
+        items: [
+          'Analysis: I started from the survey and the brief, and asked where learners would struggle most. I also considered fact-checking AI and summarizing sources, but brainstorming felt more foundational. It makes those other skills stronger, so it made sense to teach it early.',
+          'Design: the lesson moves from people to AI. Learners tackle a shared problem (a remote company deciding whether to go hybrid) on their own, then in breakout rooms of 3 to 5 with no AI, so they feel what other perspectives add. Then we bring the same moves to AI: AI as another hat, a curious observer, or a critic. It wraps up with independent practice and a quick reflection.',
+          'Development: I made a 14-slide deck and a minute-by-minute facilitator plan. I went with a deck instead of an interactive app because, in my experience, getting everyone onto a new link can eat 2 to 8 minutes, and that’s a lot of a 30-minute lesson. I tried every example prompt in the deck with AI myself, and used AI to check that the skill wasn’t too narrow or too broad.',
+          'Implementation: breakout rooms get set up before class so groups can start right away, and a TA collects answers in a shared doc so everyone can see each other’s ideas. The plan also covers what to cut if class runs behind: take answers in chat, and keep the live prompt examples.',
+        ],
+      },
+      { type: 'h', text: 'Lesson flow' },
+      {
+        type: 'list',
+        items: [
+          '3 min: what makes a good brainstorm, and rubber ducking (slides 1–2)',
+          '4 min: think and share on the hybrid-work problem, alone (slide 3)',
+          '2 min: techniques, including the Six Thinking Hats (slides 4–5)',
+          '7 min: think-group-share in breakout rooms, AI-free (slide 6)',
+          '8 min: from group brainstorm to AI, with live prompt examples (slides 7–12)',
+          '4 min: independent practice on a new problem (slide 13)',
+          '2 min: wrap-up: one technique you’ll keep, and one you won’t (slide 14)',
+        ],
+      },
+      {
+        type: 'image',
+        src: 'images/portfolio/ai-brainstorming-slide-03.jpg',
+        alt: 'Slide “Think and Share”: a remote-only company must choose between staying remote, going hybrid, or requiring office time, then announce it and handle exceptions. Learners list their questions, first steps, and the data they’d want.',
+        caption: 'The shared problem learners brainstorm alone, then in groups, then with AI.',
+      },
+      {
+        type: 'image',
+        src: 'images/portfolio/ai-brainstorming-slide-04.jpg',
+        alt: 'Slide “Six Thinking Hats”: process, creativity, facts, benefits, feelings and cautions, asking which hat learners usually wear and which others would have helped.',
+      },
+      {
+        type: 'image',
+        src: 'images/portfolio/ai-brainstorming-slide-08.jpg',
+        alt: 'Slide “AI as a curious observer”: don’t outsource your thinking. Example prompt: “Don’t give me any answers. Ask me questions that help me navigate the problem myself.”',
+      },
+      {
+        type: 'image',
+        src: 'images/portfolio/ai-brainstorming-slide-10.jpg',
+        alt: 'Slide “Iterate!”: prompt, review, tweak, repeat. Example prompts: “Those project ideas are pretty similar. Give me 5 that are completely different from each other” and “Combine ideas 3 and 7 into something new.”',
+      },
+      {
+        type: 'image',
+        src: 'images/portfolio/ai-brainstorming-slide-11.jpg',
+        alt: 'Slide “AI as a critic”. Example prompt: “Here’s my idea: [idea]. Give me the three strongest reasons it might fail, then tell me what I’d need to be true for it to work.”',
+      },
+      {
+        type: 'image',
+        src: 'images/portfolio/ai-brainstorming-slide-12.jpg',
+        alt: 'Slide “What to avoid”: leading questions, since AI can be sycophantic; trusting output before verifying it; and outsourcing your thinking by accepting the first answer.',
+      },
+      { type: 'h', text: 'My role' },
+      { type: 'p', text: 'I designed the whole lesson myself: the skill, the activities, the deck, the example prompts, and a facilitator plan written so someone else could teach it.' },
+      { type: 'h', text: 'How it went' },
+      {
+        type: 'list',
+        items: [
+          'Checks are built into the lesson: each breakout group turns in its plan, and the wrap-up collects one technique every learner will use and one they won’t, shared as a group list after class.',
+          'With more time, I’d add a Mentimeter activity where learners answer in writing and see the answers grouped into themes live. That would help quieter learners early in a cohort and bring in more perspectives.',
+          'I’d also cut down the text on the slides. I kept them wordy so a facilitator could teach from them without separate notes, but a wall of text can lose people.',
+        ],
       },
     ],
   },
@@ -191,15 +283,45 @@ export const projects: Project[] = [
     summary: 'A culturally responsive, project-based coding club built around the imagiCharm hardware and software kit.',
     tags: ['project-based learning', 'culturally responsive', 'hardware'],
     body: [
+      { type: 'h', text: 'Who it was for' },
+      {
+        type: 'p',
+        text: 'Middle school students in a Black Girls Code CODE Club, run with the William Grose Center for Cultural Innovation in Seattle’s Africatown. The club was built around the imagiCharm, a hardware and software kit. Most students had little or no coding experience, and none of them had worked with hardware before.',
+      },
+      { type: 'h', text: 'Goals' },
+      { type: 'p', text: 'I wanted students to be able to:' },
       {
         type: 'list',
         items: [
-          'Partnered with the William Grose Center for Cultural Innovation in Seattle’s Africatown and Black Girls Code to run a multi-week club centered on the imagiCharm',
-          'Learned, taught and edited the imagiCharm curriculum, designing and refining project-based lessons that build computational thinking, creativity and confidence',
-          'Mentored students through hands-on projects with debugging support and individual feedback',
+          'Use variables, loops and conditionals to program their imagiCharm',
+          'Debug their own code',
+          'Walk away more creative and confident with technology',
         ],
       },
+      { type: 'h', text: 'Design decisions' },
+      {
+        type: 'list',
+        items: [
+          'Analysis: these were first-time coders and first-time hardware builders, so the basics needed a clear payoff.',
+          'Design: lessons were project-based over several weeks. Each project taught a basic concept, and what students ended up with was something cute they could carry around and be proud of, not just something on their computer.',
+          'Development: the curriculum came from Black Girls Code. I learned it first, then edited and refined the project-based lessons.',
+          'Implementation: I taught in person, with Google Slides and an online code editor, and mentored students through hands-on projects, helping them debug and giving individual feedback.',
+        ],
+      },
+      { type: 'h', text: 'My role' },
+      {
+        type: 'p',
+        text: 'I was the Lead Tech Instructor: I learned, taught and edited the imagiCharm curriculum, mentored students, and managed a teaching assistant.',
+      },
       { type: 'p', text: 'Before this, I volunteered as a Black Girls Code teaching assistant from 2017 to 2020, teaching Python, Scratch and LEGO Robotics.' },
+      { type: 'h', text: 'How it went' },
+      {
+        type: 'list',
+        items: [
+          'Every student completed every assignment.',
+          'Attendance was lower than we hoped, mostly because of how the club was marketed. Next time, I’d change how we reach students and make signing up a real commitment, instead of advertising it as a club students can drop in and out of.',
+        ],
+      },
     ],
   },
   {
@@ -212,24 +334,53 @@ export const projects: Project[] = [
     audience: 'A 30-student adult cohort',
     format: 'Weekly cohort course',
     summary: 'Weekly Python, algorithms, Django and interview prep for a 30-student cohort, with a 92% job and school placement rate.',
-    tags: ['Python', 'Django', 'adult learners'],
+    tags: ['Python', 'Django', 'adult learners', 'Canvas'],
     links: [{ label: 'Merge conflict lesson on GitHub ↗', href: 'https://github.com/aryndavis/merge-conflict-demo' }],
     body: [
-      { type: 'h', text: 'Technical Instructor (2022–2023)' },
+      { type: 'h', text: 'Who it was for' },
+      {
+        type: 'p',
+        text: 'Justice Through Code serves people impacted by the criminal legal system. I worked with a 30-student cohort of adults from all kinds of backgrounds, preparing for entry-level software engineering jobs or more school.',
+      },
+      { type: 'h', text: 'Goals' },
+      { type: 'p', text: 'I wanted learners to be able to:' },
       {
         type: 'list',
         items: [
-          'Taught weekly Python classes to a 30-student cohort, from basic syntax and algorithms to Django, web development and interview preparation: 92% job or school placement',
-          'Co-developed and revised content to keep it relevant and engaging for diverse learners and aligned with partner companies’ expectations for entry-level engineers',
-          'Built small teaching tools, like a quick, colorful page of notable 2020s artists that students used to practice resolving their first merge conflicts',
+          'Write Python, starting from basic syntax',
+          'Solve algorithm problems',
+          'Build web apps with Django',
+          'Work with Git on a team, merge conflicts included',
+          'Interview for entry-level engineering roles',
         ],
       },
-      { type: 'h', text: 'Teaching Assistant (2020–2021)' },
+      { type: 'h', text: 'Design decisions' },
       {
         type: 'list',
         items: [
-          'Led small-group sessions of 5–6 students with extra coding challenges, and held regular office hours',
-          'Redesigned parts of the course from student feedback during the move to online learning, to improve engagement in a remote setting',
+          'Analysis: the content was first developed with Columbia Business School and lined up with what partner companies expect from entry-level engineers. Every cohort, student surveys and performance showed us which lessons and assignments needed work.',
+          'Design: the course goes from basic syntax and algorithms to Django and web development, and ends with interview prep. Learners had weekly quizzes and homework, and finished with a group final project built with a mentor who was a working software engineer.',
+          'Development: instructors and TAs revised lessons and assignments every cohort to keep them relevant and engaging for a diverse group of learners. I also built small teaching tools, like a quick, colorful page of notable 2020s artists that students used to practice resolving their first merge conflicts.',
+          'Implementation: weekly classes over Zoom for the whole cohort, with time in every class for breakout rooms. Small groups worked through an in-class project to practice the lesson, with TAs there to help solidify the material and answer questions. Instructors and TAs managed the breakout rooms and made sure students in every room were participating. As a TA, I also ran small-group sessions of 5–6 students with extra coding challenges, and held office hours.',
+        ],
+      },
+      { type: 'h', text: 'My role' },
+      {
+        type: 'list',
+        items: [
+          'Technical Instructor (2022–2023): I taught the weekly classes, used Canvas to publish materials, build assignments and grade, and worked with the other instructors and TAs to revise lessons and assignments based on survey and performance data.',
+          'Teaching Assistant (2020–2021): I led breakout rooms and small groups, held office hours, and helped redesign parts of the course for remote learning.',
+        ],
+      },
+      { type: 'h', text: 'How it went' },
+      {
+        type: 'list',
+        items: [
+          '92% of the cohort went on to a job or school.',
+          'Every learner completed every assignment.',
+          'Several groups turned their final projects into real tools and resources for their topics, and kept building them after the course ended.',
+          'Weekly quizzes and homework showed us where learners were each week.',
+          'Student surveys shaped each new cohort’s version of the course, including the move to remote.',
         ],
       },
     ],
@@ -246,16 +397,36 @@ export const projects: Project[] = [
     summary: 'Beginner and intermediate web development courses in HTML/CSS, JavaScript and React, with slides, instructor notes, demo projects and project instructions for every unit.',
     tags: ['curriculum development', 'web development', 'React'],
     body: [
-      { type: 'h', text: 'What I delivered for each unit' },
-      { type: 'list', items: ['Teaching slides', 'Instructor notes', 'A demo project for every lesson', 'Project instructions for students'] },
-      { type: 'h', text: 'How I built it' },
+      { type: 'h', text: 'Who it was for' },
+      {
+        type: 'p',
+        text: 'CodePath partners with universities, and students take its courses alongside school, either to build on what they’re learning in class or to get ready for internships and full-time jobs. WEB101 is the beginner course, and WEB102 is the intermediate one.',
+      },
+      { type: 'h', text: 'Goals' },
+      { type: 'p', text: 'The goal was for students to be able to:' },
+      {
+        type: 'list',
+        items: ['Build web pages with HTML and CSS', 'Add interactivity with JavaScript', 'Build React apps that use APIs and databases'],
+      },
+      { type: 'h', text: 'Design decisions' },
       {
         type: 'list',
         items: [
-          'Worked with subject matter experts on full code examples and clear student instructions',
-          'Quality-assured the course by rigorously testing every lab',
-          'Set up a daily GitHub Actions job that keeps course databases and APIs from shutting down for inactivity',
+          'Analysis: CodePath set the objectives and the broad lesson structure with a subject matter expert. As we contractors designed each course, we could add concepts we felt were missing.',
+          'Design: lessons are sequenced so each one builds on the last, from web basics in WEB101 to full web apps in WEB102. Every unit has the same pieces: teaching slides, instructor notes, a demo project for every lesson, and a project for students to build.',
+          'Development: I worked with subject matter experts on full code examples and clear student instructions, and built the demo projects below.',
+          'Implementation: before launch, every lesson, in-class lab and take-home project was tested by us contractors and by supervisors on the team. I also set up a daily GitHub Actions job that keeps course databases and APIs from shutting down for inactivity.',
         ],
+      },
+      { type: 'h', text: 'My role' },
+      {
+        type: 'p',
+        text: 'As a curriculum development contractor, I wrote the slides, instructor notes and project instructions, built the demos, and tested the labs. CodePath owned the overall course design, and I wasn’t involved in teaching it.',
+      },
+      { type: 'h', text: 'How it went' },
+      {
+        type: 'p',
+        text: 'We launched with zero broken labs or demo projects. These materials were built for the courses’ first pilot, so our check was quality: every lesson, lab and project was tested by the contractors and by supervisors on the team. I wasn’t part of teaching the pilot, so I don’t have learner results to share.',
       },
       { type: 'h', text: 'Demo projects I built' },
       { type: 'p', text: [{ text: 'Crewmate Creator', href: 'https://shimmering-stardust-c75334.netlify.app/' }, ': create a crew of crewmates and browse them in a gallery.'] },
@@ -277,12 +448,44 @@ export const projects: Project[] = [
     summary: 'Python, Django and sociotechnical concepts, with 95% of students rating the course “Excellent.”',
     tags: ['Python', 'Django', 'youth'],
     body: [
+      { type: 'h', text: 'Who it was for' },
+      {
+        type: 'p',
+        text: 'Hack the Hood’s remote summer program, with 25 students ages 16 to 25 from backgrounds underrepresented in tech. Their coding experience varied.',
+      },
+      { type: 'h', text: 'Goals' },
+      { type: 'p', text: 'I wanted students to be able to:' },
       {
         type: 'list',
         items: [
-          'Taught Python, Django web development and sociotechnical concepts; 95% of students rated the course “Excellent” afterward',
-          'Created course outlines, training videos and visual aids with a team of technical instructors and curriculum consultants',
-          'Mentored 10 high-potential students toward post-program opportunities',
+          'Write Python, starting with the fundamentals',
+          'Build web apps with Django',
+          'Think critically about tech’s impact, from bias in tech and discriminatory AI systems to surveillance and accessibility',
+        ],
+      },
+      { type: 'h', text: 'Design decisions' },
+      {
+        type: 'list',
+        items: [
+          'Analysis: the curriculum was already planned out, but instructors could adjust each unit based on how engaged students were in the ones before it.',
+          'Design: coding fundamentals in Python and Django, with sociotechnical topics woven in, so students learned how to build things and to ask what those things do in the world.',
+          'Development: course outlines, training videos and visual aids, made with a team of technical instructors and curriculum consultants.',
+          'Implementation: we taught over Zoom all summer, using Google Slides for lessons and an online code editor for practice, with class discussions on tech’s impact. I also mentored 10 high-potential students one-on-one toward post-program opportunities.',
+        ],
+      },
+      { type: 'h', text: 'My role' },
+      {
+        type: 'p',
+        text: 'As a Technical Instructor, I taught the course and mentored 10 students. I had control over the course outlines and the extra material we showed in class; the rest of the curriculum was already set.',
+      },
+      { type: 'h', text: 'How it went' },
+      {
+        type: 'list',
+        items: [
+          '95% of students rated the course “Excellent” afterward.',
+          'Every student completed every assignment.',
+          'In discussions, students could explain how technology can reinforce harmful systems, and think critically about how those systems could be improved.',
+          'What I’d change: add a short critique project at the start and end of the program, so we could measure growth in critical thinking, not just see it in discussion.',
         ],
       },
     ],
@@ -299,13 +502,36 @@ export const projects: Project[] = [
     summary: 'Tailored lessons for young coders, and inclusive resources for students with nontraditional learning profiles.',
     tags: ['K-8', 'Scratch', 'inclusive design'],
     body: [
+      { type: 'h', text: 'Who it was for' },
+      {
+        type: 'p',
+        text: 'Elementary and middle school students at CodeSpeak Labs, most of them meeting code for the first time. Classes came in different sizes, and students had different learning styles, paces and backgrounds, including students with nontraditional learning profiles.',
+      },
+      { type: 'h', text: 'Goals' },
+      { type: 'p', text: 'I wanted students to be able to:' },
       {
         type: 'list',
         items: [
-          'Created and taught lesson plans in HTML, JavaScript and Scratch, adapted to different learning styles and class sizes',
-          'Gave individual, hands-on support so every student understood the key ideas, whatever their pace or background',
-          'Helped design inclusive, adaptive resources for students with nontraditional learning profiles',
+          'Think computationally in a way that fits their age: Scratch for elementary students, HTML and JavaScript for middle schoolers',
+          'Finish a coding project and make it their own',
         ],
+      },
+      { type: 'h', text: 'Design decisions' },
+      {
+        type: 'list',
+        items: [
+          'Analysis: I matched each lesson to where students were developmentally, and adapted it to each class’s learning styles and size.',
+          'Design: understanding came from coding assignments, not quizzes. Every student had to finish the project, but they had the freedom to customize it.',
+          'Development: I created lesson plans in HTML, JavaScript and Scratch, and helped design inclusive, adaptive resources for students with nontraditional learning profiles.',
+          'Implementation: I taught in person, with Google Slides and an online editor for whichever language the class was using, and gave individual, hands-on support so every student understood the key ideas, whatever their pace or background.',
+        ],
+      },
+      { type: 'h', text: 'My role' },
+      { type: 'p', text: 'As a coach, I created and taught the lesson plans and helped design the inclusive resources.' },
+      { type: 'h', text: 'How it went' },
+      {
+        type: 'p',
+        text: 'Every student completed every assignment. Students had to finish each one in the class it was due or the next one, which showed they understood it before we moved on.',
       },
     ],
   },

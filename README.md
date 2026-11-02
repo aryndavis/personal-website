@@ -10,7 +10,9 @@ Taken from the production build at 1280×800. Update them whenever a page's look
 
 | Home (about me) | Portfolio |
 | --- | --- |
-| ![Home page](docs/screenshots/home.jpg) | ![Portfolio](docs/screenshots/portfolio.jpg) |
+| ![Home page](docs/screenshots/home.jpg) | ![Portfolio: a folder for curriculum design and one for software engineering](docs/screenshots/portfolio.jpg) |
+| **Portfolio: curriculum design** | **Portfolio: software engineering** |
+| ![Curriculum design case studies](docs/screenshots/portfolio-curriculum.jpg) | ![Software engineering projects](docs/screenshots/portfolio-software.jpg) |
 | **Education blog** | **Gen Z With A Glass (wine blog)** |
 | ![Education blog](docs/screenshots/education.jpg) | ![Gen Z With A Glass wine rack](docs/screenshots/wine.jpg) |
 | **Bookshelf** | |
@@ -49,18 +51,20 @@ Every pull request runs lint, type-check, tests and a build in GitHub Actions (`
 | URL | Page | Content file |
 | --- | --- | --- |
 | `/` | About me (home) | `src/pages/Home.tsx` |
-| `/portfolio` | Portfolio: curriculum design and software engineering | `src/content/portfolio.ts` |
+| `/portfolio` | Portfolio: a folder for each track below | `src/pages/Sections.tsx` |
+| `/portfolio/curriculum` | Curriculum design case studies | `src/content/portfolio.ts` |
+| `/portfolio/software` | Software engineering projects | `src/content/portfolio.ts` |
 | `/education` | Education blog | `src/content/education.ts` |
 | `/wine` | Gen Z With A Glass (wine blog) | `src/content/wine.ts` |
 | `/bookshelf` | Bookshelf (reading list) | `src/content/books.ts` |
 
-Every project and post has its own address (for example `/wine/weeknight-white-under-20`). Opening it shows the entry in a pop-up window, and each section also has a plain `index.txt` list of links. Moving around never reloads the page: the app handles its own links (`src/router.ts`). For first visits, search engines and link previews, `npm run build` also writes a page for every address with its own title, description and preview tags, plus `sitemap.xml` and a `404.html` (`scripts/prerender.mjs`, from the list in `src/routes.ts`). Old `#/` links still work: they're swapped for the new address on load.
+Every project and post has its own address (for example `/wine/weeknight-white-under-20`, or `/portfolio/software/aryns-closet` for a project). Opening it shows the entry in a pop-up window, and each section also has a plain `index.txt` list of links. Moving around never reloads the page: the app handles its own links (`src/router.ts`). For first visits, search engines and link previews, `npm run build` also writes a page for every address with its own title, description and preview tags, plus `sitemap.xml` and a `404.html` (`scripts/prerender.mjs`, from the list in `src/routes.ts`). Old `#/` links still work: they're swapped for the new address on load. Projects used to live at `/portfolio/<slug>`; those addresses redirect to the project's track (a 301 from `dist/_redirects` on Netlify, and in the app for old `#/` links).
 
 ## Editing content
 
 - **Name, email, tagline:** `src/site.ts`
 - **About me text:** `src/pages/Home.tsx`
-- **Portfolio projects** (`src/content/portfolio.ts`) have a `track`: `'curriculum'` or `'software'`. Each shows under its own heading on the Portfolio page. Software projects can add a `cover` screenshot for the card and `links` (live site, code) as buttons in the pop-up. Put images in `public/images/portfolio/`.
+- **Portfolio projects** (`src/content/portfolio.ts`) have a `track`: `'curriculum'` or `'software'`, which decides their page (`/portfolio/curriculum` or `/portfolio/software`). Track names and blurbs are in `portfolioTracks` in `src/site.ts`. Curriculum case studies follow one outline: who it was for, goals, design decisions (ADDIE), my role, and how it went. Projects can add a `cover` image for the card and `links` (live site, code, or a file like a slide deck) as buttons in the pop-up. Put images in `public/images/portfolio/` and downloadable files (PDFs) in `public/files/`, linked as `/files/name.pdf`.
 - **Projects and posts:** add an object to the array in the matching `src/content/*.ts` file. Bodies are lists of blocks (`p`, `h`, `list`, `quote`); see `src/content/types.ts`. Content is rendered as text, never as raw HTML.
 - **Books:** add or move books in `src/content/books.ts`. Set `status` to `'reading'` (shown face-out and on the home page's currently.txt), `'read'` or `'want'`, and pick a spine `color`. `rating` and `note` are optional.
 - **Wine posts (Gen Z With A Glass)** come in two kinds, both in `src/content/wine.ts`:

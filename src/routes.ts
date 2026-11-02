@@ -3,9 +3,9 @@
 import { books } from './content/books'
 import { educationPosts } from './content/education'
 import { projects } from './content/portfolio'
-import { newestFirst, type Entry } from './content/types'
+import { newestFirst, type Entry, type Track } from './content/types'
 import { winePosts } from './content/wine'
-import { bookshelf, sections, site, winePreview } from './site'
+import { bookshelf, portfolioTracks, projectPath, sections, site, winePreview } from './site'
 
 export interface PageMeta {
   path: string
@@ -63,6 +63,41 @@ const entryPages = (key: keyof typeof sections, entries: Entry[]) => {
   return sectionPages(section.path, section.label, section.blurb, newestFirst(entries))
 }
 
+/** /portfolio links to its two tracks, and each track is a section of its own. */
+function portfolioPages(): PageMeta[] {
+  const portfolio = sections.portfolio
+  const tracks = Object.entries(portfolioTracks) as [Track, (typeof portfolioTracks)[Track]][]
+  return [
+    {
+      path: portfolio.path,
+      title: titled(portfolio.label),
+      description: trimDescription(portfolio.blurb),
+      heading: portfolio.label,
+      links: tracks.map(([, track]) => ({ href: track.path, text: track.label })),
+      article: false,
+    },
+    ...tracks.flatMap(([key, track]) =>
+      sectionPages(track.path, track.label, track.blurb, newestFirst(projects.filter((project) => project.track === key))),
+    ),
+  ]
+}
+
+/**
+ * Projects used to live at /portfolio/<slug>, before the portfolio split into tracks. Each old address
+ * points at the new one: Netlify sends a 301 (dist/_redirects, from prerender.mjs) and the app follows
+ * old #/ links the same way.
+ */
+export const portfolioRedirects = () =>
+  projects.map((project) => ({ from: `${sections.portfolio.path}/${project.slug}`, to: projectPath(project) }))
+
+let redirects: Map<string, string> | undefined
+
+/** Where an old project address went, or undefined. */
+export function movedTo(path: string) {
+  redirects ??= new Map(portfolioRedirects().map(({ from, to }) => [from, to]))
+  return redirects.get(path)
+}
+
 /** Every page on the site, home first. */
 export function allPages(): PageMeta[] {
   return [
@@ -74,7 +109,7 @@ export function allPages(): PageMeta[] {
       links: [],
       article: false,
     },
-    ...entryPages('portfolio', projects),
+    ...portfolioPages(),
     ...entryPages('education', educationPosts),
     ...winePages(),
     ...sectionPages(

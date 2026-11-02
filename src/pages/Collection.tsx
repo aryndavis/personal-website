@@ -10,11 +10,43 @@ import { sections, type SectionKey } from '../site'
 // Every note color, in an order where neighbors never match; seven colors means repeats are rare.
 const noteTones: Tone[] = ['yellow', 'pink', 'mint', 'peach', 'lilac', 'lime', 'blue']
 
+type Section = { path: string; label: string; file: string }
+
+/** A section page's title, breadcrumb and readme window. */
+export function PageHero({ sectionKey, trail, headline, longTitle, intro, icon }: { sectionKey: SectionKey; trail: Section[]; headline: ReactNode; longTitle?: boolean; intro: ReactNode; icon: IconName }) {
+  return (
+    <section className="page-hero" aria-labelledby="page-title">
+      <p className="page-path">
+        <a href={href('/')}>C:\HOME</a>
+        {trail.map((step, i) => (
+          <span key={step.path}>
+            {' \\ '}
+            {i < trail.length - 1 ? <a href={href(step.path)}>{step.file.toUpperCase()}</a> : step.file.toUpperCase()}
+          </span>
+        ))}
+      </p>
+      <h1 id="page-title" className={longTitle ? 'mega long-title' : 'mega'}>
+        {headline}
+      </h1>
+      <PixelWindow title={`readme_${sectionKey}.txt`} tone="lilac" className="page-intro">
+        <div className="intro-row">
+          <PixelIcon name={icon} size={56} />
+          <div>{intro}</div>
+        </div>
+      </PixelWindow>
+    </section>
+  )
+}
+
 interface CollectionProps<T extends Entry> {
   sectionKey: SectionKey
+  /** Where the entries live, when it isn't the section itself (a portfolio track). Defaults to the section. */
+  section?: Section
   entries: T[]
   slug?: string
   headline: ReactNode
+  /** A title word longer than PORTFOLIO, shrunk so it doesn't break mid-word. */
+  longTitle?: boolean
   intro: ReactNode
   icon: IconName
   /** 'windows' for portfolio case studies, 'notes' for post-it blog posts. */
@@ -22,14 +54,11 @@ interface CollectionProps<T extends Entry> {
   fileExtension: string
   cardExtra?: (entry: T) => ReactNode
   dialogMeta?: (entry: T) => ReactNode
-  /** Splits the 'windows' layout into titled sections. Entries in no group aren't shown on the board. */
-  groups?: { id: string; title: string; intro?: ReactNode; filter: (entry: T) => boolean }[]
   /** The button text on a 'windows' card. */
   openLabel?: (entry: T) => string
 }
 
-export default function Collection<T extends Entry>({ sectionKey, entries, slug, headline, intro, icon, layout, fileExtension, cardExtra, dialogMeta, groups, openLabel = () => 'Open case study ▶' }: CollectionProps<T>) {
-  const section = sections[sectionKey]
+export default function Collection<T extends Entry>({ sectionKey, section = sections[sectionKey], entries, slug, headline, longTitle, intro, icon, layout, fileExtension, cardExtra, dialogMeta, openLabel = () => 'Open case study ▶' }: CollectionProps<T>) {
   const sorted = newestFirst(entries)
   const index = slug ? sorted.findIndex((entry) => entry.slug === slug) : -1
   const open = index >= 0 ? sorted[index] : undefined
@@ -39,20 +68,17 @@ export default function Collection<T extends Entry>({ sectionKey, entries, slug,
 
   const link = (entry: T) => href(`${section.path}/${entry.slug}`)
 
-  // Inside a titled group, card titles sit one level below the group title.
-  const CardHeading = groups ? 'h3' : 'h2'
-  // `offset` continues the color rotation from the previous group, so sections don't start on the same color.
-  const windowBoard = (list: T[], offset = 0) => (
+  const windowBoard = (list: T[]) => (
     <ul className="window-board">
       {list.map((entry, i) => (
         <li key={entry.slug}>
-          <PixelWindow as="article" title={`${entry.slug}.${fileExtension}`} tone={noteTones[(i + offset + 1) % noteTones.length]} labelledBy={`card-${entry.slug}`} className="card-window">
+          <PixelWindow as="article" title={`${entry.slug}.${fileExtension}`} tone={noteTones[(i + 1) % noteTones.length]} labelledBy={`card-${entry.slug}`} className="card-window">
             {cardExtra?.(entry)}
-            <CardHeading className="card-title" id={`card-${entry.slug}`}>
+            <h2 className="card-title" id={`card-${entry.slug}`}>
               <a className="stretched" href={link(entry)} data-slug={entry.slug}>
                 {entry.title}
               </a>
-            </CardHeading>
+            </h2>
             <p>{entry.summary}</p>
             <ul className="tag-list" aria-label="Tags">
               {entry.tags.map((tag) => (
@@ -70,20 +96,7 @@ export default function Collection<T extends Entry>({ sectionKey, entries, slug,
 
   return (
     <div className={`collection collection-${sectionKey}`}>
-      <section className="page-hero" aria-labelledby="page-title">
-        <p className="page-path">
-          <a href={href('/')}>C:\HOME</a> \ {section.file.toUpperCase()}
-        </p>
-        <h1 id="page-title" className="mega">
-          {headline}
-        </h1>
-        <PixelWindow title={`readme_${sectionKey}.txt`} tone="lilac" className="page-intro">
-          <div className="intro-row">
-            <PixelIcon name={icon} size={56} />
-            <div>{intro}</div>
-          </div>
-        </PixelWindow>
-      </section>
+      <PageHero sectionKey={sectionKey} trail={section === sections[sectionKey] ? [section] : [sections[sectionKey], section]} headline={headline} longTitle={longTitle} intro={intro} icon={icon} />
 
       {missing && (
         <PixelWindow title="error.exe" tone="pink" className="error-window">
@@ -118,22 +131,6 @@ export default function Collection<T extends Entry>({ sectionKey, entries, slug,
               </li>
             ))}
           </ul>
-        ) : groups ? (
-          groups.map((group, g) => {
-            const list = sorted.filter(group.filter)
-            const offset = groups.slice(0, g).reduce((count, earlier) => count + sorted.filter(earlier.filter).length, 0)
-            return (
-              list.length > 0 && (
-                <section key={group.id} id={group.id} className="board-group" aria-labelledby={`${group.id}-title`}>
-                  <h2 id={`${group.id}-title`} className="board-group-title">
-                    {group.title}
-                  </h2>
-                  {group.intro}
-                  {windowBoard(list, offset)}
-                </section>
-              )
-            )
-          })
         ) : (
           windowBoard(sorted)
         )}

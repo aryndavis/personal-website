@@ -1,11 +1,11 @@
 // Runs after `vite build` (see the build script). Writes a page for every address so each one has its own
-// title, description and link preview on first load, plus dist/sitemap.xml and dist/404.html.
+// title, description and link preview on first load, plus dist/sitemap.xml, dist/404.html and dist/_redirects.
 // The app itself is unchanged: once loaded, moving between pages never reloads.
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createServer } from 'vite'
-import { fileFor, notFoundPage, renderPage, sitemap } from './page-html.mjs'
+import { fileFor, notFoundPage, redirectsFile, renderPage, sitemap } from './page-html.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const dist = join(root, 'dist')
@@ -13,9 +13,11 @@ const dist = join(root, 'dist')
 // Load the page list through Vite, so content files (TypeScript, JSON) work exactly as in the app.
 const vite = await createServer({ root, logLevel: 'error', server: { middlewareMode: true, hmr: false }, appType: 'custom' })
 let pages
+let redirects
 try {
-  ;({ allPages: pages } = await vite.ssrLoadModule('/src/routes.ts'))
-  pages = pages()
+  const routes = await vite.ssrLoadModule('/src/routes.ts')
+  pages = routes.allPages()
+  redirects = routes.portfolioRedirects()
 } finally {
   await vite.close()
 }
@@ -28,4 +30,5 @@ for (const page of pages) {
 }
 await writeFile(join(dist, '404.html'), notFoundPage(template))
 await writeFile(join(dist, 'sitemap.xml'), sitemap(pages))
-console.log(`Prerendered ${pages.length} pages, 404.html and sitemap.xml.`)
+await writeFile(join(dist, '_redirects'), redirectsFile(redirects))
+console.log(`Prerendered ${pages.length} pages, 404.html, sitemap.xml and ${redirects.length} redirects.`)
