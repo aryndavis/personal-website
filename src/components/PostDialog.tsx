@@ -41,8 +41,10 @@ export function PostBody({ blocks }: { blocks: Block[] }) {
           case 'list':
             return (
               <ul key={index}>
-                {block.items.map((item) => (
-                  <li key={item}>{item}</li>
+                {block.items.map((item, i) => (
+                  <li key={i}>
+                    <InlineText text={item} />
+                  </li>
                 ))}
               </ul>
             )
@@ -53,7 +55,7 @@ export function PostBody({ blocks }: { blocks: Block[] }) {
               <figure key={index} className="post-code">
                 {block.label && <figcaption>{block.label}</figcaption>}
                 {/* Focusable so keyboard users can scroll long lines sideways. */}
-                <pre tabIndex={0} aria-label={block.label ? `Code: ${block.label}` : 'Code'}>
+                <pre tabIndex={0} role="group" aria-label={block.label ? `Code: ${block.label}` : 'Code'}>
                   <code>{block.text.replace(/\n$/, '')}</code>
                 </pre>
               </figure>

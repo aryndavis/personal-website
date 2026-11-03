@@ -13,6 +13,8 @@ export function parseNote(text: string): Result {
     const key = label.trim().toLowerCase()
     const value = parts.join(':').trim()
     if (!key || !value) continue
+    // The first line already set (and checked) these.
+    if (key in note) return { ok: false, error: `${key} goes on the first line` }
     if (key === 'rating') {
       const rating = Number(value)
       // 1 to 5, in halves

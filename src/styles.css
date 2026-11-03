@@ -1127,6 +1127,8 @@ button.pixel-button:active {
 .post-figure img {
   display: block;
   max-width: 100%;
+  /* Tall images (phone screenshots, portraits) stay a readable size instead of filling the window. */
+  max-height: min(80vh, 720px);
   height: auto;
   margin-inline: auto;
   border: 3px solid var(--ink);
@@ -1139,20 +1141,15 @@ button.pixel-button:active {
   text-align: center;
 }
 
-/* Tall images (phone screenshots, portraits) stay a readable size instead of filling the window. */
-.post-figure img {
-  max-height: min(80vh, 720px);
-  width: auto;
-}
-
 /* ---------- Code in posts ---------- */
 
 .post-body code {
-  font: 0.9em/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 .post-body p code,
 .post-body li code {
+  font-size: 0.9em;
   padding: 1px 5px;
   border: 1px solid rgba(59, 35, 70, 0.35);
   background: #f3e9ff;

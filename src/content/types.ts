@@ -6,7 +6,7 @@ export type Inline = string | { text: string; href: string } | { text: string; e
 export type Block =
   | { type: 'p'; text: string | Inline[] }
   | { type: 'h'; text: string }
-  | { type: 'list'; items: string[] }
+  | { type: 'list'; items: (string | Inline[])[] }
   | { type: 'quote'; text: string }
   /** A code sample, shown as written (whitespace kept). `label` names it, e.g. 'TypeScript' or 'netlify/functions/sms.ts'. */
   | { type: 'code'; text: string; label?: string }

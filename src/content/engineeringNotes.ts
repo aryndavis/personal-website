@@ -161,7 +161,7 @@ export const engineeringNotes: Entry[] = [
       {
         type: 'list',
         items: [
-          'The preview only ever goes to my own number. Even if someone managed to fake the sender, they’d never see the preview, so they couldn’t confirm a post.',
+          'The preview only ever goes to my own number, so nobody else ever sees what’s waiting to post.',
           'The preview is deleted only after publishing works. If GitHub has a hiccup, the preview is still there, and I can just reply YES again.',
         ],
       },
@@ -212,12 +212,12 @@ export const engineeringNotes: Entry[] = [
       {
         type: 'list',
         items: [
-          'TWILIO_AUTH_TOKEN: from the Twilio console (mark it secret)',
-          'SMS_WEBHOOK_URL: the webhook URL, exactly as you typed it in Twilio',
-          'SMS_ALLOWED_FROM: your own number, like +1XXXXXXXXXX',
-          'GITHUB_TOKEN: the fine-grained token (mark it secret)',
-          'GITHUB_REPO: your-name/your-site',
-          'SMS_PUBLISHING: on',
+          [c('TWILIO_AUTH_TOKEN'), ': from the Twilio console (mark it secret)'],
+          [c('SMS_WEBHOOK_URL'), ': the webhook URL, exactly as you typed it in Twilio'],
+          [c('SMS_ALLOWED_FROM'), ': your own number, like ', c('+1XXXXXXXXXX')],
+          [c('GITHUB_TOKEN'), ': the fine-grained token (mark it secret)'],
+          [c('GITHUB_REPO'), ': ', c('your-name/your-site')],
+          [c('SMS_PUBLISHING'), ': ', c('on')],
         ],
       },
       { type: 'p', text: 'Then redeploy, so the function picks up the new settings.' },
@@ -229,13 +229,13 @@ export const engineeringNotes: Entry[] = [
       {
         type: 'list',
         items: [
-          'Texting “wine help”, which should send back the format.',
-          'Sending a broken note, like “wine: Just a name”, which should get a helpful error.',
+          ['Texting ', c('wine help'), ', which should send back the format.'],
+          ['Sending a broken note, like ', c('wine: Just a name'), ', which should get a helpful error.'],
           'A full note, replying NO, which should be discarded.',
           'A real note, replying YES.',
         ],
       },
-      { type: 'p', text: 'The first time “wine help” texted me back, I was genuinely so excited!' },
+      { type: 'p', text: ['The first time ', c('wine help'), ' texted me back, I was genuinely so excited!'] },
 
       { type: 'h', text: 'Why I love this' },
       {

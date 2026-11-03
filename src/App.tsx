@@ -9,16 +9,17 @@ import WinePage from './pages/Wine'
 import { href, redirect, useRoute } from './router'
 import { showLinkPreview } from './linkPreview'
 import { movedTo, pageAt } from './routes'
-import { portfolioTracks, site } from './site'
+import { bookshelf, portfolioTracks, sections, site } from './site'
 import type { Track } from './content/types'
 
 const marquee = '✦ stay curious ✦ take the long way ✦ pour something interesting'
 
+// Keyed by each section's first path segment (from site.ts), like the router's list of sections.
 const pages = {
-  education: EducationPage,
-  'engineering-notes': EngineeringNotesPage,
-  wine: WinePage,
-  bookshelf: BookshelfPage,
+  [sections.education.path.slice(1)]: EducationPage,
+  [sections.engineering.path.slice(1)]: EngineeringNotesPage,
+  [sections.wine.path.slice(1)]: WinePage,
+  [bookshelf.path.slice(1)]: BookshelfPage,
 }
 
 /** /portfolio, /portfolio/<track> and /portfolio/<track>/<slug>. */

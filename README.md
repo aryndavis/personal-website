@@ -129,7 +129,7 @@ Anything after "notes:" becomes the post's extra notes.
 **Security**
 - Every request must carry a valid Twilio signature.
 - Texts from any other number get no reply.
-- A spoofed sender never sees the preview, so it can't confirm a post.
+- Replies only ever go to the owner's number, so nobody else sees a preview.
 - Limits: 60 texts and 10 posts a day.
 - `SMS_PUBLISHING` is a kill switch.
 - Texted content is stored as data and shown as plain text.

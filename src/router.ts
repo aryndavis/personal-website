@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { isWinePath, publicUrl, sections, site, wineDomain } from './site.ts'
+import { bookshelf, isWinePath, publicUrl, sections, site, wineDomain } from './site.ts'
 
 // Real paths (/wine/some-post), so every page and post has its own address for search engines and link
 // previews. Moving around never reloads: clicks on the app's own links are handled here with the History
@@ -11,7 +11,7 @@ import { isWinePath, publicUrl, sections, site, wineDomain } from './site.ts'
 // else (localhost, deploy previews) addresses and app paths are the same.
 
 /** First path segments the app draws. Anything else (/sms, /terms, /privacy, files) is a separate page. */
-const APP_SECTIONS = new Set(['', 'portfolio', 'education', 'engineering-notes', 'wine', 'bookshelf'])
+const APP_SECTIONS = new Set(['', ...[...Object.values(sections), bookshelf].map((section) => section.path.slice(1))])
 
 const CHANGE = 'routechange'
 
