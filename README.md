@@ -32,7 +32,7 @@ npm run lint      # ESLint (TypeScript + React hooks rules)
 npm run social-cards  # redraw the link-preview cards in public/images/ (first time: npx playwright install chromium)
 ```
 
-**Link previews:** the site's card shows the name and roles from `src/site.ts`. Gen Z With A Glass pages use their own card and wording from `winePreview` in `src/site.ts` (tagline, subtitle, and the sign-off added to each post's description). To change the wine tagline, say after graduating, edit it there, run `npm run social-cards`, and commit the new images.
+**Link previews:** the site's card shows the name and roles from `src/site.ts`. Gen Z With A Glass pages use their own card, the site name "Gen Z With A Glass", their genzwithaglass.com address, and wording from `winePreview` in `src/site.ts` (tagline, subtitle, and the sign-off added to each post's description). To change the wine tagline, say after graduating, edit it there, run `npm run social-cards`, and commit the new images.
 
 Every pull request runs lint, type-check, tests and a build in GitHub Actions (`.github/workflows/ci.yml`).
 
@@ -55,10 +55,10 @@ Every pull request runs lint, type-check, tests and a build in GitHub Actions (`
 | `/portfolio/curriculum` | Curriculum design case studies | `src/content/portfolio.ts` |
 | `/portfolio/software` | Software engineering projects | `src/content/portfolio.ts` |
 | `/education` | Education blog | `src/content/education.ts` |
-| `/wine` | Gen Z With A Glass (wine blog) | `src/content/wine.ts` |
+| `genzwithaglass.com` (`/wine` in the app) | Gen Z With A Glass (wine blog) | `src/content/wine.ts` |
 | `/bookshelf` | Bookshelf (reading list) | `src/content/books.ts` |
 
-Every project and post has its own address (for example `/wine/weeknight-white-under-20`, or `/portfolio/software/aryns-closet` for a project). Opening it shows the entry in a pop-up window, and each section also has a plain `index.txt` list of links. Moving around never reloads the page: the app handles its own links (`src/router.ts`). For first visits, search engines and link previews, `npm run build` also writes a page for every address with its own title, description and preview tags, plus `sitemap.xml` and a `404.html` (`scripts/prerender.mjs`, from the list in `src/routes.ts`). Old `#/` links still work: they're swapped for the new address on load. Projects used to live at `/portfolio/<slug>`; those addresses redirect to the project's track (a 301 from `dist/_redirects` on Netlify, and in the app for old `#/` links).
+Every project and post has its own address (for example `/portfolio/software/aryns-closet`, or `genzwithaglass.com/smell-vs-taste` for a wine post). Opening it shows the entry in a pop-up window, and each section also has a plain `index.txt` list of links. Moving around never reloads the page: the app handles its own links (`src/router.ts`). For first visits, search engines and link previews, `npm run build` also writes a page for every address with its own title, description and preview tags, plus `sitemap.xml`, the wine blog's `sitemap-wine.xml` and a `404.html` (`scripts/prerender.mjs`, from the list in `src/routes.ts`). Old `#/` links still work: they're swapped for the new address on load. Projects used to live at `/portfolio/<slug>`; those addresses redirect to the project's track (a 301 from `dist/_redirects` on Netlify, and in the app for old `#/` links).
 
 ## Editing content
 
@@ -163,7 +163,11 @@ Anything after "notes:" becomes the post's extra notes.
 
 1. In Netlify, **Add new site → Import an existing project → GitHub** and pick this repo. `netlify.toml` already sets the build (`npm run build`, publish `dist`, Node 22), so leave the defaults.
 2. **Domain:** `arynlynn.com` (registered at Porkbun) uses **Netlify DNS**: Porkbun's nameservers point to Netlify, and the records for `arynlynn.com`, `www`, `library` and `closet` live in Netlify. HTTPS is set up automatically.
-   - `genzwithaglass.com` (also at Porkbun, also on Netlify DNS) is a domain alias of this site. `public/_redirects` sends it to the wine blog: the bare domain opens `/wine`, and `genzwithaglass.com/<post>` opens `/wine/<post>`.
+   - `genzwithaglass.com` (also at Porkbun, also on Netlify DNS) is a domain alias of this site, and the wine blog's real home.
+     - **In the app,** every wine page keeps its `/wine/...` path. On genzwithaglass.com, `src/router.ts` reads `/<post>` as `/wine/<post>`, and links to the rest of the site become full arynlynn.com addresses (and the other way around). On localhost and deploy previews, everything stays at `/wine`.
+     - **On Netlify,** the build writes a rewrite for each wine page (`genzwithaglass.com/<post>` serves `/wine/<post>`). `public/_redirects` sends `www.` and the old `arynlynn.com/wine/...` links to genzwithaglass.com, and serves the wine blog's own `robots.txt` and sitemap there.
+     - **Previews and texted posts:** wine pages' link previews, canonical addresses and sitemap use genzwithaglass.com, and the text-posting replies link there too.
+     - Deploy previews can't show the domain rules, so check genzwithaglass.com right after a merge that touches them.
 3. Every push to `main` redeploys. Security headers come from `public/_headers`.
 
 ## Security

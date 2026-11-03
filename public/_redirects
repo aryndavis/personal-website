@@ -1,12 +1,15 @@
-# Hand-written Netlify redirects. The build adds the portfolio's moved addresses after these (scripts/prerender.mjs).
+# Hand-written Netlify redirects. The build adds more after these (scripts/prerender.mjs): a rewrite that
+# serves each wine page at its genzwithaglass.com address, then the portfolio's moved addresses.
 
-# genzwithaglass.com is Gen Z With A Glass's own address: it opens the wine blog, and /<post> opens that post.
-# The domain is an alias of this site in Netlify. The ! applies the rule even where a page exists (like /).
-http://genzwithaglass.com/         https://arynlynn.com/wine         301!
-https://genzwithaglass.com/        https://arynlynn.com/wine         301!
-http://www.genzwithaglass.com/     https://arynlynn.com/wine         301!
-https://www.genzwithaglass.com/    https://arynlynn.com/wine         301!
-http://genzwithaglass.com/*        https://arynlynn.com/wine/:splat  301!
-https://genzwithaglass.com/*       https://arynlynn.com/wine/:splat  301!
-http://www.genzwithaglass.com/*    https://arynlynn.com/wine/:splat  301!
-https://www.genzwithaglass.com/*   https://arynlynn.com/wine/:splat  301!
+# Gen Z With A Glass lives at genzwithaglass.com (see wineDomain in src/site.ts). Its old addresses move there:
+# www, and the wine section's /wine links on either domain. The ! applies a rule even where a file exists.
+https://www.genzwithaglass.com/*   https://genzwithaglass.com/:splat   301!
+http://www.genzwithaglass.com/*    https://genzwithaglass.com/:splat   301!
+https://arynlynn.com/wine          https://genzwithaglass.com/         301!
+https://arynlynn.com/wine/*        https://genzwithaglass.com/:splat   301!
+https://genzwithaglass.com/wine    https://genzwithaglass.com/         301!
+https://genzwithaglass.com/wine/*  https://genzwithaglass.com/:splat   301!
+
+# genzwithaglass.com's own robots.txt and sitemap.
+https://genzwithaglass.com/robots.txt   /robots-wine.txt   200!
+https://genzwithaglass.com/sitemap.xml  /sitemap-wine.xml  200!

@@ -34,4 +34,7 @@ test('the structured data is valid JSON and lists the same profiles as the site'
 test('robots.txt allows crawling and points at the sitemap the build writes', () => {
   assert.match(read('public/robots.txt'), /^Allow: \/$/m)
   assert.match(read('public/robots.txt'), /^Sitemap: https:\/\/arynlynn\.com\/sitemap\.xml$/m)
+  // genzwithaglass.com gets its own (public/_redirects serves it there as /robots.txt).
+  assert.match(read('public/robots-wine.txt'), /^Allow: \/$/m)
+  assert.match(read('public/robots-wine.txt'), /^Sitemap: https:\/\/genzwithaglass\.com\/sitemap\.xml$/m)
 })

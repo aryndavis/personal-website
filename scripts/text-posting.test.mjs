@@ -138,7 +138,7 @@ function setup(overrides = {}) {
     webhookUrl: URL_,
     publishing: true,
     timeZone: 'America/New_York',
-    siteUrl: 'https://arynlynn.com',
+    wineUrl: 'https://genzwithaglass.com',
     store: {
       get: async (k) => (data.has(k) ? structuredClone(data.get(k)) : null),
       set: async (k, v) => void data.set(k, structuredClone(v)),
@@ -177,7 +177,7 @@ test('preview, then YES publishes and replies with the link', async () => {
   assert.equal(published.length, 0, 'nothing is published before YES')
 
   const yes = await send('Yes!')
-  assert.match(yes.reply, /Posted! .*https:\/\/arynlynn\.com\/wine\/sample-gamay-2023/)
+  assert.match(yes.reply, /Posted! .*https:\/\/genzwithaglass\.com\/sample-gamay-2023/)
   assert.equal(published.length, 1)
   assert.equal(published[0].date, '2026-10-20')
 
@@ -347,7 +347,7 @@ test('if the published notes cannot be read, nothing posts and the preview is ke
 // ---------- edge cases at the front door ----------
 
 test('only POST requests of a sensible size are accepted', async () => {
-  const deps = { authToken: 'secret-token', allowedFrom: OWNER, webhookUrl: URL_, publishing: true, timeZone: 'UTC', siteUrl: '', store: failingStore([]), readTextNotes: async () => [], publish: async () => {}, slugFor: () => '', now: () => new Date() }
+  const deps = { authToken: 'secret-token', allowedFrom: OWNER, webhookUrl: URL_, publishing: true, timeZone: 'UTC', wineUrl: '', store: failingStore([]), readTextNotes: async () => [], publish: async () => {}, slugFor: () => '', now: () => new Date() }
   assert.equal((await handleSms(new Request(URL_, { method: 'GET' }), deps)).status, 405)
   const huge = new URLSearchParams({ Body: 'x'.repeat(20_000), From: OWNER })
   assert.equal((await handleSms(new Request(URL_, { method: 'POST', body: huge }), deps)).status, 413)

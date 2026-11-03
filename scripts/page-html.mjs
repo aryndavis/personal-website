@@ -2,7 +2,7 @@
 // tags, plus a plain-HTML summary that search engines can read before the app starts. Used by prerender.mjs.
 
 import { previewTags } from '../src/previewTags.ts'
-import { site } from '../src/site.ts'
+import { isWinePath, publicUrl, site } from '../src/site.ts'
 
 export const ORIGIN = site.url
 
@@ -28,6 +28,7 @@ function writeTags(template, tags) {
   html = replaceOnce(html, /(<meta\s+name="description"\s+content=")[^"]*(")/, `$1${escape(tags.description)}$2`, 'description')
   html = replaceOnce(html, /(<link rel="canonical" href=")[^"]*(")/, `$1${escape(tags.url)}$2`, 'canonical link')
   html = replaceOnce(html, /(<meta property="og:url" content=")[^"]*(")/, `$1${escape(tags.url)}$2`, 'og:url')
+  html = replaceOnce(html, /(<meta property="og:site_name" content=")[^"]*(")/, `$1${escape(tags.siteName)}$2`, 'og:site_name')
   html = replaceOnce(html, /(<meta property="og:title" content=")[^"]*(")/, `$1${escape(tags.previewTitle)}$2`, 'og:title')
   html = replaceOnce(html, /(<meta property="og:description" content=")[^"]*(")/, `$1${escape(tags.previewDescription)}$2`, 'og:description')
   html = replaceOnce(html, /(<meta property="og:type" content=")[^"]*(")/, `$1${tags.article ? 'article' : 'website'}$2`, 'og:type')
@@ -39,13 +40,14 @@ function writeTags(template, tags) {
 export function renderPage(template, page) {
   const html = writeTags(template, previewTags(page))
   if (page.path === '/') return html
-  const links = page.links.map((link) => `          <li><a href="${escape(link.href)}">${escape(link.text)}</a></li>`).join('\n')
+  // Full addresses, since a wine page and the pages it links to can live on different domains.
+  const links = page.links.map((link) => `          <li><a href="${escape(publicUrl(link.href))}">${escape(link.text)}</a></li>`).join('\n')
   const summary = `<main class="prerender">
         <h1>${escape(page.heading)}</h1>
         <p>${escape(page.description)}</p>
         <ul>
 ${links}
-          <li><a href="/">Aryn Davis, home</a></li>
+          <li><a href="${escape(publicUrl('/'))}">Aryn Davis, home</a></li>
         </ul>
       </main>`
   return replaceOnce(html, PRERENDER, summary, 'prerender summary')
@@ -66,19 +68,25 @@ export function notFoundPage(template) {
   )
 }
 
-/** Netlify's _redirects file: a permanent redirect for each address that moved. */
-export const redirectsFile = (redirects) => redirects.map(({ from, to }) => `${from} ${to} 301\n`).join('')
+/** Netlify's _redirects file: one rule per line, a permanent redirect unless a rule says otherwise. */
+export const redirectsFile = (redirects) => redirects.map(({ from, to, status = '301' }) => `${from} ${to} ${status}\n`).join('')
 
-export function sitemap(pages) {
-  const urls = [...pages.map((page) => page.path), ...STATIC_PAGES]
-    .map((path) => `  <url><loc>${escape(`${ORIGIN}${path}`)}</loc></url>`)
-    .join('\n')
-  return `<?xml version="1.0" encoding="UTF-8"?>
+/** Netlify rules that serve each wine page at its genzwithaglass.com address (a rewrite, so the address stays). */
+export const wineRewrites = (pages) =>
+  pages.filter((page) => isWinePath(page.path)).map((page) => ({ from: publicUrl(page.path), to: page.path, status: '200!' }))
+
+const urlset = (urls) => `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls}
+${urls.map((url) => `  <url><loc>${escape(url)}</loc></url>`).join('\n')}
 </urlset>
 `
-}
+
+/** arynlynn.com's sitemap: every page except the wine section, plus the static pages. */
+export const sitemap = (pages) =>
+  urlset([...pages.filter((page) => !isWinePath(page.path)).map((page) => publicUrl(page.path)), ...STATIC_PAGES.map((path) => `${ORIGIN}${path}`)])
+
+/** genzwithaglass.com's sitemap (served there as /sitemap.xml; see public/_redirects): the wine section. */
+export const wineSitemap = (pages) => urlset(pages.filter((page) => isWinePath(page.path)).map((page) => publicUrl(page.path)))
 
 /**
  * Where a page's HTML goes in dist/: /wine/x → wine/x.html. Netlify serves that at /wine/x as is; a folder
