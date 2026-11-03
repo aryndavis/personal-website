@@ -1,3 +1,4 @@
+import { engineeringNotes } from '../content/engineeringNotes'
 import { educationPosts } from '../content/education'
 import { projectsIn } from '../content/portfolio'
 import PixelIcon from '../components/PixelIcon'
@@ -180,6 +181,27 @@ export function EducationPage({ slug }: { slug?: string }) {
           </span>
         )
       }
+    />
+  )
+}
+
+export function EngineeringNotesPage({ slug }: { slug?: string }) {
+  return (
+    <Collection
+      sectionKey="engineering"
+      entries={engineeringNotes}
+      slug={slug}
+      layout="notes"
+      fileExtension="md"
+      icon="floppy"
+      longTitle
+      headline={
+        <>
+          Engineering notes
+          <span className="mega-ext">.md</span>
+        </>
+      }
+      intro={<p>How I build the things on this site, step by step and with the code, so you can make something similar for your own.</p>}
     />
   )
 }

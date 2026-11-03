@@ -1,0 +1,2 @@
+curl -i -X POST https://your-site.com/api/sms -d "From=+15550000000&Body=wine help"
+# HTTP/2 403

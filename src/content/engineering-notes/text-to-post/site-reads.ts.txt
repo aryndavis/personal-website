@@ -1,0 +1,12 @@
+import texted from './wine.texts.json'
+
+type TextNote = { wine: string; grape: string; vintage: number | 'NV' }
+
+/** Only entries shaped like a note make it onto the site. Anything else is skipped. */
+function isTextNote(entry: unknown): entry is TextNote {
+  if (typeof entry !== 'object' || entry === null) return false
+  const { wine, grape, vintage } = entry as Record<string, unknown>
+  return typeof wine === 'string' && typeof grape === 'string' && (typeof vintage === 'number' || vintage === 'NV')
+}
+
+export const textNotes = (texted as unknown[]).filter(isTextNote)

@@ -25,6 +25,7 @@ export default function Header({ route }: { route: string }) {
         {link('/', 'About me')}
         {link(sections.portfolio.path, sections.portfolio.label)}
         {link(sections.education.path, sections.education.label)}
+        {link(sections.engineering.path, sections.engineering.label)}
         {link(sections.wine.path, sections.wine.label)}
         {link(bookshelf.path, bookshelf.label)}
       </nav>

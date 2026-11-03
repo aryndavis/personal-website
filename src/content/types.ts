@@ -1,13 +1,15 @@
 // Post bodies are plain structured text. Nothing here is rendered as HTML.
 
-/** A piece of paragraph text: plain, a link (http/https only), or italic. */
-export type Inline = string | { text: string; href: string } | { text: string; em: true }
+/** A piece of paragraph text: plain, a link (http/https only), italic, or code (a command, a file name). */
+export type Inline = string | { text: string; href: string } | { text: string; em: true } | { text: string; code: true }
 
 export type Block =
   | { type: 'p'; text: string | Inline[] }
   | { type: 'h'; text: string }
-  | { type: 'list'; items: string[] }
+  | { type: 'list'; items: (string | Inline[])[] }
   | { type: 'quote'; text: string }
+  /** A code sample, shown as written (whitespace kept). `label` names it, e.g. 'TypeScript' or 'netlify/functions/sms.ts'. */
+  | { type: 'code'; text: string; label?: string }
   /** src is a file in public/, e.g. 'images/education/photo.jpg' */
   | { type: 'image'; src: string; alt: string; caption?: string }
 

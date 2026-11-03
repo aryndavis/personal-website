@@ -1127,6 +1127,8 @@ button.pixel-button:active {
 .post-figure img {
   display: block;
   max-width: 100%;
+  /* Tall images (phone screenshots, portraits) stay a readable size instead of filling the window. */
+  max-height: min(80vh, 720px);
   height: auto;
   margin-inline: auto;
   border: 3px solid var(--ink);
@@ -1137,6 +1139,51 @@ button.pixel-button:active {
   margin-top: 8px;
   font: 1.15rem/1.2 var(--terminal);
   text-align: center;
+}
+
+/* ---------- Code in posts ---------- */
+
+.post-body code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.post-body p code,
+.post-body li code {
+  font-size: 0.9em;
+  padding: 1px 5px;
+  border: 1px solid rgba(59, 35, 70, 0.35);
+  background: #f3e9ff;
+  overflow-wrap: anywhere;
+}
+
+.post-code {
+  margin: 1.4em 0;
+  border: 3px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--lilac);
+}
+
+.post-code figcaption {
+  padding: 4px 12px;
+  border-bottom: 3px solid var(--ink);
+  background: var(--lilac);
+  color: var(--ink);
+  font: 1.15rem/1.2 var(--terminal);
+}
+
+.post-code pre {
+  margin: 0;
+  padding: 14px 16px;
+  overflow-x: auto;
+  background: var(--ink);
+  color: var(--cream);
+  font-size: 0.85rem;
+  line-height: 1.55;
+  tab-size: 2;
+}
+
+.post-code pre:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: -3px;
 }
 
 .substack-note {

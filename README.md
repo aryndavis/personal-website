@@ -15,8 +15,8 @@ Taken from the production build at 1280×800. Update them whenever a page's look
 | ![Curriculum design case studies](docs/screenshots/portfolio-curriculum.jpg) | ![Software engineering projects](docs/screenshots/portfolio-software.jpg) |
 | **Education blog** | **Gen Z With A Glass (wine blog)** |
 | ![Education blog](docs/screenshots/education.jpg) | ![Gen Z With A Glass wine rack](docs/screenshots/wine.jpg) |
-| **Bookshelf** | |
-| ![Bookshelf](docs/screenshots/bookshelf.jpg) | |
+| **Bookshelf** | **Engineering notes** |
+| ![Bookshelf](docs/screenshots/bookshelf.jpg) | ![Engineering notes](docs/screenshots/engineering-notes.jpg) |
 
 ## Run locally
 
@@ -55,6 +55,7 @@ Every pull request runs lint, type-check, tests and a build in GitHub Actions (`
 | `/portfolio/curriculum` | Curriculum design case studies | `src/content/portfolio.ts` |
 | `/portfolio/software` | Software engineering projects | `src/content/portfolio.ts` |
 | `/education` | Education blog | `src/content/education.ts` |
+| `/engineering-notes` | Engineering notes: how things on the site are made, step by step with code | `src/content/engineeringNotes.ts` |
 | `genzwithaglass.com` (`/wine` in the app) | Gen Z With A Glass (wine blog) | `src/content/wine.ts` |
 | `/bookshelf` | Bookshelf (reading list) | `src/content/books.ts` |
 
@@ -65,7 +66,8 @@ Every project and post has its own address (for example `/portfolio/software/ary
 - **Name, email, tagline:** `src/site.ts`
 - **About me text:** `src/pages/Home.tsx`
 - **Portfolio projects** (`src/content/portfolio.ts`) have a `track`: `'curriculum'` or `'software'`, which decides their page (`/portfolio/curriculum` or `/portfolio/software`). Track names and blurbs are in `portfolioTracks` in `src/site.ts`. Each track lists its projects in the order they appear in `portfolio.ts`, so move an entry up or down to reorder it. Curriculum case studies follow one outline: who it was for, goals, design decisions (ADDIE), my role, and how it went. Projects can add a `cover` image for the card and `links` (live site, code, or a file like a slide deck) as buttons in the pop-up. Put images in `public/images/portfolio/` and downloadable files (PDFs) in `public/files/`, linked as `/files/name.pdf`.
-- **Projects and posts:** add an object to the array in the matching `src/content/*.ts` file. Bodies are lists of blocks (`p`, `h`, `list`, `quote`); see `src/content/types.ts`. Content is rendered as text, never as raw HTML.
+- **Projects and posts:** add an object to the array in the matching `src/content/*.ts` file. Bodies are lists of blocks (`p`, `h`, `list`, `quote`, `image`, `code`); see `src/content/types.ts`. Content is rendered as text, never as raw HTML.
+- **Engineering notes posts** (`src/content/engineeringNotes.ts`) can show code: put each sample in its own file under `src/content/engineering-notes/<post>/` and import it with `?raw`, so it's shown exactly as written. Inline code in a paragraph is `{ text: 'wine help', code: true }`. Never put a real phone number, token or account ID in a post.
 - **Books:** add or move books in `src/content/books.ts`. Set `status` to `'reading'` (shown face-out and on the home page's currently.txt), `'read'` or `'want'`, and pick a spine `color`. `rating` and `note` are optional.
 - **Wine posts (Gen Z With A Glass)** come in two kinds, both in `src/content/wine.ts`:
   - **Tasting notes** show as pixel bottles on a wine rack, colored by style. Only four fields are required:
@@ -127,7 +129,7 @@ Anything after "notes:" becomes the post's extra notes.
 **Security**
 - Every request must carry a valid Twilio signature.
 - Texts from any other number get no reply.
-- A spoofed sender never sees the preview, so it can't confirm a post.
+- Replies only ever go to the owner's number, so nobody else sees a preview.
 - Limits: 60 texts and 10 posts a day.
 - `SMS_PUBLISHING` is a kill switch.
 - Texted content is stored as data and shown as plain text.

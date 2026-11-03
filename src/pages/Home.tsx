@@ -263,6 +263,10 @@ export default function Home() {
             <PixelIcon name="notebook" size={36} />
             <span>Edu blog</span>
           </a>
+          <a href={href(sections.engineering.path)}>
+            <PixelIcon name="floppy" size={36} />
+            <span>Eng notes</span>
+          </a>
           <a href={href(sections.wine.path)}>
             <PixelIcon name="glass" size={30} />
             <span>{sections.wine.label}</span>

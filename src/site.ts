@@ -48,7 +48,7 @@ export const bookshelf = {
   blurb: 'What I’m reading now, what I’ve finished, and what’s up next. Pick any book to see my notes.',
 }
 
-export type SectionKey = 'portfolio' | 'education' | 'wine'
+export type SectionKey = 'portfolio' | 'education' | 'wine' | 'engineering'
 
 export const sections: Record<SectionKey, { path: string; label: string; file: string; blurb: string }> = {
   portfolio: {
@@ -62,6 +62,12 @@ export const sections: Record<SectionKey, { path: string; label: string; file: s
     label: 'Education blog',
     file: 'edu_notes.txt',
     blurb: 'Notes on teaching, learning, and designing for real classrooms.',
+  },
+  engineering: {
+    path: '/engineering-notes',
+    label: 'Engineering notes',
+    file: 'engineering_notes.md',
+    blurb: 'How I build the things on this site, step by step, with the code.',
   },
   wine: {
     path: '/wine',

@@ -1,0 +1,4 @@
+wine: Domaine Example Poulsard, Poulsard, 2022
+rating: 4
+buy again: yes
+flavors: red currant, rose petal

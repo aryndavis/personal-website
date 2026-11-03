@@ -20,7 +20,7 @@ test('paths are tidied the same way everywhere', () => {
 })
 
 test('the app handles its own sections; SMS, terms, privacy and files load as separate pages', () => {
-  for (const path of ['/', '/portfolio', '/portfolio/aryns-closet', '/education/x', '/wine', '/wine/x/', '/bookshelf/survivor']) {
+  for (const path of ['/', '/portfolio', '/portfolio/aryns-closet', '/education/x', '/engineering-notes', '/engineering-notes/x', '/wine', '/wine/x/', '/bookshelf/survivor']) {
     assert.equal(isAppPath(path), true, path)
   }
   for (const path of ['/sms', '/sms/', '/terms', '/privacy/', '/images/social-card.png', '/sitemap.xml', '/winery', '/api/sms']) {
@@ -62,7 +62,7 @@ test('links stay on their own domain, and cross to the other one with a full add
 
 test('on the wine domain, only links to wine pages open in place; files and the rest of the site load normally', () => {
   for (const address of ['/', '/smell-vs-taste', '/negretti-barolo-2021/']) assert.equal(opensInApp('genzwithaglass.com', address), true, address)
-  for (const address of ['/sms/', '/privacy', '/portfolio', '/portfolio/software', '/images/label.jpg', '/files/deck.pdf', '/api/sms']) {
+  for (const address of ['/sms/', '/privacy', '/portfolio', '/portfolio/software', '/engineering-notes/text-to-post', '/images/label.jpg', '/files/deck.pdf', '/api/sms']) {
     assert.equal(opensInApp('genzwithaglass.com', address), false, address)
   }
   // Elsewhere, the app's own sections, as before.
@@ -85,7 +85,7 @@ test('every section, post, project and book has exactly one page, under an addre
   assert.equal(new Set(paths).size, paths.length, 'no two pages share an address')
   for (const path of [
     '/', '/portfolio', '/portfolio/curriculum', '/portfolio/curriculum/codepath-web101-web102', '/portfolio/software', '/portfolio/software/aryns-closet',
-    '/education', '/wine', '/wine/hermann-j-wiemer-late-harvest-riesling-2023', '/bookshelf', '/bookshelf/survivor',
+    '/education', '/engineering-notes', '/engineering-notes/text-to-post', '/wine', '/wine/hermann-j-wiemer-late-harvest-riesling-2023', '/bookshelf', '/bookshelf/survivor',
   ]) {
     assert.ok(paths.includes(path), path)
   }
@@ -273,7 +273,7 @@ test('genzwithaglass.com serves every wine page, and the wine blog’s old addre
   check('https://genzwithaglass.com/robots.txt', { to: '/robots-wine.txt', status: '200!' })
   check('https://genzwithaglass.com/sitemap.xml', { to: '/sitemap-wine.xml', status: '200!' })
   // The rest of the site's pages go back to arynlynn.com instead of showing up on the wine domain.
-  for (const section of ['portfolio', 'education', 'bookshelf', 'sms', 'terms', 'privacy']) {
+  for (const section of ['portfolio', 'education', 'engineering-notes', 'bookshelf', 'sms', 'terms', 'privacy']) {
     check(`https://genzwithaglass.com/${section}`, moved(`https://arynlynn.com/${section}`))
     check(`https://genzwithaglass.com/${section}/*`, moved(`https://arynlynn.com/${section}/:splat`))
   }
