@@ -126,6 +126,16 @@ test('Gen Z With A Glass speaks for itself: wine card, wine titles, no day-job d
     assert.equal(p.previewTitle, `Tasting card: ${post.title} · Gen Z With A Glass`)
     assert.equal(p.title, `${post.title} · Gen Z With A Glass`)
   }
+  // Guides have a page under their own title, and their whole summary fits before the sign-off
+  // (a summary that gets cut off mid-sentence in link previews means it needs shortening).
+  const guides = winePosts.filter((p) => p.kind === 'guide')
+  for (const post of guides) {
+    const p = wine.find((p) => p.path === `/wine/${post.slug}`)
+    assert.ok(p, `${post.slug} has a page`)
+    assert.equal(p.previewTitle, undefined, post.slug)
+    assert.equal(p.title, `${post.title} · Gen Z With A Glass`)
+    assert.ok(p.description.startsWith(post.summary), `${post.slug}: shorten the summary so previews show all of it`)
+  }
   // Everything else keeps the site's own card.
   assert.ok(pages.filter((p) => !wine.includes(p)).every((p) => p.image === undefined))
 })

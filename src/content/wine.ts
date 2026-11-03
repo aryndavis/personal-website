@@ -95,7 +95,7 @@ export const guides: WinePost[] = [
     title: 'Smell vs. taste: why the nose and tongue read wine differently',
     date: '2026-11-02',
     summary: 'I don’t like apples, but I don’t mind apple in a wine, and I often pick it out distinctly. On smell vs. taste.',
-    tags: ['tasting', 'thoughts'],
+    tags: ['guide', 'aromas'],
     body: [
       {
         type: 'p',
