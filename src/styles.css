@@ -6,7 +6,7 @@
   --yellow: #ffd166;
   --pink: #ff8fcf;
   --pink-deep: #d9468f;
-  --raspberry: #b0306f; /* a darker --pink-deep, dark enough for light text */
+  --raspberry: #b0306f; /* a darker --pink-deep: dark enough for light text on it, and as text on light backgrounds (small pink text uses this, not --pink-deep) */
   --lilac: #c9a7ff;
   --mint: #8be0c4;
   --blue: #8fb7ff;
@@ -686,7 +686,7 @@ button.pixel-button:active {
 .currently dt {
   font: 500 14px var(--pixel);
   text-transform: uppercase;
-  color: var(--pink-deep);
+  color: var(--raspberry);
 }
 
 .currently dd {
@@ -873,7 +873,7 @@ button.pixel-button:active {
   bottom: 14px;
   font: 500 14px var(--pixel);
   text-transform: uppercase;
-  color: var(--pink-deep);
+  color: var(--raspberry);
 }
 
 .stretched {
@@ -949,7 +949,7 @@ button.pixel-button:active {
 .facts dt {
   font: 500 12px var(--pixel);
   text-transform: uppercase;
-  color: var(--pink-deep);
+  color: var(--raspberry);
 }
 
 .facts dd {
@@ -1089,7 +1089,7 @@ button.pixel-button:active {
   margin: 0;
   font: 1.25rem/1 var(--terminal);
   text-transform: uppercase;
-  color: var(--pink-deep);
+  color: var(--raspberry);
 }
 
 .post-title {
@@ -1111,7 +1111,7 @@ button.pixel-button:active {
 }
 
 .post-body a {
-  color: var(--pink-deep);
+  color: var(--raspberry);
   text-decoration-thickness: 2px;
   text-underline-offset: 2px;
 }
@@ -1571,7 +1571,7 @@ button.pixel-button:active {
   top: -8px;
   right: 10px;
   padding: 4px 6px 10px;
-  background: var(--pink-deep);
+  background: var(--raspberry);
   color: var(--cream);
   font: 500 10px/1 var(--pixel);
   text-transform: uppercase;
@@ -1621,7 +1621,7 @@ button.pixel-button:active {
   margin: 0 0 6px;
   font: 600 12px/1 var(--pixel);
   text-transform: uppercase;
-  color: var(--pink-deep);
+  color: var(--raspberry);
 }
 
 .book-section .book-note {
@@ -1632,7 +1632,7 @@ button.pixel-button:active {
   margin: 18px 0 2px;
   font: 500 14px var(--pixel);
   text-transform: uppercase;
-  color: var(--pink-deep);
+  color: var(--raspberry);
 }
 
 .archive-meta {
@@ -1777,7 +1777,7 @@ button.pixel-button:active {
 
 .bottle-vintage {
   font: 1rem/1 var(--terminal);
-  color: var(--pink-deep);
+  color: var(--raspberry);
 }
 
 .bottle-tag {
@@ -1838,7 +1838,7 @@ button.pixel-button:active {
   margin: 0 0 8px;
   font: 600 13px/1 var(--pixel);
   text-transform: uppercase;
-  color: var(--pink-deep);
+  color: var(--raspberry);
 }
 
 .verdict {
@@ -1893,7 +1893,7 @@ button.pixel-button:active {
   margin: 0 0 8px;
   font: 600 12px/1 var(--pixel);
   text-transform: uppercase;
-  color: var(--pink-deep);
+  color: var(--raspberry);
 }
 
 .card-section .pairing + h3 {
@@ -2054,7 +2054,7 @@ button.pixel-button:active {
 .recipe-kicker {
   margin: 0;
   font: 1.1rem/1 var(--terminal);
-  color: var(--pink-deep);
+  color: var(--raspberry);
 }
 
 .recipe-title {
