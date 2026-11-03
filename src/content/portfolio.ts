@@ -164,6 +164,7 @@ export const projects: Project[] = [
   },
   // Curriculum case studies share one outline: who it was for, goals, design decisions
   // (framed by ADDIE: analysis, design, development, implementation), my role, and how it went (evaluation).
+  // An analysis of someone else's design (like the Duolingo paper) has "The analysis" and "Redesign" instead.
   {
     slug: 'ai-brainstorming-lesson',
     track: 'curriculum',
@@ -203,6 +204,18 @@ export const projects: Project[] = [
           'Prompt AI to be a curious observer that only asks questions, a critic, or another “hat”',
           'Give AI enough background to get useful ideas back, and keep iterating: prompt, review, tweak, repeat',
           'Steer clear of leading questions, unverified output, and outsourcing their own thinking',
+        ],
+      },
+      { type: 'h', text: 'The framework: Merrill’s First Principles' },
+      { type: 'p', text: 'I built the lesson and the lesson plan around Merrill’s First Principles of Instruction:' },
+      {
+        type: 'list',
+        items: [
+          'Problem-centered: everything centers on solving a real problem, first a remote company deciding whether to go hybrid, then a new problem of each learner’s choice.',
+          'Activation: learners start with what they already know, like what makes a good brainstorming session and what they’d ask about the problem, before anyone opens an AI tool.',
+          'Demonstration: every tip comes with a live prompt example, so learners see a technique in action before they try it.',
+          'Application: learners apply the brainstorming techniques to the shared problem in breakout rooms, then use the AI techniques themselves on a new problem in the independent activity.',
+          'Integration: the wrap-up has learners reflect on how they’ll use AI in their own planning and brainstorming going forward.',
         ],
       },
       { type: 'h', text: 'Design decisions' },
@@ -269,6 +282,77 @@ export const projects: Project[] = [
           'With more time, I’d add a Mentimeter activity where learners answer in writing and see the answers grouped into themes live. That would help quieter learners early in a cohort and bring in more perspectives.',
           'I’d also cut down the text on the slides. I kept them wordy so a facilitator could teach from them without separate notes, but a wall of text can lose people.',
         ],
+      },
+    ],
+  },
+  {
+    slug: 'duolingo-chess-analysis',
+    track: 'curriculum',
+    title: 'A critical analysis of Duolingo Chess',
+    date: '2026-10-21',
+    period: 'Oct 2026',
+    role: 'Co-author',
+    audience: 'Adults learning chess informally',
+    format: 'Theory-based design analysis, with redesign mockups',
+    summary: 'A design critique of Duolingo Chess through the Cognitive Theory of Multimedia Learning and social constructivism, with redesign recommendations and mockups.',
+    tags: ['learning theory', 'social constructivism', 'redesign'],
+    cover: {
+      src: 'images/portfolio/duolingo-move-talk.jpg',
+      alt: 'Two phone mockups of “Move Talk”, a redesign of Duolingo Chess matches where players share ideas about a position.',
+    },
+    links: [{ label: 'Read the paper (PDF) ↗', href: '/files/duolingo-chess-analysis.pdf' }],
+    body: [
+      { type: 'h', text: 'Who it was for' },
+      {
+        type: 'p',
+        text: 'A midterm paper for MSTU 4083, in the Technology, Media, and Learning program at Teachers College, Columbia University, co-written with a classmate. We were interested in informal learning among adult learners, and we had contrasting chess experience: one of us had played before, and the other had never taken a lesson. That gave us an intermediate and a novice view of Duolingo’s newest course.',
+      },
+      { type: 'h', text: 'Goals' },
+      { type: 'p', text: 'We set out to:' },
+      {
+        type: 'list',
+        items: [
+          'Evaluate whether an established, informal learning platform’s design helps learners reach meaningful learning',
+          'Analyze it through two lenses that pull in different directions: the Cognitive Theory of Multimedia Learning (CTML), for individual cognition, and social constructivism, for the social and cultural side of learning',
+          'Identify what works, and recommend redesigns where it falls short',
+        ],
+      },
+      { type: 'h', text: 'The analysis' },
+      {
+        type: 'p',
+        text: 'Through CTML, Duolingo Chess does a lot right: text sits right above the board, arrows signal each move, the interface is minimal, lessons come in small segments, and Oscar, the guide, talks to learners conversationally. But lessons skip pre-training (the Italian Game is taught with no explanation of what an opening is), nothing asks learners to explain why a move works, and a stack of reward screens interrupts learners between lessons.',
+      },
+      {
+        type: 'p',
+        text: 'I wrote the social constructivism analysis, drawing on Vygotsky’s zone of proximal development and situated learning. Lessons are well scaffolded, with placement by level and automated characters acting as the more knowledgeable other. But that support disappears in the games tab: in games against Oscar, friends or anyone else, there are no hints and no gradually fading support, so a beginner has to figure out real games alone. On the cultural side, Duolingo uses Elo ratings, which place learners in chess’s wider community, but it leaves out etiquette like when to resign or how the clock works in person. That keeps it from working as a community of practice, though adding too much would clash with CTML’s coherence principle and overload novices.',
+      },
+      { type: 'h', text: 'Redesign' },
+      {
+        type: 'list',
+        items: [
+          'CTML: merge the reward screens into one, add a short line of pre-training at the start of each lesson, and add reflective quizzes that ask why, not just what.',
+          'Social constructivism: bring in chess’s history and etiquette where it adds meaning (like a prompt that tells a learner when it’s time to resign), add hints that fade as a game goes on, and add “Move Talk”, a space where players discuss a position and have their reasoning reviewed by friends or mentors, so the knowledgeable other isn’t only automated.',
+        ],
+      },
+      {
+        type: 'image',
+        src: 'images/portfolio/duolingo-move-talk.jpg',
+        alt: 'Two phone mockups. “Move Talk” shows a chess position after move 4 of a Two Knights Defense, asks “What is White threatening, and how would you answer it?”, and lists players’ ideas, including one from the opponent. “Add your idea” walks a player through what the opponent is trying to do, picking a move, and explaining why, with a hint button and an option to ask a mentor to review it.',
+        caption: 'My Move Talk mockups: players reason about a position together, with fading hints and an option to ask a mentor.',
+      },
+      { type: 'h', text: 'My role' },
+      {
+        type: 'p',
+        text: 'I wrote the social constructivism analysis and everything built on it: its redesign recommendations and the Move Talk mockups. My classmate wrote the CTML side.',
+      },
+      { type: 'h', text: 'How it went' },
+      {
+        type: 'p',
+        text: 'The paper got good feedback. The main notes were that it needed more definitions, and that some of the analysis could be taken further.',
+      },
+      {
+        type: 'p',
+        text: 'On my side, the feedback was that I talked too much about the platform itself and not enough about the lessons, which is valid. Looking back, the lessons are so individualistic that I should have called that out as a shortcoming from a social constructivist view, too. Next time, I’d keep the analysis anchored in the lessons and define each term up front.',
       },
     ],
   },

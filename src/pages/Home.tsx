@@ -11,8 +11,8 @@ import { school } from '../content/school'
 import { bookshelf, projectPath, sections, site, type SectionKey } from '../site'
 
 const latest = <T extends Entry>(entries: T[], count = 2) => newestFirst(entries).slice(0, count)
-// The featured project is the newest one people can open and try.
-const featuredProject = latest(projects.filter((project) => project.links?.length), 1)[0]
+// The featured build is the newest project people can open and try: one with a live web link, not just a PDF.
+const featuredProject = latest(projects.filter((project) => project.links?.some((link) => /^https?:\/\//.test(link.href))), 1)[0]
 
 const inSection = (key: SectionKey) => (entry: Entry) => ({ slug: entry.slug, title: entry.title, path: `${sections[key].path}/${entry.slug}` })
 
@@ -65,7 +65,7 @@ export default function Home() {
               </span>
               <PixelIcon name="star" size={40} />
             </div>
-            <p className="featured-label">▶ Latest project</p>
+            <p className="featured-label">▶ Latest build</p>
             <a className="featured-link" href={href(projectPath(featured))}>
               {featured.title}
             </a>
