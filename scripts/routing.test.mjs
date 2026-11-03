@@ -4,8 +4,8 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { after, before, test } from 'node:test'
 import { createServer } from 'vite'
-import { fileFor, notFoundPage, redirectsFile, renderPage, sitemap, wineRewrites, wineSitemap } from './page-html.mjs'
-import { appPathOn, fromHashLink, isAppPath, linkOn, normalize } from '../src/router.ts'
+import { fileFor, notFoundPage, redirectsFile, renderPage, sitemap, wineDomainRules, wineRewrites, wineRobots, wineSitemap } from './page-html.mjs'
+import { appPathOn, fromHashLink, isAppPath, linkOn, normalize, opensInApp } from '../src/router.ts'
 
 const template = readFileSync(new URL('../index.html', import.meta.url), 'utf8')
 
@@ -58,6 +58,16 @@ test('links stay on their own domain, and cross to the other one with a full add
   assert.equal(linkOn('arynlynn.com', '/winery'), '/winery', 'only the wine section moves')
   // Anywhere else (local, deploy previews) the whole site is one domain, as before.
   assert.equal(linkOn('localhost', '/wine/smell-vs-taste'), '/wine/smell-vs-taste')
+})
+
+test('on the wine domain, only links to wine pages open in place; files and the rest of the site load normally', () => {
+  for (const address of ['/', '/smell-vs-taste', '/negretti-barolo-2021/']) assert.equal(opensInApp('genzwithaglass.com', address), true, address)
+  for (const address of ['/sms/', '/privacy', '/portfolio', '/portfolio/software', '/images/label.jpg', '/files/deck.pdf', '/api/sms']) {
+    assert.equal(opensInApp('genzwithaglass.com', address), false, address)
+  }
+  // Elsewhere, the app's own sections, as before.
+  assert.equal(opensInApp('arynlynn.com', '/portfolio'), true)
+  assert.equal(opensInApp('arynlynn.com', '/sms/'), false)
 })
 
 // ---------- every page ----------
@@ -226,6 +236,8 @@ test('the 404 page is not indexed and has no canonical address', () => {
   assert.match(html, /<title>Page not found · Aryn Davis<\/title>/)
   assert.match(html, /<meta name="robots" content="noindex" \/>/)
   assert.doesNotMatch(html, /rel="canonical"/)
+  // It's served for missing addresses on both domains, so its way home is a full address.
+  assert.match(html, /<a href="https:\/\/arynlynn\.com\/">Go to Aryn Davis's home page<\/a>/)
   // Otherwise it previews like the home page.
   const home = renderPage(template, pages.find((p) => p.path === '/'))
   for (const tag of ['og:url', 'og:title', 'og:description', 'og:image', 'og:image:alt']) {
@@ -250,20 +262,26 @@ test('the sitemap lists every page and the static pages, and files go where Netl
 })
 
 test('genzwithaglass.com serves every wine page, and the wine blog’s old addresses move there', () => {
-  const rules = readFileSync(new URL('../public/_redirects', import.meta.url), 'utf8')
-    .split('\n')
-    .filter((line) => line.trim() && !line.startsWith('#'))
-    .map((line) => line.trim().split(/\s+/))
-  for (const rule of rules) assert.equal(rule.length, 3, rule.join(' '))
-  const to = (from) => rules.find((rule) => rule[0] === from)?.slice(1)
-  assert.deepEqual(to('https://www.genzwithaglass.com/*'), ['https://genzwithaglass.com/:splat', '301!'])
-  assert.deepEqual(to('https://arynlynn.com/wine'), ['https://genzwithaglass.com/', '301!'])
-  assert.deepEqual(to('https://arynlynn.com/wine/*'), ['https://genzwithaglass.com/:splat', '301!'])
-  assert.deepEqual(to('https://genzwithaglass.com/wine/*'), ['https://genzwithaglass.com/:splat', '301!'])
-  assert.deepEqual(to('https://genzwithaglass.com/robots.txt'), ['/robots-wine.txt', '200!'])
-  assert.deepEqual(to('https://genzwithaglass.com/sitemap.xml'), ['/sitemap-wine.xml', '200!'])
-  // Nothing on genzwithaglass.com points back at arynlynn.com any more.
-  assert.ok(!rules.some(([from, target]) => from.includes('genzwithaglass.com') && target.includes('arynlynn.com')))
+  const rules = wineDomainRules(pages)
+  const to = (from) => rules.find((rule) => rule.from === from)
+  const moved = (target) => ({ to: target, status: '301!' })
+  const check = (from, expected) => assert.deepEqual(to(from) && { to: to(from).to, status: to(from).status }, expected, from)
+  check('https://www.genzwithaglass.com/*', moved('https://genzwithaglass.com/:splat'))
+  check('https://arynlynn.com/wine', moved('https://genzwithaglass.com/'))
+  check('https://arynlynn.com/wine/*', moved('https://genzwithaglass.com/:splat'))
+  check('https://genzwithaglass.com/wine/*', moved('https://genzwithaglass.com/:splat'))
+  check('https://genzwithaglass.com/robots.txt', { to: '/robots-wine.txt', status: '200!' })
+  check('https://genzwithaglass.com/sitemap.xml', { to: '/sitemap-wine.xml', status: '200!' })
+  // The rest of the site's pages go back to arynlynn.com instead of showing up on the wine domain.
+  for (const section of ['portfolio', 'education', 'bookshelf', 'sms', 'terms', 'privacy']) {
+    check(`https://genzwithaglass.com/${section}`, moved(`https://arynlynn.com/${section}`))
+    check(`https://genzwithaglass.com/${section}/*`, moved(`https://arynlynn.com/${section}/:splat`))
+  }
+  // Files (the app's scripts, images, PDFs) are served on both domains: no rule catches them.
+  for (const prefix of ['assets', 'images', 'files', 'fonts']) assert.ok(!rules.some((rule) => rule.from.startsWith(`https://genzwithaglass.com/${prefix}`)), prefix)
+  // Nothing sends a genzwithaglass.com wine page back to arynlynn.com.
+  assert.ok(!rules.some((rule) => rule.from.startsWith('https://genzwithaglass.com/') && rule.to.startsWith('https://arynlynn.com/wine')))
+  assert.equal(wineRobots(), 'User-agent: *\nAllow: /\n\nSitemap: https://genzwithaglass.com/sitemap.xml\n')
 })
 
 test('the build serves each wine page at its genzwithaglass.com address, and only wine pages', () => {

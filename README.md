@@ -165,7 +165,11 @@ Anything after "notes:" becomes the post's extra notes.
 2. **Domain:** `arynlynn.com` (registered at Porkbun) uses **Netlify DNS**: Porkbun's nameservers point to Netlify, and the records for `arynlynn.com`, `www`, `library` and `closet` live in Netlify. HTTPS is set up automatically.
    - `genzwithaglass.com` (also at Porkbun, also on Netlify DNS) is a domain alias of this site, and the wine blog's real home.
      - **In the app,** every wine page keeps its `/wine/...` path. On genzwithaglass.com, `src/router.ts` reads `/<post>` as `/wine/<post>`, and links to the rest of the site become full arynlynn.com addresses (and the other way around). On localhost and deploy previews, everything stays at `/wine`.
-     - **On Netlify,** the build writes a rewrite for each wine page (`genzwithaglass.com/<post>` serves `/wine/<post>`). `public/_redirects` sends `www.` and the old `arynlynn.com/wine/...` links to genzwithaglass.com, and serves the wine blog's own `robots.txt` and sitemap there.
+     - **On Netlify,** the build writes every rule for the domain into `dist/_redirects` (`wineDomainRules` in `scripts/page-html.mjs`, from `wineDomain` in `src/site.ts`):
+       - a rewrite for each wine page, so `genzwithaglass.com/<post>` serves `/wine/<post>`
+       - redirects for `www.` and the old `arynlynn.com/wine/...` links, which move to genzwithaglass.com
+       - redirects that send the rest of the site's pages back to arynlynn.com
+       - the wine blog's own `robots.txt` and sitemap
      - **Previews and texted posts:** wine pages' link previews, canonical addresses and sitemap use genzwithaglass.com, and the text-posting replies link there too.
      - Deploy previews can't show the domain rules, so check genzwithaglass.com right after a merge that touches them.
 3. Every push to `main` redeploys. Security headers come from `public/_headers`.

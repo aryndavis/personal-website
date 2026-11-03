@@ -2,7 +2,7 @@
 // tags, plus a plain-HTML summary that search engines can read before the app starts. Used by prerender.mjs.
 
 import { previewTags } from '../src/previewTags.ts'
-import { isWinePath, publicUrl, site } from '../src/site.ts'
+import { isWinePath, publicUrl, sections, site, wineDomain } from '../src/site.ts'
 
 export const ORIGIN = site.url
 
@@ -62,7 +62,7 @@ export function notFoundPage(template) {
     PRERENDER,
     `<main class="prerender">
         <h1>Page not found</h1>
-        <p><a href="/">Go to Aryn Davis's home page</a></p>
+        <p><a href="${escape(publicUrl('/'))}">Go to Aryn Davis's home page</a></p>
       </main>`,
     'prerender summary',
   )
@@ -74,6 +74,35 @@ export const redirectsFile = (redirects) => redirects.map(({ from, to, status = 
 /** Netlify rules that serve each wine page at its genzwithaglass.com address (a rewrite, so the address stays). */
 export const wineRewrites = (pages) =>
   pages.filter((page) => isWinePath(page.path)).map((page) => ({ from: publicUrl(page.path), to: page.path, status: '200!' }))
+
+/**
+ * Every Netlify rule for Gen Z With A Glass's own domain (wineDomain in src/site.ts), written into
+ * dist/_redirects by the build. The ! applies a rule even where a file exists.
+ */
+export function wineDomainRules(pages) {
+  const wine = wineDomain.url
+  const winePath = sections.wine.path
+  const moved = (from, to) => ({ from, to, status: '301!' })
+  // The rest of the site's pages belong on arynlynn.com, not on the wine domain.
+  const elsewhere = [...new Set([...pages.map((page) => page.path), ...STATIC_PAGES].filter((path) => path !== '/' && !isWinePath(path)).map((path) => path.split('/')[1]))]
+  return [
+    // www, and the wine section's old /wine addresses on either domain, move to the bare domain.
+    moved(`https://www.${wineDomain.host}/*`, `${wine}/:splat`),
+    moved(`http://www.${wineDomain.host}/*`, `${wine}/:splat`),
+    moved(`${site.url}${winePath}`, `${wine}/`),
+    moved(`${site.url}${winePath}/*`, `${wine}/:splat`),
+    moved(`${wine}${winePath}`, `${wine}/`),
+    moved(`${wine}${winePath}/*`, `${wine}/:splat`),
+    ...elsewhere.flatMap((section) => [moved(`${wine}/${section}`, `${site.url}/${section}`), moved(`${wine}/${section}/*`, `${site.url}/${section}/:splat`)]),
+    // Its own robots.txt and sitemap.
+    { from: `${wine}/robots.txt`, to: '/robots-wine.txt', status: '200!' },
+    { from: `${wine}/sitemap.xml`, to: '/sitemap-wine.xml', status: '200!' },
+    ...wineRewrites(pages),
+  ]
+}
+
+/** genzwithaglass.com's robots.txt (served there as /robots.txt by wineDomainRules). */
+export const wineRobots = () => `User-agent: *\nAllow: /\n\nSitemap: ${wineDomain.url}/sitemap.xml\n`
 
 const urlset = (urls) => `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

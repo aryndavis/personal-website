@@ -36,11 +36,24 @@ export const fromHashLink = (hash: string) => (hash.startsWith('#/') ? normalize
 export const appPathOn = (host: string, path: string) =>
   normalize(host === wineDomain.host ? `${sections.wine.path}${path === '/' ? '' : path}` : path)
 
+const siteHost = new URL(site.url).host
+
 /** How to link to an app path from this host: a path on the same domain, a full address on the other one. */
 export function linkOn(host: string, path: string) {
-  if (host === wineDomain.host) return isWinePath(path) ? path.slice(sections.wine.path.length) || '/' : `${site.url}${path}`
-  if (host === new URL(site.url).host && isWinePath(path)) return publicUrl(path)
+  if (host === wineDomain.host) return isWinePath(path) ? publicUrl(path).slice(wineDomain.url.length) : `${site.url}${path}`
+  if (host === siteHost && isWinePath(path)) return publicUrl(path)
   return path
+}
+
+/** Sections (and static pages) that live on arynlynn.com, so on the wine domain a link to one is never a wine page. */
+const ELSEWHERE = new Set([...APP_SECTIONS, 'sms', 'terms', 'privacy', 'api'].filter((section) => section && section !== 'wine'))
+
+/** Whether a link to this address on this host is one of the app's own pages, to open in place. */
+export function opensInApp(host: string, address: string) {
+  if (host !== wineDomain.host) return isAppPath(address)
+  // On the wine domain every page is /<post>: files (a dot) and the rest of the site aren't.
+  const first = normalize(address).split('/')[1] ?? ''
+  return !address.includes('.') && !ELSEWHERE.has(first)
 }
 
 const host = () => window.location.hostname
@@ -85,9 +98,8 @@ function onClick(event: MouseEvent) {
   const link = (event.target as Element | null)?.closest?.('a')
   if (!link || (link.target && link.target !== '_self') || link.hasAttribute('download')) return
   const url = new URL(link.href, window.location.href)
-  if (url.origin !== window.location.origin) return
+  if (url.origin !== window.location.origin || !opensInApp(host(), url.pathname)) return
   const path = appPathOn(host(), url.pathname)
-  if (!isAppPath(path)) return
   // Same page, different #fragment (like #main): let the browser handle it.
   if (url.hash && path === readRoute()) return
   event.preventDefault()

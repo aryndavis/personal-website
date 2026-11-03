@@ -6,7 +6,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createServer } from 'vite'
-import { fileFor, notFoundPage, redirectsFile, renderPage, sitemap, wineRewrites, wineSitemap } from './page-html.mjs'
+import { fileFor, notFoundPage, redirectsFile, renderPage, sitemap, wineDomainRules, wineRobots, wineSitemap } from './page-html.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const dist = join(root, 'dist')
@@ -32,7 +32,9 @@ for (const page of pages) {
 await writeFile(join(dist, '404.html'), notFoundPage(template))
 await writeFile(join(dist, 'sitemap.xml'), sitemap(pages))
 await writeFile(join(dist, 'sitemap-wine.xml'), wineSitemap(pages))
-// Hand-written rules (public/_redirects, copied in by Vite) come first: Netlify uses the first match.
+await writeFile(join(dist, 'robots-wine.txt'), wineRobots())
+// Hand-written rules (public/_redirects, copied in by Vite, if there is one) come first: Netlify uses the first match.
+const wineRules = wineDomainRules(pages)
 const handWritten = await readFile(join(dist, '_redirects'), 'utf8').catch(() => '')
-await writeFile(join(dist, '_redirects'), `${handWritten}${handWritten && !handWritten.endsWith('\n') ? '\n' : ''}${redirectsFile([...wineRewrites(pages), ...redirects])}`)
-console.log(`Prerendered ${pages.length} pages, 404.html, both sitemaps and ${redirects.length} redirects.`)
+await writeFile(join(dist, '_redirects'), `${handWritten}${handWritten && !handWritten.endsWith('\n') ? '\n' : ''}${redirectsFile([...wineRules, ...redirects])}`)
+console.log(`Prerendered ${pages.length} pages, 404.html and both sitemaps, with ${wineRules.length} genzwithaglass.com rules and ${redirects.length} portfolio redirects.`)
