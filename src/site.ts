@@ -71,6 +71,19 @@ export const sections: Record<SectionKey, { path: string; label: string; file: s
   },
 }
 
+/**
+ * Gen Z With A Glass's own domain. The wine section lives there: genzwithaglass.com/<post> is the app's
+ * /wine/<post>. Netlify serves it from this same site (public/_redirects and the rules prerender.mjs writes).
+ */
+export const wineDomain = { host: 'genzwithaglass.com', url: 'https://genzwithaglass.com', name: 'Gen Z With A Glass' }
+
+/** Whether an app path is in the wine section (/wine or /wine/<post>). */
+export const isWinePath = (path: string) => path === sections.wine.path || path.startsWith(`${sections.wine.path}/`)
+
+/** The address people see for an app path: wine pages on Gen Z With A Glass's own domain, everything else here. */
+export const publicUrl = (path: string) =>
+  isWinePath(path) ? `${wineDomain.url}${path.slice(sections.wine.path.length) || '/'}` : `${site.url}${path}`
+
 /** The portfolio's two halves, each its own page under /portfolio, in the order they're shown. */
 export const portfolioTracks: Record<Track, { path: string; label: string; file: string; blurb: string }> = {
   curriculum: {

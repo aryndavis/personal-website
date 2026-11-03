@@ -13,6 +13,7 @@ import { tastingNotes, type TastingNote } from '../../src/content/tastingNotes.t
 import { guides, handNotes } from '../../src/content/wine.ts'
 import { appendNote, readNotes, type GitHubConfig } from '../lib/github.ts'
 import { handleSms } from '../lib/sms.ts'
+import { wineDomain } from '../../src/site.ts'
 
 const env = (name: string) => Netlify.env.get(name) ?? ''
 
@@ -26,7 +27,7 @@ export default async (request: Request) => {
     webhookUrl: env('SMS_WEBHOOK_URL'),
     publishing: env('SMS_PUBLISHING') === 'on' && Boolean(github.token),
     timeZone: env('SMS_TIMEZONE') || 'America/New_York',
-    siteUrl: env('URL') || 'https://arynlynn.com',
+    wineUrl: wineDomain.url,
     store: {
       get: (key) => store.get(key, { type: 'json' }),
       set: async (key, value) => {

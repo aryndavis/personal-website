@@ -25,7 +25,8 @@ export interface SmsDeps {
   publishing: boolean
   /** For post dates, e.g. America/New_York. */
   timeZone: string
-  siteUrl: string
+  /** Where the wine blog lives, e.g. https://genzwithaglass.com: replies link to the post there. */
+  wineUrl: string
   store: Store
   readTextNotes(): Promise<unknown[]>
   publish(note: TastingNote, message: string): Promise<void>
@@ -129,7 +130,7 @@ async function respond(params: Record<string, string>, deps: SmsDeps): Promise<R
       const alreadyPosted = published.find((existing) => JSON.stringify(existing) === JSON.stringify(note))
       if (alreadyPosted) {
         await deps.store.delete(PENDING).catch(() => {})
-        return twiml(`That one’s already posted: ${deps.siteUrl}/wine/${deps.slugFor(note, published.filter((n) => n !== alreadyPosted))}`)
+        return twiml(`That one’s already posted: ${deps.wineUrl}/${deps.slugFor(note, published.filter((n) => n !== alreadyPosted))}`)
       }
       slug = deps.slugFor(note, published)
       await deps.publish(note, `Add tasting note by text: ${note.wine} ${note.vintage}`)
@@ -145,7 +146,7 @@ async function respond(params: Record<string, string>, deps: SmsDeps): Promise<R
     } catch (error) {
       console.error('posted, but clearing the preview failed', error)
     }
-    return twiml(`Posted! It’ll be live in a couple of minutes: ${deps.siteUrl}/wine/${slug}`)
+    return twiml(`Posted! It’ll be live in a couple of minutes: ${deps.wineUrl}/${slug}`)
   }
 
   if (/^books?\b/i.test(body)) return twiml('Adding books by text isn’t set up yet.')

@@ -15,6 +15,7 @@ export function showLinkPreview(page: PageMeta | undefined) {
   document.title = tags.title
   set('meta[name="description"]', 'content', tags.description)
   set('meta[property="og:url"]', 'content', tags.url)
+  set('meta[property="og:site_name"]', 'content', tags.siteName)
   set('meta[property="og:title"]', 'content', tags.previewTitle)
   set('meta[property="og:description"]', 'content', tags.previewDescription)
   set('meta[property="og:type"]', 'content', tags.article ? 'article' : 'website')
