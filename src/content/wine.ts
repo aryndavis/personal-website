@@ -94,7 +94,7 @@ export const guides: WinePost[] = [
     slug: 'smell-vs-taste',
     title: 'Smell vs. taste: why the nose and tongue read wine differently',
     date: '2026-11-02',
-    summary: 'How I pick out apple in wine when I’d never eat one, and why the nose and tongue read the same glass so differently.',
+    summary: 'I don’t eat apples, but I can often find them in a wine. Some thoughts on how smelling and tasting wine differ.',
     tags: ['guide', 'aromas'],
     body: [
       {
