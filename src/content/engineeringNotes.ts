@@ -1,22 +1,22 @@
 import type { Entry, Inline } from './types'
-// Code samples live in their own files (build-log/<post>/), so they're shown exactly as written.
-import textCurl from './build-log/text-to-post/curl.sh.txt?raw'
-import textFormat from './build-log/text-to-post/format.txt?raw'
-import textFunction from './build-log/text-to-post/function.ts.txt?raw'
-import textHandler from './build-log/text-to-post/handler.ts.txt?raw'
-import textParse from './build-log/text-to-post/parse-note.ts.txt?raw'
-import textPreview from './build-log/text-to-post/preview.ts.txt?raw'
-import textPublish from './build-log/text-to-post/publish.ts.txt?raw'
-import textSignature from './build-log/text-to-post/signature.ts.txt?raw'
-import textSiteReads from './build-log/text-to-post/site-reads.ts.txt?raw'
+// Code samples live in their own files (engineering-notes/<post>/), so they're shown exactly as written.
+import textCurl from './engineering-notes/text-to-post/curl.sh.txt?raw'
+import textFormat from './engineering-notes/text-to-post/format.txt?raw'
+import textFunction from './engineering-notes/text-to-post/function.ts.txt?raw'
+import textHandler from './engineering-notes/text-to-post/handler.ts.txt?raw'
+import textParse from './engineering-notes/text-to-post/parse-note.ts.txt?raw'
+import textPreview from './engineering-notes/text-to-post/preview.ts.txt?raw'
+import textPublish from './engineering-notes/text-to-post/publish.ts.txt?raw'
+import textSignature from './engineering-notes/text-to-post/signature.ts.txt?raw'
+import textSiteReads from './engineering-notes/text-to-post/site-reads.ts.txt?raw'
 
-// Build log: how the things on this site are made, step by step, with the code. Bodies are blocks like the
+// Engineering notes: how the things on this site are made, step by step, with the code. Bodies are blocks like the
 // other posts (see types.ts), plus `code` blocks. Never put a real phone number, token or account ID here.
 
 /** Inline code, like a command or a setting name. */
 const c = (text: string): Inline => ({ text, code: true })
 
-export const buildLogPosts: Entry[] = [
+export const engineeringNotes: Entry[] = [
   {
     slug: 'text-to-post',
     title: 'How I post wine tasting notes by text message',
@@ -30,7 +30,7 @@ export const buildLogPosts: Entry[] = [
       },
       {
         type: 'image',
-        src: 'images/build-log/cork-waiter.jpg',
+        src: 'images/engineering-notes/cork-waiter.jpg',
         alt: 'Me in heart-shaped glasses, smiling and holding my thrifted cork holder: a metal cartoon waiter with a bow tie, a round head and a body full of holes for corks.',
         caption: 'My thrifted cork holder, the cutest little cartoon waiter. He keeps all my corks!',
       },
@@ -74,7 +74,7 @@ export const buildLogPosts: Entry[] = [
       { type: 'p', text: ['Everything else is an optional label. Texting ', c('wine help'), ' sends back the full list, so I never have to remember it!'] },
       {
         type: 'image',
-        src: 'images/build-log/wine-help-text.jpg',
+        src: 'images/engineering-notes/wine-help-text.jpg',
         alt: 'A text conversation. I text “wine help”, and the reply lists the tasting note format: the required first line (wine name, grape and year), then optional labels for producer, region, where I bought it, style, price, rating, buy again, verdict, flavors, sweetness, body, acidity, tannin, what I paired it with, and notes.',
         caption: 'Texting “wine help” sends back every label I can use.',
       },

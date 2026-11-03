@@ -4,7 +4,7 @@ import HoloBackground from './components/HoloBackground'
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
 import BookshelfPage from './pages/Bookshelf'
-import { BuildLogPage, EducationPage, PortfolioHome, PortfolioTrackPage } from './pages/Sections'
+import { EngineeringNotesPage, EducationPage, PortfolioHome, PortfolioTrackPage } from './pages/Sections'
 import WinePage from './pages/Wine'
 import { href, redirect, useRoute } from './router'
 import { showLinkPreview } from './linkPreview'
@@ -16,7 +16,7 @@ const marquee = '✦ stay curious ✦ take the long way ✦ pour something inter
 
 const pages = {
   education: EducationPage,
-  'build-log': BuildLogPage,
+  'engineering-notes': EngineeringNotesPage,
   wine: WinePage,
   bookshelf: BookshelfPage,
 }

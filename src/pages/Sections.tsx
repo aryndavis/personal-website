@@ -1,4 +1,4 @@
-import { buildLogPosts } from '../content/buildLog'
+import { engineeringNotes } from '../content/engineeringNotes'
 import { educationPosts } from '../content/education'
 import { projectsIn } from '../content/portfolio'
 import PixelIcon from '../components/PixelIcon'
@@ -185,18 +185,19 @@ export function EducationPage({ slug }: { slug?: string }) {
   )
 }
 
-export function BuildLogPage({ slug }: { slug?: string }) {
+export function EngineeringNotesPage({ slug }: { slug?: string }) {
   return (
     <Collection
-      sectionKey="buildlog"
-      entries={buildLogPosts}
+      sectionKey="engineering"
+      entries={engineeringNotes}
       slug={slug}
       layout="notes"
       fileExtension="md"
       icon="floppy"
+      longTitle
       headline={
         <>
-          Build log
+          Engineering notes
           <span className="mega-ext">.md</span>
         </>
       }
