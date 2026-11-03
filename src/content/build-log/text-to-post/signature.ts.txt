@@ -1,0 +1,22 @@
+const encoder = new TextEncoder()
+
+async function twilioSignature(authToken: string, url: string, params: Record<string, string>) {
+  const data = url + Object.keys(params).sort().map((name) => name + params[name]).join('')
+  const key = await crypto.subtle.importKey('raw', encoder.encode(authToken), { name: 'HMAC', hash: 'SHA-1' }, false, ['sign'])
+  const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(data))
+  return btoa(String.fromCharCode(...new Uint8Array(signature)))
+}
+
+/** Compares in constant time, so the check doesn't leak how much of a forged signature was right. */
+function sameText(a: string, b: string) {
+  const left = encoder.encode(a)
+  const right = encoder.encode(b)
+  let difference = left.length ^ right.length
+  for (let i = 0; i < Math.max(left.length, right.length); i++) difference |= (left[i] ?? 0) ^ (right[i] ?? 0)
+  return difference === 0
+}
+
+async function isFromTwilio(authToken: string, url: string, params: Record<string, string>, signature: string | null) {
+  if (!authToken || !signature) return false
+  return sameText(await twilioSignature(authToken, url, params), signature)
+}

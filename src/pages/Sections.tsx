@@ -1,3 +1,4 @@
+import { buildLogPosts } from '../content/buildLog'
 import { educationPosts } from '../content/education'
 import { projectsIn } from '../content/portfolio'
 import PixelIcon from '../components/PixelIcon'
@@ -180,6 +181,26 @@ export function EducationPage({ slug }: { slug?: string }) {
           </span>
         )
       }
+    />
+  )
+}
+
+export function BuildLogPage({ slug }: { slug?: string }) {
+  return (
+    <Collection
+      sectionKey="buildlog"
+      entries={buildLogPosts}
+      slug={slug}
+      layout="notes"
+      fileExtension="md"
+      icon="floppy"
+      headline={
+        <>
+          Build log
+          <span className="mega-ext">.md</span>
+        </>
+      }
+      intro={<p>How I build the things on this site, step by step and with the code, so you can make something similar for your own.</p>}
     />
   )
 }

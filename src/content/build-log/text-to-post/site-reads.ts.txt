@@ -1,0 +1,3 @@
+import texted from './wine.texts.json'
+
+export const textNotes = (texted as unknown[]).filter(isTextNote)

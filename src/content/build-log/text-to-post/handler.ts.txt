@@ -1,0 +1,25 @@
+import { getStore } from '@netlify/blobs'
+
+const env = (name: string) => Netlify.env.get(name) ?? ''
+const digits = (number: string) => number.replace(/[^\d+]/g, '')
+
+export default async (request: Request) => {
+  const params = Object.fromEntries(new URLSearchParams(await request.text()))
+  const signed = await isFromTwilio(env('TWILIO_AUTH_TOKEN'), env('SMS_WEBHOOK_URL'), params, request.headers.get('x-twilio-signature'))
+  if (!signed) return new Response('Forbidden', { status: 403 })
+
+  // Texts from any other number get no reply at all.
+  if (digits(params.From ?? '') !== digits(env('SMS_ALLOWED_FROM'))) return reply()
+
+  // A daily limit, well above normal use, in case of a stuck phone or anything unexpected.
+  const store = getStore({ name: 'sms', consistency: 'strong' })
+  const today = new Date().toISOString().slice(0, 10)
+  const texts = Number((await store.get(`texts/${today}`)) ?? 0) + 1
+  await store.set(`texts/${today}`, String(texts))
+  if (texts > 60) return reply()
+
+  // The kill switch: one setting turns publishing off without touching any code.
+  if (env('SMS_PUBLISHING') !== 'on') return reply('Posting by text is turned off right now.')
+
+  return handle(params.Body ?? '', store) // step 5
+}

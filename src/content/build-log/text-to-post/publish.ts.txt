@@ -1,0 +1,31 @@
+const FILE = 'src/content/wine.texts.json'
+const api = () => `https://api.github.com/repos/${env('GITHUB_REPO')}/contents/${FILE}`
+const headers = () => ({
+  authorization: `Bearer ${env('GITHUB_TOKEN')}`,
+  accept: 'application/vnd.github+json',
+  'user-agent': 'text-to-post',
+})
+
+async function publish(note: { wine: string; vintage: string | number }) {
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const read = await fetch(api(), { headers: headers() })
+    if (!read.ok) throw new Error(`GitHub read failed (${read.status})`)
+    const file = await read.json()
+    // Buffer, not atob/btoa: those mangle accents (rosé) and emoji.
+    const notes: unknown[] = JSON.parse(Buffer.from(file.content, 'base64').toString('utf8'))
+
+    // Already there (say, two quick YES replies): don't post it twice.
+    if (notes.some((existing) => JSON.stringify(existing) === JSON.stringify(note))) return
+
+    const content = Buffer.from(`${JSON.stringify([...notes, note], null, 2)}\n`).toString('base64')
+    const write = await fetch(api(), {
+      method: 'PUT',
+      headers: headers(),
+      body: JSON.stringify({ message: `Add tasting note by text: ${note.wine} ${note.vintage}`, content, sha: file.sha }),
+    })
+    if (write.ok) return
+    // 409/422: the file changed since we read it. Read it again and retry once.
+    if (write.status !== 409 && write.status !== 422) throw new Error(`GitHub write failed (${write.status})`)
+  }
+  throw new Error('GitHub write kept conflicting')
+}

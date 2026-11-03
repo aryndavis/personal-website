@@ -1,0 +1,19 @@
+// netlify/functions/sms.ts
+import type { Config } from '@netlify/functions'
+
+export default async (request: Request) => {
+  const params = Object.fromEntries(new URLSearchParams(await request.text()))
+  return reply(`You said: ${params.Body}`)
+}
+
+// Twilio will POST to https://your-site.com/api/sms
+export const config: Config = { path: '/api/sms', method: 'POST' }
+
+const escapeXml = (text: string) =>
+  text.replace(/[<>&'"]/g, (char) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', "'": '&apos;', '"': '&quot;' })[char]!)
+
+/** A TwiML reply. With no message, Twilio texts nothing back. */
+function reply(message?: string) {
+  const body = message ? `<Response><Message>${escapeXml(message)}</Message></Response>` : '<Response/>'
+  return new Response(`<?xml version="1.0" encoding="UTF-8"?>${body}`, { headers: { 'content-type': 'text/xml' } })
+}

@@ -19,6 +19,7 @@ function InlineText({ text }: { text: string | Inline[] }) {
         part.text
       )
     }
+    if ('code' in part) return <code key={index}>{part.text}</code>
     return <em key={index}>{part.text}</em>
   })
 }
@@ -47,6 +48,16 @@ export function PostBody({ blocks }: { blocks: Block[] }) {
             )
           case 'quote':
             return <blockquote key={index}>{block.text}</blockquote>
+          case 'code':
+            return (
+              <figure key={index} className="post-code">
+                {block.label && <figcaption>{block.label}</figcaption>}
+                {/* Focusable so keyboard users can scroll long lines sideways. */}
+                <pre tabIndex={0} aria-label={block.label ? `Code: ${block.label}` : 'Code'}>
+                  <code>{block.text.replace(/\n$/, '')}</code>
+                </pre>
+              </figure>
+            )
           default:
             return (
               <p key={index}>

@@ -1,6 +1,7 @@
 // Every page's address, title and description, for the browser tab, the prerendered pages
 // (scripts/prerender.mjs) and the sitemap. Posts and projects get their own entries.
 import { books } from './content/books'
+import { buildLogPosts } from './content/buildLog'
 import { educationPosts } from './content/education'
 import { projects, projectsIn } from './content/portfolio'
 import { newestFirst, type Entry, type Track } from './content/types'
@@ -123,6 +124,7 @@ export function allPages(): PageMeta[] {
     },
     ...portfolioPages(),
     ...entryPages('education', educationPosts),
+    ...entryPages('buildlog', buildLogPosts),
     ...winePages(),
     ...sectionPages(
       bookshelf.path,

@@ -1,0 +1,34 @@
+import type { Store } from '@netlify/blobs'
+
+async function handle(text: string, store: Store) {
+  const body = text.trim()
+  const command = body.toLowerCase()
+
+  if (command === 'wine help') return reply(HELP_TEXT)
+
+  if (command === 'no') {
+    await store.delete('pending')
+    return reply('Discarded. Nothing was posted.')
+  }
+
+  if (command === 'yes') {
+    const pending = await store.get('pending', { type: 'json' })
+    if (!pending || Date.now() - pending.at > 60 * 60_000) return reply('There’s nothing waiting to post (previews expire after an hour).')
+    try {
+      await publish(pending.note) // step 6
+    } catch {
+      return reply('I couldn’t post that just now. Your preview is still saved, so reply YES to try again.')
+    }
+    await store.delete('pending')
+    return reply(`Posted! It’ll be live in a couple of minutes: https://your-site.com/${slugFor(pending.note)}`)
+  }
+
+  if (/^wine\b/i.test(body)) {
+    const result = parseNote(body) // step 1
+    if (!result.ok) return reply(result.error)
+    await store.setJSON('pending', { note: result.note, at: Date.now() })
+    return reply(`Preview: ${result.note.wine} ${result.note.vintage} (${result.note.grape})\nReply YES to post or NO to discard.`)
+  }
+
+  return reply('Start a tasting note with "wine:", or text "wine help".')
+}

@@ -1,0 +1,26 @@
+type Result = { ok: true; note: Record<string, string | number> } | { ok: false; error: string }
+
+export function parseNote(text: string): Result {
+  const [first, ...rest] = text.trim().split('\n')
+  const match = first.match(/^wine:\s*(.+?),\s*(.+?),\s*(\d{4}|nv)\s*$/i)
+  if (!match) return { ok: false, error: 'The first line needs the wine, grape and year, like: wine: Name, Grape, 2022' }
+
+  const [, wine, grape, year] = match
+  const note: Record<string, string | number> = { wine, grape, vintage: /nv/i.test(year) ? 'NV' : Number(year) }
+
+  for (const line of rest) {
+    const [label, ...parts] = line.split(':')
+    const key = label.trim().toLowerCase()
+    const value = parts.join(':').trim()
+    if (!key || !value) continue
+    if (key === 'rating') {
+      const rating = Number(value)
+      // 1 to 5, in halves
+      if (!(rating >= 1 && rating <= 5 && Number.isInteger(rating * 2))) return { ok: false, error: 'rating: use 1 to 5 (halves are ok, like 4.5)' }
+      note.rating = rating
+    } else {
+      note[key] = value
+    }
+  }
+  return { ok: true, note }
+}
