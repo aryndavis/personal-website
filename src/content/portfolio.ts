@@ -211,10 +211,10 @@ export const projects: Project[] = [
       {
         type: 'list',
         items: [
-          'Problem-centered: everything centers on solving a real problem, first a remote company deciding whether to go hybrid, then a new problem of each learner’s choice. The skill itself was chosen for the hardest part of their project, the brief’s market research.',
+          'Problem-centered: everything centers on solving a real problem, first a remote company deciding whether to go hybrid, then a new problem of each learner’s choice.',
           'Activation: learners start with what they already know, like what makes a good brainstorming session and what they’d ask about the problem, before anyone opens an AI tool.',
           'Demonstration: every tip comes with a live prompt example, so learners see a technique in action before they try it.',
-          'Application: the breakout rooms and the independent activity have learners use the techniques themselves, on a new problem.',
+          'Application: learners apply the brainstorming techniques to the shared problem in breakout rooms, then use the AI techniques themselves on a new problem in the independent activity.',
           'Integration: the wrap-up has learners reflect on how they’ll use AI in their own planning and brainstorming going forward.',
         ],
       },
@@ -324,7 +324,7 @@ export const projects: Project[] = [
       },
       {
         type: 'p',
-        text: 'I wrote the social constructivism analysis, drawing on Vygotsky’s zone of proximal development and situated learning. Lessons are well scaffolded, with placement by level and automated characters acting as the more knowledgeable other. But that support disappears in the games tab: there are no hints, and no gradually fading support, against Oscar, friends or anyone else, so a beginner has to figure out real games alone. On the cultural side, Duolingo uses Elo ratings, which places learners in chess’s wider community, but it leaves out etiquette like when to resign or how the clock works in person. That keeps it from working as a community of practice, though adding too much would clash with CTML’s coherence principle and overload novices.',
+        text: 'I wrote the social constructivism analysis, drawing on Vygotsky’s zone of proximal development and situated learning. Lessons are well scaffolded, with placement by level and automated characters acting as the more knowledgeable other. But that support disappears in the games tab: in games against Oscar, friends or anyone else, there are no hints and no gradually fading support, so a beginner has to figure out real games alone. On the cultural side, Duolingo uses Elo ratings, which place learners in chess’s wider community, but it leaves out etiquette like when to resign or how the clock works in person. That keeps it from working as a community of practice, though adding too much would clash with CTML’s coherence principle and overload novices.',
       },
       { type: 'h', text: 'Redesign' },
       {

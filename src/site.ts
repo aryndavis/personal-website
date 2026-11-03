@@ -96,7 +96,7 @@ export const portfolioTracks: Record<Track, { path: string; label: string; file:
     path: '/portfolio/curriculum',
     label: 'Curriculum design',
     file: 'curriculum.exe',
-    blurb: 'Courses, clubs and classes I’ve designed and taught, from middle school coding clubs to adult cohorts.',
+    blurb: 'Courses, clubs and classes I’ve designed and taught, from middle school coding clubs to adult cohorts, plus analysis of learning platforms.',
   },
   software: {
     path: '/portfolio/software',
