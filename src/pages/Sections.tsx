@@ -129,7 +129,7 @@ export function PortfolioTrackPage({ track, slug }: { track: Track; slug?: strin
       intro={
         <p>
           {curriculum
-            ? 'Courses, clubs and classes I’ve designed and taught. Each case study covers the learners, the goals, the design decisions, my role, and how it went.'
+            ? 'Courses, clubs and classes I’ve designed and taught. Each case study covers the learners, the goals, the design decisions (or the analysis), my role, and how it went.'
             : 'Things I’ve designed and built, most with a live demo and the code on GitHub.'}{' '}
           <a href={href(portfolioTracks[curriculum ? 'software' : 'curriculum'].path)}>See {curriculum ? 'my software' : 'my curriculum design'} work ▶</a>
         </p>

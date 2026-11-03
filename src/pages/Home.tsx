@@ -11,8 +11,8 @@ import { school } from '../content/school'
 import { bookshelf, projectPath, sections, site, type SectionKey } from '../site'
 
 const latest = <T extends Entry>(entries: T[], count = 2) => newestFirst(entries).slice(0, count)
-// The featured project is the newest one people can open and try.
-const featuredProject = latest(projects.filter((project) => project.links?.length), 1)[0]
+// The featured project is the newest thing I've built that people can open and try (a software project with links).
+const featuredProject = latest(projects.filter((project) => project.track === 'software' && project.links?.length), 1)[0]
 
 const inSection = (key: SectionKey) => (entry: Entry) => ({ slug: entry.slug, title: entry.title, path: `${sections[key].path}/${entry.slug}` })
 

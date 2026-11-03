@@ -164,6 +164,7 @@ export const projects: Project[] = [
   },
   // Curriculum case studies share one outline: who it was for, goals, design decisions
   // (framed by ADDIE: analysis, design, development, implementation), my role, and how it went (evaluation).
+  // An analysis of someone else's design (like the Duolingo paper) has "The analysis" and "Redesign" instead.
   {
     slug: 'ai-brainstorming-lesson',
     track: 'curriculum',
@@ -210,11 +211,11 @@ export const projects: Project[] = [
       {
         type: 'list',
         items: [
-          'Problem-centered: everything centers on a real problem, first a remote company deciding whether to go hybrid, then a problem of each learner’s own, which ties back to the market research in the brief.',
+          'Problem-centered: everything centers on solving a real problem, first a remote company deciding whether to go hybrid, then a new problem of each learner’s choice. The skill itself was chosen for the hardest part of their project, the brief’s market research.',
           'Activation: learners start with what they already know, like what makes a good brainstorming session and what they’d ask about the problem, before anyone opens an AI tool.',
           'Demonstration: every tip comes with a live prompt example, so learners see a technique in action before they try it.',
           'Application: the breakout rooms and the independent activity have learners use the techniques themselves, on a new problem.',
-          'Integration: the wrap-up asks for one technique each learner will keep using and one they won’t, shared as a group list after class.',
+          'Integration: the wrap-up has learners reflect on how they’ll use AI in their own planning and brainstorming going forward.',
         ],
       },
       { type: 'h', text: 'Design decisions' },
@@ -341,7 +342,7 @@ export const projects: Project[] = [
     title: 'A critical analysis of Duolingo Chess',
     date: '2026-10-21',
     period: 'Oct 2026',
-    role: 'Co-author (co-written with a classmate)',
+    role: 'Co-author',
     audience: 'Adults learning chess informally',
     format: 'Theory-based design analysis, with redesign mockups',
     summary: 'A design critique of Duolingo Chess through the Cognitive Theory of Multimedia Learning and social constructivism, with redesign recommendations and mockups.',
@@ -355,7 +356,7 @@ export const projects: Project[] = [
       { type: 'h', text: 'Who it was for' },
       {
         type: 'p',
-        text: 'A midterm paper for MSTU 4083 in Technology, Media, and Learning at Columbia, co-written with a classmate. We were interested in informal learning among adult learners, and we had contrasting chess experience: one of us had played before, and the other had never taken a lesson. That gave us an intermediate and a novice view of Duolingo’s newest course.',
+        text: 'A midterm paper for MSTU 4083, in the Technology, Media, and Learning program at Teachers College, Columbia University, co-written with a classmate. We were interested in informal learning among adult learners, and we had contrasting chess experience: one of us had played before, and the other had never taken a lesson. That gave us an intermediate and a novice view of Duolingo’s newest course.',
       },
       { type: 'h', text: 'Goals' },
       { type: 'p', text: 'We set out to:' },
