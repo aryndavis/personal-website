@@ -108,6 +108,16 @@ test('the portfolio links to both tracks, and each project lives under its own t
   }
 })
 
+test('school assignments link to real case studies, or to outside pages over http(s)', async () => {
+  const { school, assignmentLinks } = await vite.ssrLoadModule('/src/content/school.ts')
+  const links = assignmentLinks()
+  assert.equal(links.length, school.assignments.length, 'every assignment has somewhere to go')
+  for (const link of links) {
+    if (link.external) assert.match(link.path, /^https?:\/\//, link.title)
+    else assert.ok(pages.some((page) => page.path === link.path), link.path)
+  }
+})
+
 test('old and wrong-track project addresses redirect to the project’s page', async () => {
   const { movedTo, portfolioRedirects } = await vite.ssrLoadModule('/src/routes.ts')
   const paths = new Set(pages.map((page) => page.path))

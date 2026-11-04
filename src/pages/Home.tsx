@@ -7,7 +7,7 @@ import { newestFirst, type Entry } from '../content/types'
 import { winePosts } from '../content/wine'
 import { href } from '../router'
 import { currentlyReading } from '../content/books'
-import { school } from '../content/school'
+import { assignmentLinks, school } from '../content/school'
 import { bookshelf, projectPath, sections, site, type SectionKey } from '../site'
 
 const latest = <T extends Entry>(entries: T[], count = 2) => newestFirst(entries).slice(0, count)
@@ -21,6 +21,8 @@ const folders: { key: SectionKey; icon: IconName; tone: 'lime' | 'mint' | 'pink'
   { key: 'education', icon: 'notebook', tone: 'mint', entries: latest(educationPosts).map(inSection('education')) },
   { key: 'wine', icon: 'glass', tone: 'pink', entries: latest(winePosts).map(inSection('wine')) },
 ]
+
+const assignments = assignmentLinks()
 
 type WindowId = 'about' | 'currently' | 'school' | 'mail' | SectionKey
 
@@ -205,18 +207,20 @@ export default function Home() {
                 ))}
               </ul>
               <p className="folder-recent">Assignments:</p>
-              {school.assignments.filter((a) => /^https?:\/\//i.test(a.href)).length ? (
+              {assignments.length ? (
                 <ul className="folder-list">
-                  {school.assignments
-                    .filter((a) => /^https?:\/\//i.test(a.href))
-                    .map((assignment) => (
-                      <li key={assignment.href}>
-                        <a href={assignment.href} target="_blank" rel="noopener noreferrer">
+                  {assignments.map((assignment) => (
+                    <li key={assignment.path}>
+                      {assignment.external ? (
+                        <a href={assignment.path} target="_blank" rel="noopener noreferrer">
                           {assignment.title}
                         </a>
-                        {assignment.course && <span className="school-course"> · {assignment.course}</span>}
-                      </li>
-                    ))}
+                      ) : (
+                        <a href={href(assignment.path)}>{assignment.title}</a>
+                      )}
+                      {assignment.course && <span className="school-course"> · {assignment.course}</span>}
+                    </li>
+                  ))}
                 </ul>
               ) : (
                 <p className="school-soon">Coming soon, once there’s something to share!</p>
