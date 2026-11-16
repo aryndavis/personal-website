@@ -491,15 +491,17 @@ export const projects: Project[] = [
         text: 'The Fall 2022 cohort at Justice Through Code, adults impacted by the criminal legal system who were learning software engineering. We used this lesson right as students began working on their group projects, so they could understand some of the challenges of working with Git before they ran into them on their own.',
       },
       { type: 'h', text: 'Goals' },
-      { type: 'p', text: 'I wanted learners to be able to:' },
+      {
+        type: 'p',
+        text: 'The goal was for students to feel comfortable using Git before group projects started, so a merge conflict wouldn’t stop their work. I wanted them to be able to:',
+      },
       {
         type: 'list',
-        items: [
-          'Explain why merge conflicts happen',
-          'Predict whether a merge will conflict',
-          'Read conflict markers and resolve them',
-          'Check their work and finish the merge, or back out of it safely',
-        ],
+        items: ['Explain why merge conflicts happen when people work on the same code', 'Resolve a merge conflict in their own group’s repo'],
+      },
+      {
+        type: 'p',
+        text: 'I didn’t write formal objectives for the live lesson. When I turned it into a self-guided lesson, I wrote measurable ones and tied each to a check.',
       },
       { type: 'h', text: 'Design decisions' },
       {
@@ -525,7 +527,7 @@ export const projects: Project[] = [
         items: [
           'After this, students felt more comfortable using Git and resolving conflicts. We didn’t formally assess the lesson, since the goal was comfort with Git, but fewer students came to office hours with Git questions, and mentors said most project groups came to them with conceptual design questions rather than procedural Git questions.',
           'What I’d change: I would have automated the demo instead of relying on live demo work. Live demos raise the potential for mistakes and errors that aren’t related to the demo itself, and that makes the demo more stressful.',
-          'Since then, I’ve turned the demo into a self-guided lesson anyone can work through, with the practice branches prepared ahead of time, so every merge behaves the same way each time. Learners predict what Git will do before each merge, work through a clean merge and a conflict, learn the most common mistakes, and check themselves with a short quiz and a challenge, each tied to a lesson objective.',
+          'Since then, I’ve turned the demo into a self-guided lesson anyone can work through, with the practice branches prepared ahead of time, so every merge behaves the same way each time. Learners predict what Git will do before each merge, work through a clean merge and a conflict, learn the most common mistakes, and check themselves with a quick check and a challenge, each tied to a lesson objective.',
         ],
       },
     ],
