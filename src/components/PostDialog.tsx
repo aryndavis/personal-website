@@ -38,6 +38,20 @@ export function PostBody({ blocks }: { blocks: Block[] }) {
                 {block.caption && <figcaption>{block.caption}</figcaption>}
               </figure>
             )
+          case 'compare':
+            return (
+              <figure key={index} className="post-figure post-compare">
+                <div className="post-compare-pair">
+                  {(['before', 'after'] as const).map((side) => (
+                    <div key={side}>
+                      <span className="post-compare-label">{side === 'before' ? 'Before' : 'After'}</span>
+                      <img src={`${import.meta.env.BASE_URL}${block[side].src}`} alt={`${side === 'before' ? 'Before' : 'After'}: ${block[side].alt}`} loading="lazy" />
+                    </div>
+                  ))}
+                </div>
+                {block.caption && <figcaption>{block.caption}</figcaption>}
+              </figure>
+            )
           case 'list':
             return (
               <ul key={index}>

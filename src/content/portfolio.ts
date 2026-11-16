@@ -183,6 +183,7 @@ export const projects: Project[] = [
     links: [
       { label: 'Slide deck (PDF) ↗', href: '/files/ai-brainstorming-deck.pdf' },
       { label: 'Facilitator plan (PDF) ↗', href: '/files/ai-brainstorming-facilitator-plan.pdf' },
+      { label: 'Revised slide deck (PDF) ↗', href: '/files/ai-brainstorming-deck-revised.pdf' },
     ],
     body: [
       { type: 'h', text: 'Who it was for' },
@@ -282,6 +283,68 @@ export const projects: Project[] = [
           'With more time, I’d add a Mentimeter activity where learners answer in writing and see the answers grouped into themes live. That would help quieter learners early in a cohort and bring in more perspectives.',
           'I’d also cut down the text on the slides. I kept them wordy so a facilitator could teach from them without separate notes, but a wall of text can lose people.',
         ],
+      },
+      { type: 'h', text: 'Revising the lesson' },
+      { type: 'p', text: 'I got feedback on the deck, and revised it. The feedback was to:' },
+      {
+        type: 'list',
+        items: [
+          'Add more images to each slide, including screenshots of the prompt examples, to show how responses change with better-worded prompts. They’re meant to be a live demo, but in the deck they also help break up the page.',
+          'Add learning objectives and an agenda before the content starts, with objectives written so it’s easy to assess whether learners really learned from the lesson',
+          'Make the final question an exit ticket instead of an open question',
+        ],
+      },
+      { type: 'p', text: 'Here’s what I changed:' },
+      {
+        type: 'list',
+        items: [
+          'A new slide before the content with three objectives, each something a learner does and can show, and the agenda with the time for each part.',
+          'Prompt and response examples from Claude on the AI slides, including the same request with and without background, so learners can see the difference before they try it.',
+          'An exit ticket with one question for each objective, plus the reflection question I already had.',
+          'Less text, and an icon or image on every slide. I’d already flagged the wordy slides, so I cut each one down to its main point.',
+        ],
+      },
+      {
+        type: 'image',
+        src: 'images/portfolio/ai-brainstorming-revised-02.jpg',
+        alt: 'Revised slide “Today’s plan”: three objectives (identify a missing perspective, write a prompt that gives AI a role and background, revise a prompt based on the response) and a 30-minute agenda.',
+        caption: 'New: the objectives and agenda come before the content.',
+      },
+      {
+        type: 'compare',
+        before: {
+          src: 'images/portfolio/ai-brainstorming-slide-09.jpg',
+          alt: 'Original slide “Go into the brainstorm with your own ideas”: a paragraph about background research and two example prompts as text.',
+        },
+        after: {
+          src: 'images/portfolio/ai-brainstorming-revised-10.jpg',
+          alt: 'Revised slide: one line of text, and two cards showing Claude’s responses to a vague school project prompt and to a detailed one about light color and plant growth.',
+        },
+        caption: 'The background slide now shows the difference instead of describing it.',
+      },
+      {
+        type: 'compare',
+        before: {
+          src: 'images/portfolio/ai-brainstorming-slide-14.jpg',
+          alt: 'Original closing slide: two open questions about how learners will use AI going forward.',
+        },
+        after: {
+          src: 'images/portfolio/ai-brainstorming-revised-15.jpg',
+          alt: 'Revised closing slide, “Exit ticket”: four questions, one for each objective plus a reflection question.',
+        },
+        caption: 'The closing questions became an exit ticket, with one question per objective.',
+      },
+      {
+        type: 'compare',
+        before: {
+          src: 'images/portfolio/ai-brainstorming-slide-12.jpg',
+          alt: 'Original slide “What to avoid”: three points, each with a long explanation.',
+        },
+        after: {
+          src: 'images/portfolio/ai-brainstorming-revised-13.jpg',
+          alt: 'Revised slide “What to avoid”: the same three points with an icon and one short line each.',
+        },
+        caption: 'What to avoid, cut down to one line per point.',
       },
     ],
   },

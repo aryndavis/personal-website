@@ -12,6 +12,8 @@ export type Block =
   | { type: 'code'; text: string; label?: string }
   /** src is a file in public/, e.g. 'images/education/photo.jpg' */
   | { type: 'image'; src: string; alt: string; caption?: string }
+  /** Two images side by side, labeled Before and After, e.g. a slide before and after a revision. Stacks on phones. */
+  | { type: 'compare'; before: { src: string; alt: string }; after: { src: string; alt: string }; caption?: string }
 
 export interface Entry {
   slug: string
