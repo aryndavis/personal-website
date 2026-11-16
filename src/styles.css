@@ -1142,6 +1142,28 @@ button.pixel-button:active {
   text-align: center;
 }
 
+/* Before and after, side by side; stacked on narrow windows. */
+.post-compare-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+.post-compare-label {
+  display: block;
+  margin-bottom: 4px;
+  font: 1.15rem/1.2 var(--terminal);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 560px) {
+  .post-compare-pair {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ---------- Code in posts ---------- */
 
 .post-body code {
