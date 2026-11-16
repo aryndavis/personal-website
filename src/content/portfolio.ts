@@ -469,6 +469,70 @@ export const projects: Project[] = [
     ],
   },
   {
+    slug: 'merge-conflict-lesson',
+    track: 'curriculum',
+    title: 'Your first merge conflict: a Git lesson',
+    date: '2022-10-01',
+    period: 'Fall 2022',
+    role: 'Technical Instructor, Justice Through Code',
+    audience: 'Adult learners about to start group projects',
+    format: 'Live demo and group practice, now a self-guided lesson on GitHub',
+    summary: 'A colorful page of the best musicians of the 2020s that I used to teach merge conflicts right before students started group projects, now a self-guided lesson anyone can work through.',
+    tags: ['Git', 'adult learners', 'live demo'],
+    cover: {
+      src: 'images/portfolio/merge-conflict-page.jpg',
+      alt: 'The lesson page, “Best Musicians of the 2020s!”: five pastel cards listing rap, pop, electronic, alternative and country artists.',
+    },
+    links: [{ label: 'Lesson on GitHub ↗', href: 'https://github.com/aryndavis/merge-conflict-demo' }],
+    body: [
+      { type: 'h', text: 'Who it was for' },
+      {
+        type: 'p',
+        text: 'The Fall 2022 cohort at Justice Through Code, adults impacted by the criminal legal system who were learning software engineering. We used this lesson right as students began working on their group projects, so they could understand some of the challenges of working with Git before they ran into them on their own.',
+      },
+      { type: 'h', text: 'Goals' },
+      {
+        type: 'p',
+        text: 'The goal was for students to feel comfortable using Git before group projects started, so a merge conflict wouldn’t stop their work. I wanted them to be able to:',
+      },
+      {
+        type: 'list',
+        items: ['Explain why merge conflicts happen when people work on the same code', 'Resolve a merge conflict in their own group’s repo'],
+      },
+      {
+        type: 'p',
+        text: 'I didn’t write formal objectives for the live lesson. When I turned it into a self-guided lesson, I wrote measurable ones and tied each to a check.',
+      },
+      { type: 'h', text: 'Design decisions' },
+      {
+        type: 'list',
+        items: [
+          'Analysis: group projects were the first time students shared a repo with each other, and in earlier semesters, Git questions brought a lot of students to office hours.',
+          'Design: I kept the content low stakes and fun, a page of the best musicians of the 2020s, so every change felt like a friendly debate about an artist. The lesson starts with a live demo, then moves into students’ own project repos, so they practice where they’ll actually run into conflicts.',
+          'Development: I built the page in about an hour, with branches that change the same artist so the merge conflicts every time.',
+          'Implementation: I ran it as a live demo in class. Then students went into their groups, where they already had project repos, and made and resolved a merge conflict of their own.',
+        ],
+      },
+      {
+        type: 'image',
+        src: 'images/portfolio/merge-conflict-markers.jpg',
+        alt: 'The page after committing without resolving the conflict: “<<<<<<< HEAD”, “=======” and “>>>>>>> origin/conflict” show up as text in the rap list, between Tyler, the Creator and Doechii.',
+        caption: 'One of the common mistakes in the lesson: commit without resolving the conflict, and the markers show up on the page.',
+      },
+      { type: 'h', text: 'My role' },
+      { type: 'p', text: 'I designed and built the page and the lesson, and taught it to the cohort.' },
+      { type: 'h', text: 'How it went' },
+      {
+        type: 'list',
+        items: [
+          'After this, students felt more comfortable using Git and resolving conflicts. We didn’t formally assess the lesson, since the goal was comfort with Git, but fewer students came to office hours with Git questions, and mentors said most project groups came to them with conceptual design questions rather than procedural Git questions.',
+          'What I’d change: I would have automated the demo instead of relying on live demo work. Live demos raise the potential for mistakes and errors that aren’t related to the demo itself, and that makes the demo more stressful.',
+          'Since then, I’ve turned the demo into a self-guided lesson anyone can work through, with the practice branches prepared ahead of time, so every merge behaves the same way each time. Learners predict what Git will do before each merge, work through a clean merge and a conflict, learn the most common mistakes, and check themselves with a quick check and a challenge, each tied to a lesson objective.',
+        ],
+      },
+    ],
+  },
+  {
     slug: 'codespeak-labs',
     track: 'curriculum',
     title: 'Coding for young learners at CodeSpeak Labs',
