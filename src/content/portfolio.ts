@@ -231,58 +231,12 @@ export const projects: Project[] = [
       },
       { type: 'h', text: 'Lesson flow' },
       {
-        type: 'list',
-        items: [
-          '3 min: what makes a good brainstorm, and rubber ducking (slides 1–2)',
-          '4 min: think and share on the hybrid-work problem, alone (slide 3)',
-          '2 min: techniques, including the Six Thinking Hats (slides 4–5)',
-          '7 min: think-group-share in breakout rooms, AI-free (slide 6)',
-          '8 min: from group brainstorm to AI, with live prompt examples (slides 7–12)',
-          '4 min: independent practice on a new problem (slide 13)',
-          '2 min: wrap-up: one technique you’ll keep, and one you won’t (slide 14)',
-        ],
+        type: 'p',
+        text: 'The lesson runs 30 minutes and moves from people to AI. It opens with what makes a good brainstorm and the idea of rubber ducking (3 minutes). Learners then think on their own about a shared problem: a remote-only company deciding whether to stay remote, go hybrid or require office time (4 minutes). After a quick look at brainstorming techniques like the Six Thinking Hats (2 minutes), they take the same problem into breakout rooms with no AI (7 minutes).',
       },
       {
-        type: 'image',
-        src: 'images/portfolio/ai-brainstorming-slide-03.jpg',
-        alt: 'Slide “Think and Share”: a remote-only company must choose between staying remote, going hybrid, or requiring office time, then announce it and handle exceptions. Learners list their questions, first steps, and the data they’d want.',
-        caption: 'The shared problem learners brainstorm alone, then in groups, then with AI.',
-      },
-      {
-        type: 'image',
-        src: 'images/portfolio/ai-brainstorming-slide-04.jpg',
-        alt: 'Slide “Six Thinking Hats”: process, creativity, facts, benefits, feelings and cautions, asking which hat learners usually wear and which others would have helped.',
-      },
-      {
-        type: 'image',
-        src: 'images/portfolio/ai-brainstorming-slide-08.jpg',
-        alt: 'Slide “AI as a curious observer”: don’t outsource your thinking. Example prompt: “Don’t give me any answers. Ask me questions that help me navigate the problem myself.”',
-      },
-      {
-        type: 'image',
-        src: 'images/portfolio/ai-brainstorming-slide-10.jpg',
-        alt: 'Slide “Iterate!”: prompt, review, tweak, repeat. Example prompts: “Those project ideas are pretty similar. Give me 5 that are completely different from each other” and “Combine ideas 3 and 7 into something new.”',
-      },
-      {
-        type: 'image',
-        src: 'images/portfolio/ai-brainstorming-slide-11.jpg',
-        alt: 'Slide “AI as a critic”. Example prompt: “Here’s my idea: [idea]. Give me the three strongest reasons it might fail, then tell me what I’d need to be true for it to work.”',
-      },
-      {
-        type: 'image',
-        src: 'images/portfolio/ai-brainstorming-slide-12.jpg',
-        alt: 'Slide “What to avoid”: leading questions, since AI can be sycophantic; trusting output before verifying it; and outsourcing your thinking by accepting the first answer.',
-      },
-      { type: 'h', text: 'My role' },
-      { type: 'p', text: 'I designed the whole lesson myself: the skill, the activities, the deck, the example prompts, and a facilitator plan written so someone else could teach it.' },
-      { type: 'h', text: 'How it went' },
-      {
-        type: 'list',
-        items: [
-          'Checks are built into the lesson: each breakout group turns in its plan, and the wrap-up collects one technique every learner will use and one they won’t, shared as a group list after class.',
-          'With more time, I’d add a Mentimeter activity where learners answer in writing and see the answers grouped into themes live. That would help quieter learners early in a cohort and bring in more perspectives.',
-          'I’d also cut down the text on the slides. I kept them wordy so a facilitator could teach from them without separate notes, but a wall of text can lose people.',
-        ],
+        type: 'p',
+        text: 'The longest part brings those same moves to AI, with live prompt examples of AI as another hat, a curious observer and a critic, plus how to iterate and what to avoid (8 minutes). Learners then practice on a new problem of their choice (4 minutes), and the lesson wraps up with one technique they’ll keep and one they won’t (2 minutes).',
       },
       { type: 'h', text: 'Revising the lesson' },
       { type: 'p', text: 'I got feedback on the deck, and revised it. The feedback was to:' },
@@ -301,7 +255,7 @@ export const projects: Project[] = [
           'A new slide before the content with three objectives, each something a learner does and can show, and the agenda with the time for each part.',
           'Prompt and response examples from Claude on the AI slides, including the same request with and without background, so learners can see the difference before they try it.',
           'An exit ticket with one question for each objective, plus the reflection question I already had.',
-          'Less text, and an icon or image on every slide. I’d already flagged the wordy slides, so I cut each one down to its main point.',
+          'Less text, and an icon or image on every slide, with each one cut down to its main point.',
         ],
       },
       {
@@ -309,6 +263,42 @@ export const projects: Project[] = [
         src: 'images/portfolio/ai-brainstorming-revised-02.jpg',
         alt: 'Revised slide “Today’s plan”: three objectives (identify a missing perspective, write a prompt that gives AI a role and background, revise a prompt based on the response) and a 30-minute agenda.',
         caption: 'New: the objectives and agenda come before the content.',
+      },
+      {
+        type: 'compare',
+        before: {
+          src: 'images/portfolio/ai-brainstorming-slide-03.jpg',
+          alt: 'Slide “Think and Share”: a remote-only company must choose between staying remote, going hybrid, or requiring office time, then announce it and handle exceptions. Learners list their questions, first steps, and the data they’d want.',
+        },
+        after: {
+          src: 'images/portfolio/ai-brainstorming-revised-04.jpg',
+          alt: 'Revised slide “Think and Share”: the same problem in a shorter quote, the three questions for learners on their own, and icons of a home, an arrow and an office building.',
+        },
+        caption: 'The shared problem learners brainstorm alone, then in groups, then with AI.',
+      },
+      {
+        type: 'compare',
+        before: {
+          src: 'images/portfolio/ai-brainstorming-slide-04.jpg',
+          alt: 'Slide “Six Thinking Hats”: process, creativity, facts, benefits, feelings and cautions, asking which hat learners usually wear and which others would have helped.',
+        },
+        after: {
+          src: 'images/portfolio/ai-brainstorming-revised-05.jpg',
+          alt: 'Revised slide “Six Thinking Hats”: the same hats chart, with the question beside it.',
+        },
+        caption: 'The Six Thinking Hats, which learners use to spot the perspectives they’re leaving out.',
+      },
+      {
+        type: 'compare',
+        before: {
+          src: 'images/portfolio/ai-brainstorming-slide-08.jpg',
+          alt: 'Slide “AI as a curious observer”: don’t outsource your thinking. Example prompt: “Don’t give me any answers. Ask me questions that help me navigate the problem myself.”',
+        },
+        after: {
+          src: 'images/portfolio/ai-brainstorming-revised-09.jpg',
+          alt: 'Revised slide “AI as a curious observer”: two short lines, and a card with the prompt about the remote company and Claude answering with four questions.',
+        },
+        caption: 'The curious observer slide now shows Claude asking questions instead of giving answers.',
       },
       {
         type: 'compare',
@@ -325,14 +315,26 @@ export const projects: Project[] = [
       {
         type: 'compare',
         before: {
-          src: 'images/portfolio/ai-brainstorming-slide-14.jpg',
-          alt: 'Original closing slide: two open questions about how learners will use AI going forward.',
+          src: 'images/portfolio/ai-brainstorming-slide-10.jpg',
+          alt: 'Slide “Iterate!”: prompt, review, tweak, repeat. Example prompts: “Those project ideas are pretty similar. Give me 5 that are completely different from each other” and “Combine ideas 3 and 7 into something new.”',
         },
         after: {
-          src: 'images/portfolio/ai-brainstorming-revised-15.jpg',
-          alt: 'Revised closing slide, “Exit ticket”: four questions, one for each objective plus a reflection question.',
+          src: 'images/portfolio/ai-brainstorming-revised-11.jpg',
+          alt: 'Revised slide “Iterate!”: one line of text, a Prompt, Review, Tweak, Repeat cycle icon, and a card with Claude giving five very different project ideas.',
         },
-        caption: 'The closing questions became an exit ticket, with one question per objective.',
+        caption: 'Iterating, with a real follow-up prompt and the more varied ideas it got back.',
+      },
+      {
+        type: 'compare',
+        before: {
+          src: 'images/portfolio/ai-brainstorming-slide-11.jpg',
+          alt: 'Slide “AI as a critic”. Example prompt: “Here’s my idea: [idea]. Give me the three strongest reasons it might fail, then tell me what I’d need to be true for it to work.”',
+        },
+        after: {
+          src: 'images/portfolio/ai-brainstorming-revised-12.jpg',
+          alt: 'Revised slide “AI as a critic”: one line of text, and a card with a hybrid-work idea and Claude giving three reasons it might fail and what would need to be true.',
+        },
+        caption: 'The critic slide, with Claude’s critique of a hybrid plan.',
       },
       {
         type: 'compare',
@@ -345,6 +347,29 @@ export const projects: Project[] = [
           alt: 'Revised slide “What to avoid”: the same three points with an icon and one short line each.',
         },
         caption: 'What to avoid, cut down to one line per point.',
+      },
+      {
+        type: 'compare',
+        before: {
+          src: 'images/portfolio/ai-brainstorming-slide-14.jpg',
+          alt: 'Original closing slide: two open questions about how learners will use AI going forward.',
+        },
+        after: {
+          src: 'images/portfolio/ai-brainstorming-revised-15.jpg',
+          alt: 'Revised closing slide, “Exit ticket”: four questions, one for each objective plus a reflection question.',
+        },
+        caption: 'The closing questions became an exit ticket, with one question per objective.',
+      },
+      { type: 'h', text: 'My role' },
+      { type: 'p', text: 'I designed the whole lesson myself: the skill, the activities, the deck, the example prompts, and a facilitator plan written so someone else could teach it.' },
+      { type: 'h', text: 'How it went' },
+      {
+        type: 'list',
+        items: [
+          'Checks are built into the lesson: each breakout group turns in its plan, and the wrap-up collects one technique every learner will use and one they won’t, shared as a group list after class.',
+          'With more time, I’d add a Mentimeter activity where learners answer in writing and see the answers grouped into themes live. That would help quieter learners early in a cohort and bring in more perspectives.',
+          'I kept the original slides wordy so a facilitator could teach from them without separate notes, but a wall of text can lose people, so I cut them down in the revision.',
+        ],
       },
     ],
   },
