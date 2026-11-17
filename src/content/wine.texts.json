@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "wine": "Andrias Gvino",
+    "grape": "Rkatsiteli",
+    "vintage": "2023",
+    "date": "2026-11-16",
+    "region": "Kakheti",
+    "boughtAt": "Table Wine",
+    "style": "orange",
+    "price": "$$",
+    "rating": 4.5,
+    "buyAgain": "yes",
+    "verdict": "perfectly balanced orange wine!",
+    "flavors": [
+      "lemon zest",
+      "green apple",
+      "sage"
+    ],
+    "sweetness": "off-dry",
+    "body": "medium",
+    "acidity": "medium-high",
+    "tannin": "medium-low",
+    "pairedWith": "wavy chips and French onion dip!",
+    "thoughts": "this is the perfectly balanced orange wine. I feel like I used to not like orange wines as much but I must have had some great luck since I have some great ones lately! I didn't even know Georgia (the country) was coming with grapes like this!!! Apparently Georgia has some of the oldest wine producing land and this is one of the oldest grape varieties in the world. There's still so much to learn about the world!!! I can def tell this grape is grown in super rich soil, the notes really sing here. I would also probably pair this with a very creamy cheese, maybe a goat cheese? Loved this so much."
+  }
+]
