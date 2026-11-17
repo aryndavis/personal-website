@@ -9,7 +9,7 @@ import { BODY, LEVEL, SWEETNESS, meterFill, formatDate, newestFirst, type BuyAga
 import { everyday } from '../content/everyday'
 import { winePosts } from '../content/wine'
 import { href } from '../router'
-import { sections } from '../site'
+import { newsletterSignupUrl, sections, wineNewsletter } from '../site'
 
 const section = sections.wine
 const postLink = (post: WinePost) => href(`${section.path}/${post.slug}`)
@@ -203,6 +203,34 @@ function Bottle({ post }: { post: WinePost }) {
   )
 }
 
+/**
+ * The monthly email sign-up. A plain form that posts to Buttondown in a new tab (Buttondown asks forms not to use
+ * fetch, since it may show a CAPTCHA), so the visitor keeps their place on the rack. Hidden until a username is set.
+ */
+function NewsletterSignup() {
+  const user = wineNewsletter.buttondownUser
+  if (!user) return null
+  return (
+    <PixelWindow title="mailing_list.txt" tone="pink" className="newsletter-window">
+      <h2 className="newsletter-title">
+        <PixelIcon name="glass" size={22} /> Monthly wine mail
+      </h2>
+      <p>Once a month, I’ll send a roundup of everything new on the rack: the bottles I tried, what I thought, and any new guides. You can unsubscribe anytime.</p>
+      <form className="newsletter-form" action={newsletterSignupUrl(user)} method="post" target="_blank" rel="noopener">
+        <label htmlFor="newsletter-email">Email address</label>
+        <div className="newsletter-row">
+          <input id="newsletter-email" type="email" name="email" autoComplete="email" required placeholder="you@example.com" />
+          <input type="hidden" name="embed" value="1" />
+          <button type="submit" className="pixel-button">
+            Sign me up
+          </button>
+        </div>
+      </form>
+      <p className="newsletter-note">A new tab opens to finish signing up. Then check your inbox for a confirmation email.</p>
+    </PixelWindow>
+  )
+}
+
 export default function WinePage({ slug }: { slug?: string }) {
   useFocusReturn(slug)
   const sorted = newestFirst(winePosts)
@@ -271,6 +299,8 @@ export default function WinePage({ slug }: { slug?: string }) {
           </p>
         </section>
       </PixelWindow>
+
+      <NewsletterSignup />
 
       {guides.length > 0 && (
         <section className="guides" aria-labelledby="guides-title">

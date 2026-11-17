@@ -2,7 +2,7 @@
 // tags, plus a plain-HTML summary that search engines can read before the app starts. Used by prerender.mjs.
 
 import { previewTags } from '../src/previewTags.ts'
-import { isWinePath, publicUrl, sections, site, wineDomain } from '../src/site.ts'
+import { isWinePath, publicUrl, sections, site, wineDomain, winePreview } from '../src/site.ts'
 
 export const ORIGIN = site.url
 
@@ -94,9 +94,10 @@ export function wineDomainRules(pages) {
     moved(`${wine}${winePath}`, `${wine}/`),
     moved(`${wine}${winePath}/*`, `${wine}/:splat`),
     ...elsewhere.flatMap((section) => [moved(`${wine}/${section}`, `${site.url}/${section}`), moved(`${wine}/${section}/*`, `${site.url}/${section}/:splat`)]),
-    // Its own robots.txt and sitemap.
+    // Its own robots.txt, sitemap and RSS feed.
     { from: `${wine}/robots.txt`, to: '/robots-wine.txt', status: '200!' },
     { from: `${wine}/sitemap.xml`, to: '/sitemap-wine.xml', status: '200!' },
+    { from: `${wine}/feed.xml`, to: '/feed-wine.xml', status: '200!' },
     ...wineRewrites(pages),
   ]
 }
@@ -122,3 +123,35 @@ export const wineSitemap = (pages) => urlset(pages.filter((page) => isWinePath(p
  * with an index.html (wine/x/index.html) would get a redirect to /wine/x/ first.
  */
 export const fileFor = (path) => (path === '/' ? 'index.html' : `${path.slice(1)}.html`)
+
+const FEED_SIZE = 30
+
+/**
+ * genzwithaglass.com's RSS feed (served there as /feed.xml by wineDomainRules): the newest wine posts, for feed
+ * readers and for newsletter tools that can turn a feed into an email.
+ */
+export function wineFeed(posts) {
+  const newest = [...posts].sort((a, b) => b.date.localeCompare(a.date)).slice(0, FEED_SIZE)
+  const items = newest.map((post) => {
+    const link = publicUrl(`${sections.wine.path}/${post.slug}`)
+    return `    <item>
+      <title>${escape(post.title)}</title>
+      <link>${escape(link)}</link>
+      <guid isPermaLink="true">${escape(link)}</guid>
+      <pubDate>${new Date(`${post.date}T12:00:00Z`).toUTCString()}</pubDate>
+      <description>${escape(post.summary)}</description>
+    </item>`
+  })
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>${escape(wineDomain.name)}</title>
+    <link>${wineDomain.url}/</link>
+    <atom:link href="${wineDomain.url}/feed.xml" rel="self" type="application/rss+xml" />
+    <description>${escape(winePreview.subtitle)}</description>
+    <language>en-us</language>
+${items.join('\n')}
+  </channel>
+</rss>
+`
+}

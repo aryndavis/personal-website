@@ -83,6 +83,16 @@ export const sections: Record<SectionKey, { path: string; label: string; file: s
  */
 export const wineDomain = { host: 'genzwithaglass.com', url: 'https://genzwithaglass.com', name: 'Gen Z With A Glass' }
 
+/**
+ * Gen Z With A Glass's monthly email, sent with Buttondown (buttondown.com). The sign-up box posts straight to
+ * Buttondown, which sends each new subscriber a confirmation email; the address is allowed as a form target in
+ * public/_headers. Leave buttondownUser empty to hide the box. `npm run wine-digest` drafts each month's email.
+ */
+export const wineNewsletter = { buttondownUser: '' }
+
+/** Where the sign-up box sends its form (Buttondown's embed form). */
+export const newsletterSignupUrl = (user: string) => `https://buttondown.com/api/emails/embed-subscribe/${encodeURIComponent(user)}`
+
 /** Whether an app path is in the wine section (/wine or /wine/<post>). */
 export const isWinePath = (path: string) => path === sections.wine.path || path.startsWith(`${sections.wine.path}/`)
 
