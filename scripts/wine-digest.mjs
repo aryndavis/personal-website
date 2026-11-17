@@ -18,7 +18,7 @@ if (!isMonth(month)) {
 
 // Load the posts through Vite, the same way the build does, so texted-in notes are included.
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
-const vite = await createServer({ root, logLevel: 'error', server: { middlewareMode: true, hmr: false }, appType: 'custom' })
+const vite = await createServer({ root, logLevel: 'error', server: { middlewareMode: true, hmr: false }, appType: 'custom', optimizeDeps: { noDiscovery: true, include: [] } })
 let winePosts
 try {
   winePosts = (await vite.ssrLoadModule('/src/content/wine.ts')).winePosts
