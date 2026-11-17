@@ -44,6 +44,8 @@ export interface TastingNote {
   suggestedPairings?: string[]
 
   // Optional: the post
+  /** One line anyone would find interesting, wine fan or not, shown under the title. Also the post's summary when there is one. */
+  hook?: string
   /** Where you were, who you were with, why you opened it. */
   moment?: string
   look?: string
@@ -56,7 +58,7 @@ export interface TastingNote {
   // Optional: overrides
   /** Defaults to the wine's name and vintage. */
   title?: string
-  /** The line on the home page and in previews. Defaults to the verdict, then the first sentence of `moment`. */
+  /** The line on the home page and in previews. Defaults to the hook, then the verdict, then the first sentence of `moment`. */
   summary?: string
   /** Extra tags. 'tasting note' and the style are added automatically. */
   tags?: string[]
@@ -223,7 +225,8 @@ function toPost(note: TastingNote, slug: string, visit: Visit): WinePost {
     slug,
     title: note.title ?? reviewTitle(note, visit.round),
     date: note.date,
-    summary: note.summary ?? (note.verdict?.trim() || (note.moment ? firstSentence(note.moment.trim()) : `${note.grape}${where}.`)),
+    ...(note.hook?.trim() ? { subtitle: note.hook.trim() } : {}),
+    summary: note.summary ?? (note.hook?.trim() || note.verdict?.trim() || (note.moment ? firstSentence(note.moment.trim()) : `${note.grape}${where}.`)),
     tags: [...new Set(['tasting note', ...(style ? [style] : []), ...(note.tags ?? [])])],
     wine: {
       name: note.wine,

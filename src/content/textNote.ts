@@ -15,6 +15,7 @@ import type { TastingNote } from './tastingNotes.ts'
 import { BODY, LEVEL_OR_NONE, RATINGS, SWEETNESS, type BuyAgain, type Rating, type WinePrice, type WineStyle } from './types.ts'
 
 export const TEXT_TEMPLATE = `wine: Name, Grape, 2022
+hook: (one line anyone would find interesting)
 producer:
 region:
 bought at:
@@ -85,6 +86,9 @@ const LABELS: Record<string, Field> = {
   taste: 'palate',
   finish: 'finish',
   title: 'title',
+  hook: 'hook',
+  fact: 'hook',
+  funfact: 'hook',
   summary: 'summary',
   tags: 'tags',
 }
@@ -93,7 +97,7 @@ const REQUIRED: readonly Field[] = ['wine', 'grape', 'vintage']
 // Answers that mean "I don't know the price": the price is left off the post.
 const UNSURE = new Set(['not sure', 'unsure', 'idk', 'dont know', 'i dont know', 'no idea', 'unknown', '?'])
 
-const LIMITS: Partial<Record<Field, number>> = { wine: 120, grape: 120, verdict: 400, thoughts: 4000 }
+const LIMITS: Partial<Record<Field, number>> = { wine: 120, grape: 120, hook: 200, verdict: 400, thoughts: 4000 }
 const DEFAULT_LIMIT = 300
 
 export type ParseResult = { ok: true; note: TastingNote } | { ok: false; error: string }
@@ -252,7 +256,7 @@ function readLines(note: Record<string, unknown>, lines: string[], today: string
   return { ok: true, note: note as unknown as TastingNote }
 }
 
-const STRING_FIELDS = ['wine', 'grape', 'vintage', 'date', 'producer', 'region', 'boughtAt', 'verdict', 'pairedWith', 'moment', 'look', 'nose', 'palate', 'finish', 'thoughts', 'title', 'summary'] as const
+const STRING_FIELDS = ['wine', 'grape', 'vintage', 'date', 'producer', 'region', 'boughtAt', 'verdict', 'pairedWith', 'moment', 'look', 'nose', 'palate', 'finish', 'thoughts', 'title', 'summary', 'hook'] as const
 
 /** Checks a stored texted note before it reaches the site, so a bad file can't break the build or the page. */
 export function isTextNote(value: unknown): value is TastingNote {

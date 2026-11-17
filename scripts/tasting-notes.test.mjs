@@ -132,3 +132,14 @@ test('the order notes are listed in does not change who is "revisited": the date
   assert.equal(later.title, 'X 2022, revisited')
 })
 
+
+test('a hook shows under the title and becomes the summary', () => {
+  const [post] = tastingNotes([
+    { wine: 'X', grape: 'Rkatsiteli', vintage: '2023', date: '2026-01-01', verdict: 'Lovely.', hook: ' Georgia has made wine for 8,000 years. ' },
+  ])
+  assert.equal(post.subtitle, 'Georgia has made wine for 8,000 years.')
+  assert.equal(post.summary, 'Georgia has made wine for 8,000 years.')
+  const [plain] = tastingNotes([{ wine: 'X', grape: 'Gamay', vintage: '2023', date: '2026-01-01', verdict: 'Lovely.' }])
+  assert.equal('subtitle' in plain, false)
+  assert.equal(plain.summary, 'Lovely.')
+})

@@ -121,6 +121,7 @@ notes:
 Anything after "notes:" becomes the post's extra notes.
 ```
 
+- **Hook:** `hook:` (or `fun fact:`) is one line anyone would find interesting, wine fan or not. It shows under the post's title and becomes the post's summary on the home page and in link previews.
 - **Format:** only the first line (wine, grape, year or `NV`) is required. Text `wine help` for every label. Bad values are explained, never guessed.
 - **Preview first:** you get a preview back, and nothing posts until you reply `YES`. `NO` discards it. Previews expire after an hour.
 - **Edit the preview:** to change something before posting, text just that line, like `price: $$` or `rating: 4.5`, and you get an updated preview. Leaving a label blank (`verdict:`) removes that field, and `name:`, `grape:` and `year:` fix the first line. Each edit restarts the hour.

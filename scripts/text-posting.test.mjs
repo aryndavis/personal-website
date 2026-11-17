@@ -435,3 +435,15 @@ test('a new "wine:" text replaces the waiting preview instead of editing it', as
   await send('yes')
   assert.deepEqual(published, [{ wine: 'B', grape: 'Pinot Noir', vintage: '2021', date: TODAY }])
 })
+
+test('a hook can be texted (or edited in) and shows in the preview', async () => {
+  const parsed = parseTextNote('wine: X, Gamay, 2020\nfun fact: Gamay is the grape in Beaujolais.', TODAY)
+  assert.equal(parsed.note.hook, 'Gamay is the grape in Beaujolais.')
+  assert.ok(isTextNote(parsed.note))
+
+  const { send, published } = setup()
+  await send('wine: A, Gamay, 2023')
+  assert.match((await send('hook: Picked by hand.')).reply, /^hook: Picked by hand\.$/m)
+  await send('yes')
+  assert.equal(published[0].hook, 'Picked by hand.')
+})

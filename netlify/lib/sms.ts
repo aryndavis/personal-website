@@ -62,6 +62,7 @@ export function preview(note: TastingNote, heading = 'Preview'): string {
   const lines = [
     `${heading}: ${note.title ?? `${note.wine} ${note.vintage}`} (${note.grape})`,
     facts.length ? facts.join(' · ') : '',
+    note.hook ? `hook: ${note.hook}` : '',
     note.verdict ? `“${note.verdict}”` : '',
     flavors ? `flavors: ${flavors}` : '',
     note.pairedWith ? `paired with: ${note.pairedWith}` : '',
