@@ -55,7 +55,7 @@ const withIcon = (icon: IconName, text: ReactNode) => (
   </span>
 )
 
-/** The tasting card at the top of a tasting note: verdict, ratings, facts, profile, tasting notes and pairings. */
+/** The tasting card after a tasting note's writing: verdict, ratings, facts, profile, tasting notes and pairings. */
 function TastingCard({ post }: { post: WinePost }) {
   if (!post.wine) return null
   const wine = post.wine
@@ -116,7 +116,12 @@ function TastingCard({ post }: { post: WinePost }) {
                     <Meter scale={scale} value={value!} icon={icon} />
                     <span className="meter-label">{value}</span>
                   </span>
-                  {plainly && <span className="profile-plainly">{plainly}</span>}
+                  {plainly && (
+                    <span className="profile-plainly">
+                      <span className="sr-only">: </span>
+                      {plainly}
+                    </span>
+                  )}
                 </dd>
               </div>
             ))}
@@ -312,7 +317,7 @@ export default function WinePage({ slug }: { slug?: string }) {
           prev={sorted[index + 1]}
           next={sorted[index - 1]}
           meta={<TastingCard post={open} />}
-          metaAfterBody
+          metaAfterBody={open.kind === 'tasting'}
         />
       )}
     </div>

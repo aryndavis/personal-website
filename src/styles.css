@@ -1895,6 +1895,15 @@ button.pixel-button:active {
   gap: 8px;
 }
 
+/* Profile rows are taller (meter plus a note), so they get more room and line up at the top. */
+.card-profile {
+  gap: 8px;
+}
+
+.card-profile > div {
+  align-items: start;
+}
+
 .tasting-card dt {
   font: 600 12px/1.2 var(--pixel);
   text-transform: uppercase;
@@ -1922,14 +1931,6 @@ button.pixel-button:active {
   margin-top: 16px;
 }
 
-.card-profile {
-  gap: 8px;
-}
-
-.card-profile > div {
-  align-items: start;
-}
-
 .card-profile dt {
   padding-top: 5px;
 }
@@ -1952,7 +1953,7 @@ button.pixel-button:active {
 }
 
 /* On phones, stack each row (label, then meter, then explanation) so the meters never run off the card. */
-@media (max-width: 520px) {
+@media (max-width: 560px) {
   .card-profile {
     gap: 12px;
   }

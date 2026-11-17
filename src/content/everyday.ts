@@ -1,6 +1,6 @@
 // Plain-language notes for the tasting card's profile rows, so readers who don't know wine terms
 // still get something from the card. Every option on every scale has one; the types make a missing one a build error.
-// Each row compares along one everyday thing: sugar, milk, fruit and tea.
+// Each row mostly sticks to one everyday thing (sugar, milk, fruit, tea) so the steps are easy to compare.
 import type { Body, Level, Sweetness } from './types'
 
 export const everyday: {
