@@ -2,10 +2,11 @@
 //
 // 1. Only Twilio-signed requests from the owner's phone number get through; everything else gets no reply.
 // 2. "wine: …" is parsed and a preview is texted back. Nothing is published yet.
-// 3. "YES" publishes the waiting note (a commit to the site's repo); "NO" throws it away.
+// 3. Texting just the lines to change ("price: $$") edits the waiting note and sends a new preview.
+// 4. "YES" publishes the waiting note (a commit to the site's repo); "NO" throws it away.
 //    The preview only ever goes to the owner's real phone, so a spoofed sender can't confirm a post.
 import { guessStyle, type TastingNote } from '../../src/content/tastingNotes.ts'
-import { MAX_TEXT_LENGTH, TEXT_TEMPLATE, isTextNote, parseTextNote } from '../../src/content/textNote.ts'
+import { MAX_TEXT_LENGTH, TEXT_TEMPLATE, editTextNote, isEditText, isTextNote, parseTextNote } from '../../src/content/textNote.ts'
 import { isFromTwilio, twiml } from './twilio.ts'
 
 export interface Store {
@@ -49,7 +50,7 @@ export function dateIn(timeZone: string, date: Date): string {
   return new Intl.DateTimeFormat('en-CA', { timeZone, year: 'numeric', month: '2-digit', day: '2-digit' }).format(date)
 }
 
-export function preview(note: TastingNote): string {
+export function preview(note: TastingNote, heading = 'Preview'): string {
   const style = note.style ?? guessStyle(note.wine, note.grape)
   const facts = [
     style && `${style}${note.style ? '' : ' (guessed)'}`,
@@ -59,16 +60,28 @@ export function preview(note: TastingNote): string {
   ].filter(Boolean)
   const flavors = Array.isArray(note.flavors) ? note.flavors.join(', ') : note.flavors
   const lines = [
-    `Preview: ${note.title ?? `${note.wine} ${note.vintage}`} (${note.grape})`,
+    `${heading}: ${note.title ?? `${note.wine} ${note.vintage}`} (${note.grape})`,
     facts.length ? facts.join(' · ') : '',
     note.verdict ? `“${note.verdict}”` : '',
     flavors ? `flavors: ${flavors}` : '',
     note.pairedWith ? `paired with: ${note.pairedWith}` : '',
     note.thoughts ? `notes: ${note.thoughts.length} characters` : '',
-    'Reply YES to post or NO to discard.',
+    'Reply YES to post or NO to discard. To change something, text just that line, like "price: $$".',
   ]
   return lines.filter(Boolean).join('\n')
 }
+
+/** The note waiting for YES, or null if there isn't one (or it expired). */
+async function waitingNote(deps: SmsDeps): Promise<TastingNote | null> {
+  const pending = (await deps.store.get(PENDING)) as { note: unknown; at: number } | null
+  if (!pending || deps.now().getTime() - pending.at > PENDING_MINUTES * 60_000 || !isTextNote(pending.note)) {
+    if (pending) await deps.store.delete(PENDING)
+    return null
+  }
+  return pending.note
+}
+
+const NOTHING_WAITING = 'There’s nothing waiting to post (previews expire after an hour). Text a note starting with "wine:".'
 
 async function bump(store: Store, key: string): Promise<number> {
   const count = Number((await store.get(key)) ?? 0) + 1
@@ -114,15 +127,11 @@ async function respond(params: Record<string, string>, deps: SmsDeps): Promise<R
   }
 
   if (command === 'yes' || command === 'y') {
-    const pending = (await deps.store.get(PENDING)) as { note: unknown; at: number } | null
-    if (!pending || deps.now().getTime() - pending.at > PENDING_MINUTES * 60_000 || !isTextNote(pending.note)) {
-      await deps.store.delete(PENDING)
-      return twiml('There’s nothing waiting to post (previews expire after an hour). Text a note starting with "wine:".')
-    }
+    const note = await waitingNote(deps)
+    if (!note) return twiml(NOTHING_WAITING)
     if (Number((await deps.store.get(`posts/${today}`)) ?? 0) >= MAX_POSTS_PER_DAY) {
       return twiml(`That’s ${MAX_POSTS_PER_DAY} posts today, the daily limit. Your preview is saved; reply YES tomorrow.`)
     }
-    const note = pending.note
     let slug: string
     try {
       const published = (await deps.readTextNotes()).filter(isTextNote)
@@ -157,6 +166,16 @@ async function respond(params: Record<string, string>, deps: SmsDeps): Promise<R
     if (!result.ok) return twiml(result.error)
     await deps.store.set(PENDING, { note: result.note, at: deps.now().getTime() })
     return twiml(preview(result.note))
+  }
+
+  if (isEditText(body)) {
+    const note = await waitingNote(deps)
+    if (!note) return twiml(NOTHING_WAITING)
+    const result = editTextNote(note, body, today)
+    if (!result.ok) return twiml(`${result.error} Your preview is unchanged.`)
+    // Editing restarts the hour, so a long back-and-forth doesn't expire mid-edit.
+    await deps.store.set(PENDING, { note: result.note, at: deps.now().getTime() })
+    return twiml(preview(result.note, 'Updated preview'))
   }
 
   return twiml('Start a tasting note with "wine: Name, Grape, Year". Text "wine help" for the template.')

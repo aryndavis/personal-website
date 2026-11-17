@@ -352,3 +352,86 @@ test('only POST requests of a sensible size are accepted', async () => {
   const huge = new URLSearchParams({ Body: 'x'.repeat(20_000), From: OWNER })
   assert.equal((await handleSms(new Request(URL_, { method: 'POST', body: huge }), deps)).status, 413)
 })
+
+// ---------- price: not sure ----------
+
+test('"not sure" is a fine answer for price: the price is left off', () => {
+  for (const answer of ['not sure', 'Not sure.', 'unsure', 'idk', 'I don’t know', '?']) {
+    const result = parseTextNote(`wine: X, Gamay, 2020\nprice: ${answer}`, TODAY)
+    assert.deepEqual(result, { ok: true, note: { wine: 'X', grape: 'Gamay', vintage: '2020', date: TODAY } }, answer)
+  }
+  const bad = parseTextNote('wine: X, Gamay, 2020\nprice: cheap', TODAY)
+  assert.match(bad.error, /\$\$\$\$ or not sure/)
+})
+
+// ---------- editing a waiting preview ----------
+
+test('texting a line edits the waiting preview, and YES posts the edited note', async () => {
+  const { send, published } = setup()
+  await send('wine: Sample Gamay, Gamay, 2023\nprice: $$\nrating: 4\nflavors: cherry')
+  const edited = await send('rating: 4.5\nflavors: cherry, violet')
+  assert.match(edited.reply, /^Updated preview: Sample Gamay 2023 \(Gamay\)/)
+  assert.match(edited.reply, /♥♥♥♥½/)
+  assert.match(edited.reply, /flavors: cherry, violet/)
+  assert.equal(published.length, 0, 'editing never posts')
+
+  await send('price: not sure')
+  await send('notes:\nBetter the second day.')
+  await send('Name: Sample Gamay Vieilles Vignes\nyear: 2022')
+  await send('yes')
+  assert.deepEqual(published, [
+    {
+      wine: 'Sample Gamay Vieilles Vignes',
+      grape: 'Gamay',
+      vintage: '2022',
+      date: TODAY,
+      rating: 4.5,
+      flavors: ['cherry', 'violet'],
+      thoughts: 'Better the second day.',
+    },
+  ])
+})
+
+test('a blank label clears that field; wine, grape and year cannot be cleared', async () => {
+  const { send, published } = setup()
+  await send('wine: A, Gamay, 2023\nverdict: Fine.\nrating: 3')
+  assert.doesNotMatch((await send('verdict:')).reply, /Fine/)
+  assert.match((await send('grape:')).reply, /grape can’t be blank\. Your preview is unchanged\./)
+  await send('yes')
+  assert.deepEqual(published, [{ wine: 'A', grape: 'Gamay', vintage: '2023', date: TODAY, rating: 3 }])
+})
+
+test('a bad edit is explained and leaves the preview as it was', async () => {
+  const { send, published } = setup()
+  await send('wine: A, Gamay, 2023\nrating: 4')
+  assert.match((await send('rating: 9')).reply, /from 1 to 5.*Your preview is unchanged/)
+  assert.match((await send('year: 2099')).reply, /vintage/)
+  await send('yes')
+  assert.equal(published[0].rating, 4)
+  assert.equal(published[0].vintage, '2023')
+})
+
+test('edits need a waiting preview; editing restarts the hour', async () => {
+  const { send, published, advance } = setup()
+  assert.match((await send('price: $$')).reply, /nothing waiting/)
+  assert.match((await send('hello: there')).reply, /Start a tasting note/, 'an unknown label with nothing waiting is just an unknown text')
+
+  await send('wine: A, Gamay, 2023')
+  advance(50 * 60_000)
+  await send('rating: 4')
+  advance(50 * 60_000)
+  assert.match((await send('yes')).reply, /Posted!/)
+  assert.equal(published[0].rating, 4)
+
+  await send('wine: B, Gamay, 2023')
+  advance(61 * 60_000)
+  assert.match((await send('rating: 4')).reply, /nothing waiting/)
+})
+
+test('a new "wine:" text replaces the waiting preview instead of editing it', async () => {
+  const { send, published } = setup()
+  await send('wine: A, Gamay, 2023\nrating: 4')
+  await send('wine: B, Pinot Noir, 2021')
+  await send('yes')
+  assert.deepEqual(published, [{ wine: 'B', grape: 'Pinot Noir', vintage: '2021', date: TODAY }])
+})

@@ -9,6 +9,8 @@
 //
 // Only the first line is required. Values are checked against the same scales the site uses;
 // a bad value is never guessed, it's sent back as an error.
+//
+// While a preview is waiting, texting just the lines to change ("price: $$") edits it. See editTextNote.
 import type { TastingNote } from './tastingNotes.ts'
 import { BODY, LEVEL_OR_NONE, RATINGS, SWEETNESS, type BuyAgain, type Rating, type WinePrice, type WineStyle } from './types.ts'
 
@@ -17,7 +19,7 @@ producer:
 region:
 bought at:
 style: red/white/rosé/orange/sparkling/dessert
-price: $ (under 20), $$ (20-30), $$$ (30-50), $$$$ (50+)
+price: $ (under 20), $$ (20-30), $$$ (30-50), $$$$ (50+) or not sure
 rating: 1-5 (halves ok: 4.5)
 buy again: yes/maybe/no
 verdict:
@@ -39,6 +41,11 @@ const BUY_AGAIN: BuyAgain[] = ['yes', 'maybe', 'no']
 type Field = keyof TastingNote
 // Every label you can text, and the note field it fills. Case, spaces and dashes don't matter.
 const LABELS: Record<string, Field> = {
+  // For edits: a new note sets these on its first line.
+  name: 'wine',
+  grape: 'grape',
+  vintage: 'vintage',
+  year: 'vintage',
   producer: 'producer',
   region: 'region',
   boughtat: 'boughtAt',
@@ -82,6 +89,10 @@ const LABELS: Record<string, Field> = {
   tags: 'tags',
 }
 
+const REQUIRED: readonly Field[] = ['wine', 'grape', 'vintage']
+// Answers that mean "I don't know the price": the price is left off the post.
+const UNSURE = new Set(['not sure', 'unsure', 'idk', 'dont know', 'i dont know', 'no idea', 'unknown', '?'])
+
 const LIMITS: Partial<Record<Field, number>> = { wine: 120, grape: 120, verdict: 400, thoughts: 4000 }
 const DEFAULT_LIMIT = 300
 
@@ -107,16 +118,26 @@ function pick<T extends string>(value: string, allowed: readonly T[]): T | undef
 
 const oneOf = (label: string, allowed: readonly string[]) => `${label} must be ${allowed.slice(0, -1).join(', ')} or ${allowed.at(-1)}.`
 
-/** Turns one label's text into a note field, or an error message. */
-function readField(field: Field, label: string, value: string): { value: unknown } | { error: string } {
+function readVintage(vintage: string, today: string): { value: string } | { error: string } {
+  if (/^nv$/i.test(vintage)) return { value: 'NV' }
+  const year = new Date(`${today}T12:00:00Z`).getUTCFullYear()
+  if (/^\d{4}$/.test(vintage) && Number(vintage) >= 1900 && Number(vintage) <= year) return { value: vintage }
+  return { error: `The year should be a vintage like 2022, or NV for non-vintage. I got "${vintage}".` }
+}
+
+/** Turns one label's text into a note field (undefined leaves it off), or an error message. */
+function readField(field: Field, label: string, value: string, today: string): { value: unknown } | { error: string } {
   switch (field) {
+    case 'vintage':
+      return readVintage(value, today)
     case 'style': {
       const style = pick(value, STYLES) ?? (plain(value) === 'rose' ? 'rosé' : undefined)
       return style ? { value: style } : { error: oneOf('style', STYLES) }
     }
     case 'price': {
+      if (UNSURE.has(plain(value).replace(/['’.!]/g, ''))) return { value: undefined }
       const price = pick(value.replace(/\s/g, ''), PRICES)
-      return price ? { value: price } : { error: 'price must be $, $$, $$$ or $$$$.' }
+      return price ? { value: price } : { error: 'price must be $, $$, $$$, $$$$ or not sure.' }
     }
     case 'rating': {
       // 4, 4/5, 4 hearts, 4.5, 4½
@@ -169,15 +190,32 @@ export function parseTextNote(text: string, today: string): ParseResult {
   if (parts.length < 3 || parts.some((part) => !part)) {
     return { ok: false, error: 'The first line needs the wine, grape and year, like "wine: Domaine Example Poulsard, Poulsard, 2022".' }
   }
-  const vintage = parts.pop()!
+  const vintage = readVintage(parts.pop()!, today)
+  if ('error' in vintage) return { ok: false, error: vintage.error }
   const grape = parts.pop()!
   const wine = parts.join(', ')
-  const year = new Date(`${today}T12:00:00Z`).getUTCFullYear()
-  if (!/^nv$/i.test(vintage) && !(/^\d{4}$/.test(vintage) && Number(vintage) >= 1900 && Number(vintage) <= year)) {
-    return { ok: false, error: `The year should be a vintage like 2022, or NV for non-vintage. I got "${vintage}".` }
-  }
 
-  const note: Record<string, unknown> = { wine, grape, vintage: /^nv$/i.test(vintage) ? 'NV' : vintage, date: today }
+  const note: Record<string, unknown> = { wine, grape, vintage: vintage.value, date: today }
+  return readLines(note, lines, today)
+}
+
+/** Whether a text looks like an edit to a waiting preview: it starts with a known "label:" line. */
+export function isEditText(text: string): boolean {
+  const first = text.trim().match(/^([^:\n]{1,30}):/)
+  return Boolean(first && (LABELS[key(first[1])] || ['notes', 'thoughts'].includes(key(first[1]))))
+}
+
+/**
+ * Applies an edit to a waiting note: each "label: value" line replaces that field, and a label
+ * left blank ("price:") removes it. Returns the edited copy; the original is untouched.
+ */
+export function editTextNote(note: TastingNote, text: string, today: string): ParseResult {
+  if (text.length > MAX_TEXT_LENGTH) return { ok: false, error: `That's too long (over ${MAX_TEXT_LENGTH} characters). Trim the notes and try again.` }
+  return readLines({ ...note }, text.replace(/\r\n?/g, '\n').split('\n'), today)
+}
+
+/** Reads "label: value" lines into `note` (changing it), then checks lengths. */
+function readLines(note: Record<string, unknown>, lines: string[], today: string): ParseResult {
   for (let i = 0; i < lines.length; i++) {
     const line = clean(lines[i])
     if (!line) continue
@@ -188,14 +226,22 @@ export function parseTextNote(text: string, today: string): ParseResult {
       // Everything from here on is the extra notes, blank lines and all.
       const rest = [match[2], ...lines.slice(i + 1)].join('\n').trim()
       if (rest) note.thoughts = rest
+      else delete note.thoughts
       break
     }
     const field = LABELS[key(label)]
     if (!field) return { ok: false, error: `I don't know the label "${label}". Text "wine help" for the list.` }
-    if (!match[2].trim()) continue // A template line left blank.
-    const result = readField(field, label.toLowerCase(), match[2].trim())
+    const value = match[2].trim()
+    if (!value) {
+      // A template line left blank, or an edit clearing a field.
+      if (REQUIRED.includes(field)) return { ok: false, error: `${label.toLowerCase()} can’t be blank.` }
+      delete note[field]
+      continue
+    }
+    const result = readField(field, label.toLowerCase(), value, today)
     if ('error' in result) return { ok: false, error: result.error }
-    note[field] = result.value
+    if (result.value === undefined) delete note[field]
+    else note[field] = result.value
   }
 
   for (const [field, value] of Object.entries(note)) {
