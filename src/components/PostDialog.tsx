@@ -86,6 +86,16 @@ export function PostBody({ blocks }: { blocks: Block[] }) {
   )
 }
 
+function Tags({ tags }: { tags: string[] }) {
+  return (
+    <ul className="tag-list" aria-label="Tags">
+      {tags.map((tag) => (
+        <li key={tag}>#{tag}</li>
+      ))}
+    </ul>
+  )
+}
+
 interface PostDialogProps {
   entry: Entry
   fileName: string
@@ -94,10 +104,12 @@ interface PostDialogProps {
   prev?: Entry
   next?: Entry
   meta?: ReactNode
+  /** Show `meta` after the post's writing instead of above it, so the post opens with the story. */
+  metaAfterBody?: boolean
 }
 
 // Each post has its own URL (/section/slug) and opens as a modal pop-up window.
-export default function PostDialog({ entry, fileName, closePath, prev, next, meta }: PostDialogProps) {
+export default function PostDialog({ entry, fileName, closePath, prev, next, meta, metaAfterBody }: PostDialogProps) {
   const titleId = useId()
 
   return (
@@ -109,13 +121,11 @@ export default function PostDialog({ entry, fileName, closePath, prev, next, met
         {entry.title}
       </h2>
       {entry.subtitle && <p className="post-subtitle">{entry.subtitle}</p>}
-      {meta}
-      <ul className="tag-list" aria-label="Tags">
-        {entry.tags.map((tag) => (
-          <li key={tag}>#{tag}</li>
-        ))}
-      </ul>
+      {!metaAfterBody && meta}
+      {!metaAfterBody && <Tags tags={entry.tags} />}
       <PostBody blocks={entry.body} />
+      {metaAfterBody && meta}
+      {metaAfterBody && <Tags tags={entry.tags} />}
       {entry.substackUrl && (
         <p className="substack-note">
           Also published on Substack.{' '}

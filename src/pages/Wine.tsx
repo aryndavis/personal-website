@@ -6,6 +6,7 @@ import { useFocusReturn } from '../components/Popup'
 import PostDialog from '../components/PostDialog'
 import Rating from '../components/Rating'
 import { BODY, LEVEL, SWEETNESS, meterFill, formatDate, newestFirst, type BuyAgain, type WinePost, type WinePrice, type WineStyle } from '../content/types'
+import { everyday } from '../content/everyday'
 import { winePosts } from '../content/wine'
 import { href } from '../router'
 import { sections } from '../site'
@@ -67,11 +68,12 @@ function TastingCard({ post }: { post: WinePost }) {
     ['Style', wine.style && withIcon('bottle', <span className="style-name">{wine.style}</span>)],
     ['Price', wine.price && `${wine.price} · ${priceLabel[wine.price]}`],
   ]
-  const profile: [string, readonly string[], string | undefined, MeterIcon?][] = [
-    ['Sweetness', SWEETNESS, wine.sweetness, SUGAR],
-    ['Body', BODY, wine.body, KETTLEBELL],
-    ['Acidity', LEVEL, wine.acidity, BOLT],
-    ['Tannin', LEVEL, wine.tannin, TEA],
+  // Label, scale, value, meter icon, and the value in everyday terms.
+  const profile: [string, readonly string[], string | undefined, MeterIcon, string | undefined][] = [
+    ['Sweetness', SWEETNESS, wine.sweetness, SUGAR, wine.sweetness && everyday.Sweetness[wine.sweetness]],
+    ['Body', BODY, wine.body, KETTLEBELL, wine.body && everyday.Body[wine.body]],
+    ['Acidity', LEVEL, wine.acidity, BOLT, wine.acidity && everyday.Acidity[wine.acidity]],
+    ['Tannin', LEVEL, wine.tannin, TEA, wine.tannin && everyday.Tannin[wine.tannin]],
   ]
   const shownProfile = profile.filter(([, , value]) => value)
   const flavors = wine.flavors ?? []
@@ -106,12 +108,15 @@ function TastingCard({ post }: { post: WinePost }) {
         <section className="card-section">
           <h3>Profile</h3>
           <dl className="card-profile">
-            {shownProfile.map(([label, scale, value, icon]) => (
+            {shownProfile.map(([label, scale, value, icon, plainly]) => (
               <div key={label}>
                 <dt>{label}</dt>
                 <dd>
-                  <Meter scale={scale} value={value!} icon={icon} />
-                  <span className="meter-label">{value}</span>
+                  <span className="meter-row">
+                    <Meter scale={scale} value={value!} icon={icon} />
+                    <span className="meter-label">{value}</span>
+                  </span>
+                  {plainly && <span className="profile-plainly">{plainly}</span>}
                 </dd>
               </div>
             ))}
@@ -307,6 +312,7 @@ export default function WinePage({ slug }: { slug?: string }) {
           prev={sorted[index + 1]}
           next={sorted[index - 1]}
           meta={<TastingCard post={open} />}
+          metaAfterBody
         />
       )}
     </div>
