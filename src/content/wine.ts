@@ -91,6 +91,64 @@ export const handNotes: TastingNote[] = [
 export const guides: WinePost[] = [
   {
     kind: 'guide',
+    slug: 'how-we-grow-grapes',
+    title: 'How do we grow grapes? Definitely not the soft life',
+    date: '2026-11-18',
+    summary: 'How grapes are grown, and why some of the best ones come from poor soil, little water and a bit of struggle.',
+    tags: ['guide', 'vineyards'],
+    body: [
+      {
+        type: 'p',
+        text: 'I first heard about this in a wine class at Wine Outlet in Seattle, and I was honestly shocked at how mean we are to grapes. A lot of the world’s most celebrated wine comes from poor, rocky ground, not much water, and vines that are struggling a little on purpose. It made me curious what wine would taste like if the grapes had an easy life, so I went back to the basics of how they’re grown.',
+      },
+      {
+        type: 'p',
+        text: 'A grapevine is a climbing plant, and with plenty of water and nutrients it will happily spend its energy on long shoots and big leaves rather than fruit. Most vineyard vines are also grafted onto the roots of a hardier vine, mostly to protect them from phylloxera, a tiny root pest that wiped out much of Europe’s vineyards in the late 1800s.',
+      },
+      {
+        type: 'p',
+        text: 'The vineyard year starts in winter, when growers prune the dormant vines and choose how many buds get to grow. The vines bud in spring and flower in early summer, and by midsummer the grapes soften and red varieties change color, a stage called véraison. Ripening runs until harvest in late summer or fall, as sugar builds and acid drops. Cool nights slow that drop, which is why so many great wine regions have warm days and chilly nights.',
+      },
+      {
+        type: 'p',
+        text: 'This is where it gets counterintuitive. Instead of giving vines everything they want, many growers hold back on purpose. They plant on poor, rocky soils where water drains straight through, crowd the vines together so their roots compete, and in dry regions water only as much as the vines need to keep going. Some even cut off perfectly good bunches in summer, a “green harvest,” so the vine puts everything into the grapes that are left.',
+      },
+      {
+        type: 'p',
+        text: 'The idea is that a comfortable vine grows leaves, while a slightly stressed one focuses on its fruit. Its berries also stay smaller, and since much of a wine’s color, tannin and aroma comes from the skins, smaller grapes make a more concentrated wine. Dry-farmed tomatoes work the same way, coming out smaller than the grocery-store kind but far more intense.',
+      },
+      {
+        type: 'p',
+        text: 'As for the wine I was curious about, a vine with all the water and nutrients it wants grows big, juicy grapes that make a lighter, more diluted wine, sometimes with a green, bell-pepper edge from all the shade its leaves cast. That’s a big part of why inexpensive wine from high-volume vineyards can taste simpler, though plenty of everyday wines are meant to be light and easy.',
+      },
+      {
+        type: 'p',
+        text: 'There’s a limit in the other direction, too. Under too much stress, a vine shuts down to save water and stops ripening its grapes, so the goal is always just enough struggle.',
+      },
+      {
+        type: 'p',
+        text: 'Heat is one of the hardest stresses for a vine to handle, which brings me to one of my favorite Real Housewives moments. Mary Cosby, a cast member on The Real Housewives of Salt Lake City, once insisted that 2003 Dom Pérignon, a Champagne, was made from the best grapes of all time because of the heatwave that hit Europe that summer. I have to give her some credit.',
+      },
+      {
+        type: 'p',
+        text: 'Champagne is a region in northeastern France, and only sparkling wine made there is allowed to be called Champagne. Its 2003 season started with hard spring frosts right after the buds had opened, which wiped out a big part of the crop before it could grow. Then the heat set in, building from May into a record-breaking heatwave in July and August. With that much heat and so little water, vines can stop photosynthesizing altogether, and the grapes that do ripen lose their acid fast while their sugar shoots up. That’s a real problem in Champagne, where high acidity is what keeps the wine fresh and lets it age. Most producers decided the grapes were too ripe to make a vintage wine that year, meaning one made only from a single year’s harvest. A few big houses, including Dom Pérignon and Krug, made one anyway, and critics expected the wines to be heavy and overripe. Instead, Dom Pérignon’s 2003 was well reviewed when it was finally released, and a later release with years of extra aging was praised too. So “best grapes of all time” is a stretch, but Mary wasn’t completely wrong. It’s a perfect example of how much a hard year shapes what ends up in the bottle.',
+      },
+      {
+        type: 'p',
+        text: 'You can see all this on labels, too. “Old vines” usually means vines that are decades old, with deep roots and naturally smaller crops. And Riesling, my favorite, is famous for the Mosel in Germany, where vines grow on slate slopes so steep that most of the work has to be done by hand.',
+      },
+      {
+        type: 'p',
+        text: 'All that struggle builds up to one decision, which is when to pick. Growers measure sugar, check acidity and taste the grapes, and some even chew the seeds, which turn brown and crunchy once the grapes are ripe. Picking early keeps more acid, which is why grapes for sparkling wine usually come in first.',
+      },
+      {
+        type: 'p',
+        text: 'It’s definitely not the soft life, but it’s what makes the wine worth drinking.',
+      },
+    ],
+  },
+  {
+    kind: 'guide',
     slug: 'smell-vs-taste',
     title: 'Smell vs. taste: why the nose and tongue read wine differently',
     date: '2026-11-02',
