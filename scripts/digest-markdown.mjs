@@ -1,5 +1,5 @@
-// Turns a month of Gen Z With A Glass posts into the monthly email's subject and Markdown body, ready to paste
-// into Buttondown (its editor reads Markdown). Used by wine-digest.mjs; kept separate so it can be tested.
+// Turns a month of Gen Z With A Glass posts into the monthly post's title and Markdown body, for Substack.
+// Used by wine-digest.mjs; kept separate so it can be tested.
 
 import { publicUrl, sections, wineDomain } from '../src/site.ts'
 

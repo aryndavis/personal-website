@@ -1713,39 +1713,6 @@ button.pixel-button:active {
   margin: 0 0 14px;
 }
 
-.newsletter-form label {
-  display: block;
-  margin-bottom: 6px;
-  font: 600 15px/1 var(--pixel);
-}
-
-.newsletter-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.newsletter-row input[type='email'] {
-  flex: 1 1 220px;
-  min-width: 0;
-  padding: 8px 10px;
-  border: 3px solid var(--ink);
-  background: var(--white);
-  color: var(--ink);
-  font: 1.2rem/1 var(--terminal);
-}
-
-.newsletter-row input[type='email']:focus-visible {
-  outline: 3px dashed var(--ink);
-  outline-offset: 3px;
-}
-
-.newsletter-window .newsletter-note {
-  margin: 14px 0 0;
-  font: 1.1rem/1.25 var(--terminal);
-  color: color-mix(in srgb, var(--ink) 75%, transparent);
-}
-
 .rack-window .window-body {
   padding: 20px clamp(12px, 3vw, 28px) 24px;
 }

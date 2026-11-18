@@ -3,8 +3,8 @@
 //   npm run wine-digest              last month (run it at the start of a new month)
 //   npm run wine-digest -- 2026-10   a particular month
 //
-// Prints the subject and a Markdown body. Paste them into a new email in Buttondown, write the hello at the
-// top, preview, and send. Nothing is sent from here.
+// Prints a title and a Markdown body for a new Substack post. Write the hello at the top, preview, and send.
+// Nothing is sent from here.
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createServer } from 'vite'

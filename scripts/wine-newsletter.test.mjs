@@ -1,8 +1,8 @@
-// Run with `npm test`. The monthly email: the sign-up form's target, the RSS feed, and the digest draft.
+// Run with `npm test`. The monthly email: the sign-up link, the RSS feed, and the digest draft.
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { test } from 'node:test'
-import { newsletterSignupUrl } from '../src/site.ts'
+import { newsletterSubscribeUrl } from '../src/site.ts'
 import { INTRO_PLACEHOLDER, isMonth, monthlyDigest, opening, previousMonth } from './digest-markdown.mjs'
 import { wineDomainRules, wineFeed } from './page-html.mjs'
 
@@ -17,11 +17,12 @@ const tasting = (overrides) => ({
 })
 const guide = { kind: 'guide', slug: 'smell-vs-taste', title: 'Smell vs. taste', date: '2026-10-02', summary: 'Why your nose does most of the work.' }
 
-test('the sign-up form can post to Buttondown, and only there', () => {
+test('the sign-up is a link to Substack, so the site still allows no form posts', () => {
   const headers = readFileSync(new URL('../public/_headers', import.meta.url), 'utf8')
-  assert.match(headers, /form-action https:\/\/buttondown\.com;/)
-  assert.equal(new URL(newsletterSignupUrl('genz glass')).origin, 'https://buttondown.com')
-  assert.ok(newsletterSignupUrl('genz glass').endsWith('/embed-subscribe/genz%20glass'))
+  assert.match(headers, /form-action 'none';/)
+  assert.equal(newsletterSubscribeUrl(''), '')
+  assert.equal(newsletterSubscribeUrl('https://genz.substack.com'), 'https://genz.substack.com/subscribe')
+  assert.equal(newsletterSubscribeUrl('https://genz.substack.com/'), 'https://genz.substack.com/subscribe')
 })
 
 test('the RSS feed lists posts newest first with full genzwithaglass.com links, escaped', () => {
@@ -49,7 +50,7 @@ test('the digest covers only that month, oldest first, with a hello to fill in',
   assert.match(digest.body, /Red · Nebbiolo · Barolo, Piedmont, Italy · ♥ 3\.5\/5/)
   assert.match(digest.body, /> “Very balanced\.”/)
   assert.match(digest.body, /## New guides[\s\S]*Smell vs\. taste/)
-  assert.ok(!digest.body.startsWith('---'), 'Buttondown rejects a body that starts with front matter')
+  assert.ok(!digest.body.startsWith('---'), 'the body starts with the hello, not front matter')
 })
 
 test('wine names cannot turn into Markdown links or formatting', () => {
