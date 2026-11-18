@@ -41,11 +41,6 @@ const BUY_AGAIN: BuyAgain[] = ['yes', 'maybe', 'no']
 type Field = keyof TastingNote
 // Every label you can text, and the note field it fills. Case, spaces and dashes don't matter.
 const LABELS: Record<string, Field> = {
-  // For edits: a new note sets these on its first line.
-  name: 'wine',
-  grape: 'grape',
-  vintage: 'vintage',
-  year: 'vintage',
   producer: 'producer',
   region: 'region',
   boughtat: 'boughtAt',
@@ -89,9 +84,13 @@ const LABELS: Record<string, Field> = {
   tags: 'tags',
 }
 
+// Only for edits to a waiting preview. A new note gives these on its first line, so there they stay unknown labels.
+const EDIT_LABELS: Record<string, Field> = { name: 'wine', grape: 'grape', vintage: 'vintage', year: 'vintage' }
+
 const REQUIRED: readonly Field[] = ['wine', 'grape', 'vintage']
 // Answers that mean "I don't know the price": the price is left off the post.
-const UNSURE = new Set(['not sure', 'unsure', 'idk', 'dont know', 'i dont know', 'no idea', 'unknown', '?'])
+// Compared after dropping everything but letters and spaces, so "I'm not sure?" and "n/a" count; "??" becomes "".
+const UNSURE = new Set(['', 'not sure', 'im not sure', 'unsure', 'idk', 'dont know', 'i dont know', 'dunno', 'no idea', 'no clue', 'unknown', 'na'])
 
 const LIMITS: Partial<Record<Field, number>> = { wine: 120, grape: 120, verdict: 400, thoughts: 4000 }
 const DEFAULT_LIMIT = 300
@@ -135,9 +134,10 @@ function readField(field: Field, label: string, value: string, today: string): {
       return style ? { value: style } : { error: oneOf('style', STYLES) }
     }
     case 'price': {
-      if (UNSURE.has(plain(value).replace(/['’.!]/g, ''))) return { value: undefined }
       const price = pick(value.replace(/\s/g, ''), PRICES)
-      return price ? { value: price } : { error: 'price must be $, $$, $$$, $$$$ or not sure.' }
+      if (price) return { value: price }
+      if (!value.includes('$') && UNSURE.has(plain(value).replace(/[^a-z ]/g, '').replace(/\s+/g, ' ').trim())) return { value: undefined }
+      return { error: 'price must be $, $$, $$$, $$$$ or not sure.' }
     }
     case 'rating': {
       // 4, 4/5, 4 hearts, 4.5, 4½
@@ -180,8 +180,8 @@ function readField(field: Field, label: string, value: string, today: string): {
  * The text must start with "wine" ("wine: Name, Grape, 2022" or "wine Name, Grape, 2022").
  */
 export function parseTextNote(text: string, today: string): ParseResult {
-  if (text.length > MAX_TEXT_LENGTH) return { ok: false, error: `That's too long (over ${MAX_TEXT_LENGTH} characters). Trim the notes and try again.` }
-  const lines = text.replace(/\r\n?/g, '\n').split('\n')
+  if (text.length > MAX_TEXT_LENGTH) return TOO_LONG
+  const lines = splitLines(text)
   while (lines.length && !lines[0].trim()) lines.shift()
 
   const first = clean(lines.shift() ?? '').match(/^wine\b\s*:?\s*(.*)$/i)
@@ -196,13 +196,24 @@ export function parseTextNote(text: string, today: string): ParseResult {
   const wine = parts.join(', ')
 
   const note: Record<string, unknown> = { wine, grape, vintage: vintage.value, date: today }
-  return readLines(note, lines, today)
+  return readLines(note, lines, today, LABELS)
 }
 
-/** Whether a text looks like an edit to a waiting preview: it starts with a known "label:" line. */
+const TOO_LONG: ParseResult = { ok: false, error: `That’s too long (over ${MAX_TEXT_LENGTH} characters). Trim the notes and try again.` }
+const splitLines = (text: string) => text.replace(/\r\n?/g, '\n').split('\n')
+const isNotesLabel = (label: string) => key(label) === 'notes' || key(label) === 'thoughts'
+const EDIT_FIELDS = { ...LABELS, ...EDIT_LABELS }
+
+/** Splits a cleaned line into its label and value, or null if it isn't "label: value". */
+function labelLine(line: string): { label: string; value: string } | null {
+  const match = line.match(/^([^:]{1,30}):\s*(.*)$/)
+  return match ? { label: match[1].trim(), value: match[2] } : null
+}
+
+/** Whether a text looks like an edit to a waiting preview: its first line is a known "label:" line. */
 export function isEditText(text: string): boolean {
-  const first = text.trim().match(/^([^:\n]{1,30}):/)
-  return Boolean(first && (LABELS[key(first[1])] || ['notes', 'thoughts'].includes(key(first[1]))))
+  const first = labelLine(clean(splitLines(text.trim())[0] ?? ''))
+  return Boolean(first && (EDIT_FIELDS[key(first.label)] || isNotesLabel(first.label)))
 }
 
 /**
@@ -210,28 +221,28 @@ export function isEditText(text: string): boolean {
  * left blank ("price:") removes it. Returns the edited copy; the original is untouched.
  */
 export function editTextNote(note: TastingNote, text: string, today: string): ParseResult {
-  if (text.length > MAX_TEXT_LENGTH) return { ok: false, error: `That's too long (over ${MAX_TEXT_LENGTH} characters). Trim the notes and try again.` }
-  return readLines({ ...note }, text.replace(/\r\n?/g, '\n').split('\n'), today)
+  if (text.length > MAX_TEXT_LENGTH) return TOO_LONG
+  return readLines({ ...note }, splitLines(text), today, EDIT_FIELDS)
 }
 
 /** Reads "label: value" lines into `note` (changing it), then checks lengths. */
-function readLines(note: Record<string, unknown>, lines: string[], today: string): ParseResult {
+function readLines(note: Record<string, unknown>, lines: string[], today: string, labels: Record<string, Field>): ParseResult {
   for (let i = 0; i < lines.length; i++) {
     const line = clean(lines[i])
     if (!line) continue
-    const match = line.match(/^([^:]{1,30}):\s*(.*)$/)
+    const match = labelLine(line)
     if (!match) return { ok: false, error: `I couldn't read "${line.slice(0, 40)}". Use "label: value" on each line, and put longer writing after "notes:".` }
-    const label = match[1].trim()
-    if (key(label) === 'notes' || key(label) === 'thoughts') {
+    const { label } = match
+    if (isNotesLabel(label)) {
       // Everything from here on is the extra notes, blank lines and all.
-      const rest = [match[2], ...lines.slice(i + 1)].join('\n').trim()
+      const rest = [match.value, ...lines.slice(i + 1)].join('\n').trim()
       if (rest) note.thoughts = rest
       else delete note.thoughts
       break
     }
-    const field = LABELS[key(label)]
+    const field = labels[key(label)]
     if (!field) return { ok: false, error: `I don't know the label "${label}". Text "wine help" for the list.` }
-    const value = match[2].trim()
+    const value = match.value.trim()
     if (!value) {
       // A template line left blank, or an edit clearing a field.
       if (REQUIRED.includes(field)) return { ok: false, error: `${label.toLowerCase()} can’t be blank.` }

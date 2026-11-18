@@ -435,3 +435,68 @@ test('a new "wine:" text replaces the waiting preview instead of editing it', as
   await send('yes')
   assert.deepEqual(published, [{ wine: 'B', grape: 'Pinot Noir', vintage: '2021', date: TODAY }])
 })
+
+test('more ways to say "not sure" about price; a real price still wins', () => {
+  for (const answer of ['dunno', 'no clue', 'I’m not sure', 'not sure?', 'n/a', '??']) {
+    const result = parseTextNote(`wine: X, Gamay, 2020\nprice: ${answer}`, TODAY)
+    assert.ok(result.ok && !('price' in result.note), answer)
+  }
+  assert.equal(parseTextNote('wine: X, Gamay, 2020\nprice: $$', TODAY).note.price, '$$')
+  assert.equal(parseTextNote('wine: X, Gamay, 2020\nprice: $$$$$', TODAY).ok, false)
+})
+
+test('name, grape and year labels only work as edits; a new note takes them from its first line', () => {
+  assert.match(parseTextNote('wine: A, Gamay, 2023\nname: B', TODAY).error, /don't know the label "name"/)
+  assert.match(parseTextNote('wine: A, Gamay, 2023\nyear: 2019', TODAY).error, /don't know the label "year"/)
+})
+
+test('with a title, the preview still shows the wine, so a rename is visible', async () => {
+  const { send } = setup()
+  await send('wine: Sample Gamay, Gamay, 2023\ntitle: Summer Gamay')
+  assert.match((await send('name: Sample Gamay VV')).reply, /^Updated preview: Summer Gamay, Sample Gamay VV 2023 \(Gamay\)/)
+})
+
+test('a failed "wine:" text says the waiting preview is unchanged; a good one says it replaced it', async () => {
+  const { send } = setup()
+  await send('wine: A, Gamay, 2023')
+  assert.match((await send('wine: New Name')).reply, /Your waiting preview is unchanged \(use &quot;name:&quot; to rename it\)/)
+  assert.match((await send('wine: B, Gamay, 2023')).reply, /^New preview \(replaces the last one\): B 2023/)
+})
+
+test('an edit sent while YES is posting, or after, cannot bring the note back', async () => {
+  let release
+  const published = []
+  const publish = async (note) => {
+    await new Promise((resolve) => (release = resolve))
+    published.push(note)
+  }
+  const { send } = setup({ publish, readTextNotes: async () => published })
+  await send('wine: A, Gamay, 2023')
+  const posting = send('yes')
+  while (!release) await new Promise((resolve) => setTimeout(resolve, 1))
+  assert.match((await send('rating: 5')).reply, /already being posted/)
+  release()
+  assert.match((await posting).reply, /Posted!/)
+  assert.match((await send('rating: 5')).reply, /nothing waiting/)
+  assert.match((await send('yes')).reply, /nothing waiting/)
+  assert.equal(published.length, 1)
+})
+
+test('if clearing the preview fails after posting, an edit is turned away and YES does not repost', async () => {
+  const store = failingStore([])
+  const { send, published } = setup({ store })
+  await send('wine: Once Only, Gamay, 2023')
+  const originalDelete = store.delete
+  store.delete = async () => {
+    throw new Error('blob store delete failed')
+  }
+  await quietly(() => send('yes'))
+  store.delete = originalDelete
+  assert.match((await send('rating: 5')).reply, /already being posted/)
+  assert.match((await send('yes')).reply, /already posted/)
+  assert.equal(published.length, 1)
+})
+
+test('wine help explains how to edit a preview', async () => {
+  assert.match((await setup().send('wine help')).reply, /To change a preview before posting, text just the lines to change/)
+})

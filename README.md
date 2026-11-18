@@ -124,7 +124,7 @@ Anything after "notes:" becomes the post's extra notes.
 - **Format:** only the first line (wine, grape, year or `NV`) is required. Text `wine help` for every label. Bad values are explained, never guessed.
 - **Preview first:** you get a preview back, and nothing posts until you reply `YES`. `NO` discards it. Previews expire after an hour.
 - **Edit the preview:** to change something before posting, text just that line, like `price: $$` or `rating: 4.5`, and you get an updated preview. Leaving a label blank (`verdict:`) removes that field, and `name:`, `grape:` and `year:` fix the first line. Each edit restarts the hour.
-- **Unsure of the price?** `price: not sure` works, and the post leaves the price off.
+- **Price not known:** `price: not sure` (or `idk`, `n/a`) works, and the post leaves the price off.
 - **What happens on YES:** the note is added to `src/content/wine.texts.json` with a commit to `main`, Netlify redeploys, and the reply has the post's link. To edit or delete a texted post, edit that file.
 - **Code:** `netlify/functions/sms.ts`, served at `/api/sms`. The flow lives in `netlify/lib/sms.ts`, and the parser in `src/content/textNote.ts`.
 
