@@ -86,7 +86,7 @@ export const wineDomain = { host: 'genzwithaglass.com', url: 'https://genzwithag
 /**
  * Gen Z With A Glass's monthly email, sent on Substack. The sign-up box under the rack is a link to the
  * publication's subscribe page, so the site has no form and its CSP keeps form-action 'none'. Set substackUrl to the
- * publication's address (e.g. 'https://genzwithaglass.substack.com'); while it's empty the box stays hidden.
+ * publication's address; setting it to '' hides the box.
  * `npm run wine-digest` drafts each month's post.
  */
 export const wineNewsletter = { substackUrl: 'https://genzwithaglass.substack.com' }
@@ -119,3 +119,6 @@ export const portfolioTracks: Record<Track, { path: string; label: string; file:
 
 /** A project's address: /portfolio/<track>/<slug>. */
 export const projectPath = (project: { track: Track; slug: string }) => `${portfolioTracks[project.track].path}/${project.slug}`
+
+/** A wine post's public address (on genzwithaglass.com), as the feed and the monthly digest link to it. */
+export const winePostUrl = (slug: string) => publicUrl(`${sections.wine.path}/${slug}`)

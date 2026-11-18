@@ -2,7 +2,7 @@
 // tags, plus a plain-HTML summary that search engines can read before the app starts. Used by prerender.mjs.
 
 import { previewTags } from '../src/previewTags.ts'
-import { isWinePath, publicUrl, sections, site, wineDomain, winePreview } from '../src/site.ts'
+import { isWinePath, publicUrl, sections, site, wineDomain, winePostUrl, winePreview } from '../src/site.ts'
 
 export const ORIGIN = site.url
 
@@ -38,8 +38,13 @@ function writeTags(template, tags) {
 
 /** The HTML for one page. The home page keeps index.html's own summary (and, as tests check, its tags). */
 export function renderPage(template, page) {
-  const html = writeTags(template, previewTags(page))
+  let html = writeTags(template, previewTags(page))
   if (page.path === '/') return html
+  // Wine pages point feed readers at the RSS feed, so pasting genzwithaglass.com into one finds it.
+  if (isWinePath(page.path)) {
+    const feed = `<link rel="alternate" type="application/rss+xml" title="${escape(wineDomain.name)}" href="${wineDomain.url}/feed.xml" />`
+    html = replaceOnce(html, /(<link rel="canonical" href="[^"]*" \/>)/, `$1\n    ${feed}`, 'canonical link')
+  }
   // Full addresses, since a wine page and the pages it links to can live on different domains.
   const links = page.links.map((link) => `          <li><a href="${escape(publicUrl(link.href))}">${escape(link.text)}</a></li>`).join('\n')
   const summary = `<main class="prerender">
@@ -98,6 +103,8 @@ export function wineDomainRules(pages) {
     { from: `${wine}/robots.txt`, to: '/robots-wine.txt', status: '200!' },
     { from: `${wine}/sitemap.xml`, to: '/sitemap-wine.xml', status: '200!' },
     { from: `${wine}/feed.xml`, to: '/feed-wine.xml', status: '200!' },
+    // The feed's file is only meant to be read as genzwithaglass.com/feed.xml.
+    moved(`${site.url}/feed-wine.xml`, `${wine}/feed.xml`),
     ...wineRewrites(pages),
   ]
 }
@@ -133,7 +140,7 @@ const FEED_SIZE = 30
 export function wineFeed(posts) {
   const newest = [...posts].sort((a, b) => b.date.localeCompare(a.date)).slice(0, FEED_SIZE)
   const items = newest.map((post) => {
-    const link = publicUrl(`${sections.wine.path}/${post.slug}`)
+    const link = winePostUrl(post.slug)
     return `    <item>
       <title>${escape(post.title)}</title>
       <link>${escape(link)}</link>
