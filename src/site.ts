@@ -89,7 +89,7 @@ export const wineDomain = { host: 'genzwithaglass.com', url: 'https://genzwithag
  * publication's address (e.g. 'https://genzwithaglass.substack.com'); while it's empty the box stays hidden.
  * `npm run wine-digest` drafts each month's post.
  */
-export const wineNewsletter = { substackUrl: '' }
+export const wineNewsletter = { substackUrl: 'https://genzwithaglass.substack.com' }
 
 /** The Substack page where readers subscribe, or '' while no publication is set. */
 export const newsletterSubscribeUrl = (substackUrl: string) => (substackUrl ? `${substackUrl.replace(/\/+$/, '')}/subscribe` : '')
