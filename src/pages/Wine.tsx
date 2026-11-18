@@ -9,7 +9,7 @@ import { BODY, LEVEL, SWEETNESS, meterFill, formatDate, newestFirst, type BuyAga
 import { everyday } from '../content/everyday'
 import { winePosts } from '../content/wine'
 import { href } from '../router'
-import { sections } from '../site'
+import { newsletterSubscribeUrl, sections, wineNewsletter } from '../site'
 
 const section = sections.wine
 const postLink = (post: WinePost) => href(`${section.path}/${post.slug}`)
@@ -203,6 +203,26 @@ function Bottle({ post }: { post: WinePost }) {
   )
 }
 
+/**
+ * The monthly email sign-up: a link to the Substack subscribe page, in a new tab so the visitor keeps their place on
+ * the rack. Hidden until the publication's address is set in src/site.ts.
+ */
+function NewsletterSignup() {
+  const subscribe = newsletterSubscribeUrl(wineNewsletter.substackUrl)
+  if (!subscribe) return null
+  return (
+    <PixelWindow title="mailing_list.txt" tone="pink" className="newsletter-window">
+      <h2 className="newsletter-title">
+        <PixelIcon name="glass" size={22} /> Monthly wine mail
+      </h2>
+      <p>Once a month, I’ll send a roundup of everything new on the rack: the bottles I tried, what I thought, and any new guides. You can unsubscribe anytime.</p>
+      <a className="pixel-button" href={subscribe} target="_blank" rel="noopener noreferrer">
+        Subscribe on Substack →
+      </a>
+    </PixelWindow>
+  )
+}
+
 export default function WinePage({ slug }: { slug?: string }) {
   useFocusReturn(slug)
   const sorted = newestFirst(winePosts)
@@ -271,6 +291,8 @@ export default function WinePage({ slug }: { slug?: string }) {
           </p>
         </section>
       </PixelWindow>
+
+      <NewsletterSignup />
 
       {guides.length > 0 && (
         <section className="guides" aria-labelledby="guides-title">

@@ -1690,6 +1690,29 @@ button.pixel-button:active {
   color: var(--raspberry);
 }
 
+/* The monthly email sign-up under the rack (Wine.tsx). */
+.newsletter-window {
+  max-width: 620px;
+  margin-block: 56px 0;
+  rotate: 0.5deg;
+}
+
+.newsletter-window .window-body {
+  padding: 18px clamp(14px, 3vw, 26px) 20px;
+}
+
+.newsletter-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px;
+  font: 600 1.4rem/1.1 var(--pixel);
+}
+
+.newsletter-window p {
+  margin: 0 0 14px;
+}
+
 .rack-window .window-body {
   padding: 20px clamp(12px, 3vw, 28px) 24px;
 }

@@ -1,12 +1,13 @@
 // Runs after `vite build` (see the build script). Writes a page for every address so each one has its own
 // title, description and link preview on first load, plus the sitemaps (arynlynn.com's and genzwithaglass.com's),
+// Gen Z With A Glass's RSS feed,
 // dist/404.html and dist/_redirects.
 // The app itself is unchanged: once loaded, moving between pages never reloads.
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createServer } from 'vite'
-import { fileFor, notFoundPage, redirectsFile, renderPage, sitemap, wineDomainRules, wineRobots, wineSitemap } from './page-html.mjs'
+import { fileFor, notFoundPage, redirectsFile, renderPage, sitemap, wineDomainRules, wineFeed, wineRobots, wineSitemap } from './page-html.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const dist = join(root, 'dist')
@@ -15,10 +16,12 @@ const dist = join(root, 'dist')
 const vite = await createServer({ root, logLevel: 'error', server: { middlewareMode: true, hmr: false }, appType: 'custom' })
 let pages
 let redirects
+let winePosts
 try {
   const routes = await vite.ssrLoadModule('/src/routes.ts')
   pages = routes.allPages()
   redirects = routes.portfolioRedirects()
+  winePosts = (await vite.ssrLoadModule('/src/content/wine.ts')).winePosts
 } finally {
   await vite.close()
 }
@@ -33,8 +36,9 @@ await writeFile(join(dist, '404.html'), notFoundPage(template))
 await writeFile(join(dist, 'sitemap.xml'), sitemap(pages))
 await writeFile(join(dist, 'sitemap-wine.xml'), wineSitemap(pages))
 await writeFile(join(dist, 'robots-wine.txt'), wineRobots())
+await writeFile(join(dist, 'feed-wine.xml'), wineFeed(winePosts))
 // Hand-written rules (public/_redirects, copied in by Vite, if there is one) come first: Netlify uses the first match.
 const wineRules = wineDomainRules(pages)
 const handWritten = await readFile(join(dist, '_redirects'), 'utf8').catch(() => '')
 await writeFile(join(dist, '_redirects'), `${handWritten}${handWritten && !handWritten.endsWith('\n') ? '\n' : ''}${redirectsFile([...wineRules, ...redirects])}`)
-console.log(`Prerendered ${pages.length} pages, 404.html and both sitemaps, with ${wineRules.length} genzwithaglass.com rules and ${redirects.length} portfolio redirects.`)
+console.log(`Prerendered ${pages.length} pages, 404.html and both sitemaps and the wine feed, with ${wineRules.length} genzwithaglass.com rules and ${redirects.length} portfolio redirects.`)
