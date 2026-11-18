@@ -1895,6 +1895,15 @@ button.pixel-button:active {
   gap: 8px;
 }
 
+/* Profile rows are taller (meter plus a note), so they get more room and line up at the top. */
+.card-profile {
+  gap: 8px;
+}
+
+.card-profile > div {
+  align-items: start;
+}
+
 .tasting-card dt {
   font: 600 12px/1.2 var(--pixel);
   text-transform: uppercase;
@@ -1922,10 +1931,41 @@ button.pixel-button:active {
   margin-top: 16px;
 }
 
+.card-profile dt {
+  padding-top: 5px;
+}
+
 .card-profile dd {
+  display: grid;
+  gap: 2px;
+}
+
+.meter-row {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+/* The value in everyday terms, under its meter. */
+.profile-plainly {
+  font: 0.85rem/1.35 var(--sans);
+  color: rgba(59, 35, 70, 0.78);
+}
+
+/* On phones, stack each row (label, then meter, then explanation) so the meters never run off the card. */
+@media (max-width: 560px) {
+  .card-profile {
+    gap: 12px;
+  }
+
+  .card-profile > div {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .card-profile dt {
+    padding-top: 0;
+  }
 }
 
 .meter {

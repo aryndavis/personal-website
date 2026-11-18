@@ -132,3 +132,13 @@ test('the order notes are listed in does not change who is "revisited": the date
   assert.equal(later.title, 'X 2022, revisited')
 })
 
+
+test('every profile option on the tasting card has an everyday note', async () => {
+  const { everyday } = await import('../src/content/everyday.ts')
+  const { BODY, LEVEL_OR_NONE, SWEETNESS } = await import('../src/content/types.ts')
+  const scales = { Sweetness: SWEETNESS, Body: BODY, Acidity: LEVEL_OR_NONE, Tannin: LEVEL_OR_NONE }
+  for (const [row, options] of Object.entries(scales)) {
+    assert.deepEqual(Object.keys(everyday[row]).sort(), [...options].sort(), row)
+    for (const option of options) assert.match(everyday[row][option], /^[A-Z].+\.$/, `${row}: ${option}`)
+  }
+})
