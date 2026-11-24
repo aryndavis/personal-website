@@ -4,6 +4,7 @@
     "grape": "Rkatsiteli",
     "vintage": "2023",
     "date": "2026-11-16",
+    "producer": "Andrias Gvino",
     "region": "Kakheti",
     "boughtAt": "Table Wine",
     "style": "orange",
@@ -16,7 +17,7 @@
       "green apple",
       "sage"
     ],
-    "sweetness": "off-dry",
+    "sweetness": "dry",
     "body": "medium",
     "acidity": "medium-high",
     "tannin": "medium-low",

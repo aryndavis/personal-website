@@ -2,10 +2,11 @@
 //
 // 1. Only Twilio-signed requests from the owner's phone number get through; everything else gets no reply.
 // 2. "wine: …" is parsed and a preview is texted back. Nothing is published yet.
-// 3. "YES" publishes the waiting note (a commit to the site's repo); "NO" throws it away.
+// 3. Texting just the lines to change ("price: $$") edits the waiting note and sends a new preview.
+// 4. "YES" publishes the waiting note (a commit to the site's repo); "NO" throws it away.
 //    The preview only ever goes to the owner's real phone, so a spoofed sender can't confirm a post.
 import { guessStyle, type TastingNote } from '../../src/content/tastingNotes.ts'
-import { MAX_TEXT_LENGTH, TEXT_TEMPLATE, isTextNote, parseTextNote } from '../../src/content/textNote.ts'
+import { TEXT_TEMPLATE, editTextNote, isEditText, isTextNote, parseTextNote } from '../../src/content/textNote.ts'
 import { isFromTwilio, twiml } from './twilio.ts'
 
 export interface Store {
@@ -36,6 +37,8 @@ export interface SmsDeps {
 }
 
 const PENDING = 'pending'
+// The id of the last note YES posted, so a late edit can't bring it back as a new preview.
+const POSTED = 'posted'
 const PENDING_MINUTES = 60
 // A ceiling on runaway use (a stuck phone, a script that got the auth token), well above normal posting.
 const MAX_TEXTS_PER_DAY = 60
@@ -49,7 +52,7 @@ export function dateIn(timeZone: string, date: Date): string {
   return new Intl.DateTimeFormat('en-CA', { timeZone, year: 'numeric', month: '2-digit', day: '2-digit' }).format(date)
 }
 
-export function preview(note: TastingNote): string {
+export function preview(note: TastingNote, heading = 'Preview'): string {
   const style = note.style ?? guessStyle(note.wine, note.grape)
   const facts = [
     style && `${style}${note.style ? '' : ' (guessed)'}`,
@@ -59,16 +62,39 @@ export function preview(note: TastingNote): string {
   ].filter(Boolean)
   const flavors = Array.isArray(note.flavors) ? note.flavors.join(', ') : note.flavors
   const lines = [
-    `Preview: ${note.title ?? `${note.wine} ${note.vintage}`} (${note.grape})`,
+    `${heading}: ${note.title ? `${note.title}, ${note.wine} ${note.vintage}` : `${note.wine} ${note.vintage}`} (${note.grape})`,
     facts.length ? facts.join(' · ') : '',
     note.verdict ? `“${note.verdict}”` : '',
     flavors ? `flavors: ${flavors}` : '',
     note.pairedWith ? `paired with: ${note.pairedWith}` : '',
     note.thoughts ? `notes: ${note.thoughts.length} characters` : '',
-    'Reply YES to post or NO to discard.',
+    'Reply YES to post or NO to discard. To change something, text just that line, like "price: $$".',
   ]
   return lines.filter(Boolean).join('\n')
 }
+
+/**
+ * A note waiting for YES. `id` stays the same through edits; `posting` is set while YES publishes it.
+ * (Older entries have no id, so their start time stands in.)
+ */
+type Pending = { note: TastingNote; at: number; id: string; posting?: boolean }
+
+/** The note waiting for YES, or null if there isn't one (or it expired). */
+async function waitingNote(deps: SmsDeps): Promise<Pending | null> {
+  const pending = (await deps.store.get(PENDING)) as { note: unknown; at: number; id?: string; posting?: boolean } | null
+  if (!pending || deps.now().getTime() - pending.at > PENDING_MINUTES * 60_000 || !isTextNote(pending.note)) {
+    if (pending) await deps.store.delete(PENDING)
+    return null
+  }
+  return { ...pending, note: pending.note, id: pending.id ?? String(pending.at) }
+}
+
+const newId = (deps: SmsDeps) => `${deps.now().getTime()}-${Math.random().toString(36).slice(2, 8)}`
+
+const EDIT_HELP =
+  'To change a preview before posting, text just the lines to change, like "price: $$". Use name:, grape: or year: to fix the first line, and leave a label blank to remove it.'
+
+const NOTHING_WAITING = 'There’s nothing waiting to post (previews expire after an hour). Text a note starting with "wine:".'
 
 async function bump(store: Store, key: string): Promise<number> {
   const count = Number((await store.get(key)) ?? 0) + 1
@@ -106,7 +132,7 @@ async function respond(params: Record<string, string>, deps: SmsDeps): Promise<R
   const body = (params.Body ?? '').trim()
   const command = body.toLowerCase().replace(/[.!\s]+$/g, '')
 
-  if (command === 'help' || command === 'wine help') return twiml(`Text a tasting note like this (only the first line is required):\n\n${TEXT_TEMPLATE}`)
+  if (command === 'help' || command === 'wine help') return twiml(`Text a tasting note like this (only the first line is required):\n\n${TEXT_TEMPLATE}\n\n${EDIT_HELP}`)
 
   if (command === 'no' || command === 'n') {
     await deps.store.delete(PENDING)
@@ -114,15 +140,12 @@ async function respond(params: Record<string, string>, deps: SmsDeps): Promise<R
   }
 
   if (command === 'yes' || command === 'y') {
-    const pending = (await deps.store.get(PENDING)) as { note: unknown; at: number } | null
-    if (!pending || deps.now().getTime() - pending.at > PENDING_MINUTES * 60_000 || !isTextNote(pending.note)) {
-      await deps.store.delete(PENDING)
-      return twiml('There’s nothing waiting to post (previews expire after an hour). Text a note starting with "wine:".')
-    }
+    const pending = await waitingNote(deps)
+    if (!pending) return twiml(NOTHING_WAITING)
+    const { note } = pending
     if (Number((await deps.store.get(`posts/${today}`)) ?? 0) >= MAX_POSTS_PER_DAY) {
       return twiml(`That’s ${MAX_POSTS_PER_DAY} posts today, the daily limit. Your preview is saved; reply YES tomorrow.`)
     }
-    const note = pending.note
     let slug: string
     try {
       const published = (await deps.readTextNotes()).filter(isTextNote)
@@ -133,14 +156,18 @@ async function respond(params: Record<string, string>, deps: SmsDeps): Promise<R
         return twiml(`That one’s already posted: ${deps.wineUrl}/${deps.slugFor(note, published.filter((n) => n !== alreadyPosted))}`)
       }
       slug = deps.slugFor(note, published)
+      // Edits that arrive while this publishes are turned away (see below).
+      await deps.store.set(PENDING, { ...pending, posting: true })
       await deps.publish(note, `Add tasting note by text: ${note.wine} ${note.vintage}`)
     } catch (error) {
       console.error('publish failed', error)
+      await deps.store.set(PENDING, { ...pending, posting: false }).catch(() => {})
       return twiml('I couldn’t post that just now. Your preview is still saved, so reply YES to try again.')
     }
     // It's posted. Bookkeeping failures after this point must not make it look unposted (a second YES
     // would post it twice), so they're logged and the reply still says it worked.
     try {
+      await deps.store.set(POSTED, pending.id)
       await deps.store.delete(PENDING)
       await bump(deps.store, `posts/${today}`)
     } catch (error) {
@@ -152,11 +179,24 @@ async function respond(params: Record<string, string>, deps: SmsDeps): Promise<R
   if (/^books?\b/i.test(body)) return twiml('Adding books by text isn’t set up yet.')
 
   if (/^wine\b/i.test(body)) {
-    if (body.length > MAX_TEXT_LENGTH) return twiml(`That’s over ${MAX_TEXT_LENGTH} characters. Trim the notes and try again.`)
+    const waiting = await waitingNote(deps)
     const result = parseTextNote(body, today)
-    if (!result.ok) return twiml(result.error)
-    await deps.store.set(PENDING, { note: result.note, at: deps.now().getTime() })
-    return twiml(preview(result.note))
+    // A failed new note leaves a waiting preview alone; say so, since "wine:" may have been meant as an edit.
+    if (!result.ok) return twiml(waiting && !waiting.posting ? `${result.error} Your waiting preview is unchanged (use "name:" to rename it).` : result.error)
+    await deps.store.set(PENDING, { note: result.note, at: deps.now().getTime(), id: newId(deps) })
+    return twiml(preview(result.note, waiting && !waiting.posting ? 'New preview (replaces the last one)' : 'Preview'))
+  }
+
+  if (isEditText(body)) {
+    const pending = await waitingNote(deps)
+    if (!pending || pending.posting || (await deps.store.get(POSTED)) === pending.id) {
+      return twiml(pending ? 'That note is already being posted, so it can’t be changed now. To fix it after, edit src/content/wine.texts.json.' : NOTHING_WAITING)
+    }
+    const result = editTextNote(pending.note, body, today)
+    if (!result.ok) return twiml(`${result.error} Your preview is unchanged.`)
+    // Editing restarts the hour, so a long back-and-forth doesn't expire mid-edit.
+    await deps.store.set(PENDING, { note: result.note, at: deps.now().getTime(), id: pending.id })
+    return twiml(preview(result.note, 'Updated preview'))
   }
 
   return twiml('Start a tasting note with "wine: Name, Grape, Year". Text "wine help" for the template.')

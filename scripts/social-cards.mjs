@@ -6,7 +6,7 @@ import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { chromium } from 'playwright'
-import { site, winePreview } from '../src/site.ts'
+import { site, wineDomain, winePreview } from '../src/site.ts'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const file = (path) => pathToFileURL(join(root, path)).href
@@ -82,7 +82,7 @@ const cards = {
     <div class="name">GEN Z<br>WITH A<br>GLASS</div>
     <div class="tag">${escape(winePreview.tagline)}.</div>
     <div class="sub">${escape(winePreview.subtitle)}</div>
-    <div class="url">arynlynn.com/wine</div>
+    <div class="url">${escape(wineDomain.host)}</div>
     <div class="win"><div class="bar"><span>tasting_card.dat</span><span>_ □ ×</span></div>
       <div class="body"><div class="toast"><img class="me" src="${file('public/favicon.svg')}" alt="">${pixels(glassInHand, 84)}</div></div>
       <div class="hearts">♥ ♥ ♥ ♥ ♡</div></div>
