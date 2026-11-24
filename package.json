@@ -12,7 +12,8 @@
     "test": "node --test scripts/*.test.mjs",
     "lint": "eslint .",
     "typecheck": "tsc -b",
-    "social-cards": "node scripts/social-cards.mjs"
+    "social-cards": "node scripts/social-cards.mjs",
+    "wine-digest": "node scripts/wine-digest.mjs"
   },
   "dependencies": {
     "@fontsource/pixelify-sans": "^5.3.0",

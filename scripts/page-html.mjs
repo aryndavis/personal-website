@@ -2,7 +2,7 @@
 // tags, plus a plain-HTML summary that search engines can read before the app starts. Used by prerender.mjs.
 
 import { previewTags } from '../src/previewTags.ts'
-import { isWinePath, publicUrl, sections, site, wineDomain } from '../src/site.ts'
+import { isWinePath, publicUrl, sections, site, wineDomain, winePostUrl, winePreview } from '../src/site.ts'
 
 export const ORIGIN = site.url
 
@@ -38,8 +38,13 @@ function writeTags(template, tags) {
 
 /** The HTML for one page. The home page keeps index.html's own summary (and, as tests check, its tags). */
 export function renderPage(template, page) {
-  const html = writeTags(template, previewTags(page))
+  let html = writeTags(template, previewTags(page))
   if (page.path === '/') return html
+  // Wine pages point feed readers at the RSS feed, so pasting genzwithaglass.com into one finds it.
+  if (isWinePath(page.path)) {
+    const feed = `<link rel="alternate" type="application/rss+xml" title="${escape(wineDomain.name)}" href="${wineDomain.url}/feed.xml" />`
+    html = replaceOnce(html, /(<link rel="canonical" href="[^"]*" \/>)/, `$1\n    ${feed}`, 'canonical link')
+  }
   // Full addresses, since a wine page and the pages it links to can live on different domains.
   const links = page.links.map((link) => `          <li><a href="${escape(publicUrl(link.href))}">${escape(link.text)}</a></li>`).join('\n')
   const summary = `<main class="prerender">
@@ -94,9 +99,12 @@ export function wineDomainRules(pages) {
     moved(`${wine}${winePath}`, `${wine}/`),
     moved(`${wine}${winePath}/*`, `${wine}/:splat`),
     ...elsewhere.flatMap((section) => [moved(`${wine}/${section}`, `${site.url}/${section}`), moved(`${wine}/${section}/*`, `${site.url}/${section}/:splat`)]),
-    // Its own robots.txt and sitemap.
+    // Its own robots.txt, sitemap and RSS feed.
     { from: `${wine}/robots.txt`, to: '/robots-wine.txt', status: '200!' },
     { from: `${wine}/sitemap.xml`, to: '/sitemap-wine.xml', status: '200!' },
+    { from: `${wine}/feed.xml`, to: '/feed-wine.xml', status: '200!' },
+    // The feed's file is only meant to be read as genzwithaglass.com/feed.xml.
+    moved(`${site.url}/feed-wine.xml`, `${wine}/feed.xml`),
     ...wineRewrites(pages),
   ]
 }
@@ -122,3 +130,35 @@ export const wineSitemap = (pages) => urlset(pages.filter((page) => isWinePath(p
  * with an index.html (wine/x/index.html) would get a redirect to /wine/x/ first.
  */
 export const fileFor = (path) => (path === '/' ? 'index.html' : `${path.slice(1)}.html`)
+
+const FEED_SIZE = 30
+
+/**
+ * genzwithaglass.com's RSS feed (served there as /feed.xml by wineDomainRules): the newest wine posts, for feed
+ * readers and for newsletter tools that can turn a feed into an email.
+ */
+export function wineFeed(posts) {
+  const newest = [...posts].sort((a, b) => b.date.localeCompare(a.date)).slice(0, FEED_SIZE)
+  const items = newest.map((post) => {
+    const link = winePostUrl(post.slug)
+    return `    <item>
+      <title>${escape(post.title)}</title>
+      <link>${escape(link)}</link>
+      <guid isPermaLink="true">${escape(link)}</guid>
+      <pubDate>${new Date(`${post.date}T12:00:00Z`).toUTCString()}</pubDate>
+      <description>${escape(post.summary)}</description>
+    </item>`
+  })
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>${escape(wineDomain.name)}</title>
+    <link>${wineDomain.url}/</link>
+    <atom:link href="${wineDomain.url}/feed.xml" rel="self" type="application/rss+xml" />
+    <description>${escape(winePreview.subtitle)}</description>
+    <language>en-us</language>
+${items.join('\n')}
+  </channel>
+</rss>
+`
+}
